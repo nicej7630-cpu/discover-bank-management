@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discover Bank Global Management plc — Securing Your Financial Future</title>
+  <meta name="description" content="Discover Bank Global Management plc — Personal & Business Banking, Savings, Loans, International Transfers. Based in London, UK. Est. 2022."/>
+  <meta name="author" content="Discover Bank Global Management plc"/>
+  <meta property="og:title" content="Discover Bank Global Management plc"/>
+  <meta property="og:description" content="Securing Your Financial Future. Personal & Business Banking in the UK."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://discoverjp.org"/>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SFKZ5QX58J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SFKZ5QX58J');
+  </script>
+  <!-- Google Translate -->
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'fr,de,es,ar,zh-CN,pt,yo,ig,ha,it,ru,ja,ko,nl,pl,tr',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #00325F;
+      --navy-dark: #001F3F;
+      --orange: #E87722;
+      --orange-lt: #F59A4F;
+      --white: #FFFFFF;
+      --cream: #F8F9FA;
+      --gray: #6C757D;
+      --light-gray: #E9ECEF;
+      --border: #DEE2E6;
+      --text: #212529;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: var(--navy-dark); padding: 0.4rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .top-bar-left { display: flex; align-items: center; gap: 0.5rem; font-size: 0.72rem; color: rgba(255,255,255,0.7); }
+    .top-bar-left img { height: 20px; }
+    .top-bar-right { display: flex; align-items: center; gap: 1rem; }
+    .top-bar-right a { font-size: 0.72rem; color: rgba(255,255,255,0.7); text-decoration: none; }
+    .top-bar-right a:hover { color: white; }
+    #google_translate_element select { background: transparent; border: none; color: rgba(255,255,255,0.7); font-size: 0.72rem; cursor: pointer; outline: none; }
+    .goog-te-banner-frame { display: none !important; }
+    body { top: 0 !important; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white); border-bottom: 3px solid var(--orange);
+      padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 1rem 0; text-decoration: none;
+    }
+    .logo-icon {
+      width: 44px; height: 44px; background: var(--navy);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 900; color: var(--orange); font-family: 'Merriweather', serif;
+    }
+    .logo-text { line-height: 1.2; }
+    .logo-text strong { display: block; font-size: 1rem; font-weight: 700; color: var(--navy); }
+    .logo-text span { font-size: 0.72rem; color: var(--gray); }
+    .nav-links { display: flex; align-items: center; gap: 0; }
+    .nav-links a {
+      padding: 1.4rem 1rem; font-size: 0.85rem; font-weight: 500;
+      color: var(--text); text-decoration: none; border-bottom: 3px solid transparent;
+      transition: all 0.2s; margin-bottom: -3px;
+    }
+    .nav-links a:hover { color: var(--orange); border-bottom-color: var(--orange); }
+    .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .btn-login {
+      padding: 0.6rem 1.4rem; background: var(--navy); color: white;
+      font-weight: 600; font-size: 0.85rem; border: none; border-radius: 4px;
+      cursor: pointer; text-decoration: none; transition: background 0.2s;
+    }
+    .btn-login:hover { background: var(--navy-dark); }
+    .btn-open {
+      padding: 0.6rem 1.4rem; background: var(--orange); color: white;
+      font-weight: 600; font-size: 0.85rem; border: none; border-radius: 4px;
+      cursor: pointer; text-decoration: none; transition: background 0.2s;
+    }
+    .btn-open:hover { background: var(--orange-lt); }
+    .menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+    .menu-btn span { display: block; width: 24px; height: 2px; background: var(--navy); margin: 5px 0; transition: 0.3s; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, #1a5276 100%);
+      min-height: 480px; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 45%;
+      background: linear-gradient(135deg, transparent, rgba(232,119,34,0.15));
+    }
+    .hero-content { padding: 4rem 2rem; max-width: 600px; position: relative; z-index: 1; }
+    .hero-tag { display: inline-block; background: var(--orange); color: white; font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .hero h1 { font-family: 'Merriweather', serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; color: white; line-height: 1.2; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--orange); }
+    .hero p { font-size: 1.05rem; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 2rem; max-width: 480px; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .hero-btn-primary { padding: 0.85rem 2rem; background: var(--orange); color: white; font-weight: 700; font-size: 0.95rem; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+    .hero-btn-primary:hover { background: var(--orange-lt); }
+    .hero-btn-secondary { padding: 0.85rem 2rem; background: transparent; color: white; font-weight: 600; font-size: 0.95rem; border: 2px solid rgba(255,255,255,0.5); border-radius: 4px; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+    .hero-btn-secondary:hover { border-color: white; background: rgba(255,255,255,0.1); }
+    .hero-numbers { display: flex; gap: 3rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2); }
+    .hero-num .num { font-family: 'Merriweather', serif; font-size: 1.8rem; font-weight: 900; color: var(--orange); }
+    .hero-num .label { font-size: 0.78rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem; }
+
+    /* ── FDIC BAR ── */
+    .fdic-bar { background: var(--navy-dark); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .fdic-badge { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: rgba(255,255,255,0.8); }
+    .fdic-badge span { background: var(--orange); color: white; font-weight: 700; font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 2px; }
+
+    /* ── SERVICES ── */
+    .services { background: var(--cream); padding: 4rem 2rem; }
+    .section-header { text-align: center; margin-bottom: 3rem; }
+    .section-tag { font-size: 0.78rem; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+    .section-title { font-family: 'Merriweather', serif; font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; color: var(--navy); margin-bottom: 0.75rem; }
+    .section-sub { font-size: 1rem; color: var(--gray); max-width: 560px; margin: 0 auto; line-height: 1.7; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+    .service-card { background: white; border-radius: 8px; padding: 2rem 1.5rem; text-align: center; border: 1px solid var(--border); transition: all 0.2s; cursor: pointer; text-decoration: none; display: block; }
+    .service-card:hover { border-color: var(--orange); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .service-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .service-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
+    .service-card p { font-size: 0.82rem; color: var(--gray); line-height: 1.6; }
+    .service-card .arrow { display: inline-block; margin-top: 0.75rem; font-size: 0.8rem; color: var(--orange); font-weight: 600; }
+
+    /* ── HOW IT WORKS ── */
+    .how { background: white; padding: 4rem 2rem; }
+    .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1000px; margin: 0 auto; align-items: center; }
+    .how-img { background: linear-gradient(135deg, var(--navy), #1a5276); border-radius: 12px; padding: 3rem; text-align: center; }
+    .how-img .big-icon { font-size: 5rem; }
+    .how-img p { color: rgba(255,255,255,0.8); margin-top: 1rem; font-size: 0.9rem; }
+    .how-steps { display: flex; flex-direction: column; gap: 1.5rem; }
+    .how-step { display: flex; gap: 1rem; align-items: flex-start; }
+    .step-num { width: 36px; height: 36px; background: var(--orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+    .step-content h4 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; }
+    .step-content p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+
+    /* ── NEWS / OFFERS ── */
+    .news { background: var(--cream); padding: 4rem 2rem; }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+    .news-card { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); transition: box-shadow 0.2s; }
+    .news-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .news-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .news-img.blue { background: linear-gradient(135deg, var(--navy), #1a5276); }
+    .news-img.orange { background: linear-gradient(135deg, var(--orange), #c0392b); }
+    .news-img.green { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+    .news-body { padding: 1.5rem; }
+    .news-tag { font-size: 0.68rem; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+    .news-body h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; line-height: 1.4; }
+    .news-body p { font-size: 0.82rem; color: var(--gray); line-height: 1.6; margin-bottom: 1rem; }
+    .news-link { font-size: 0.82rem; color: var(--orange); font-weight: 600; text-decoration: none; }
+    .news-link:hover { text-decoration: underline; }
+
+    /* ── RATES BANNER ── */
+    .rates-banner { background: var(--navy); padding: 3rem 2rem; text-align: center; }
+    .rates-banner h2 { font-family: 'Merriweather', serif; font-size: 1.8rem; color: white; margin-bottom: 0.5rem; }
+    .rates-banner p { color: rgba(255,255,255,0.7); margin-bottom: 2rem; }
+    .rates-grid { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+    .rate-item { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 1.5rem 2rem; text-align: center; min-width: 160px; }
+    .rate-item .rate { font-family: 'Merriweather', serif; font-size: 2rem; font-weight: 900; color: var(--orange); }
+    .rate-item .rate-label { font-size: 0.78rem; color: rgba(255,255,255,0.7); margin-top: 0.25rem; }
+
+    /* ── CONTACT STRIP ── */
+    .contact-strip { background: var(--light-gray); padding: 2rem; display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; border-top: 1px solid var(--border); }
+    .contact-item { display: flex; align-items: center; gap: 0.75rem; }
+    .contact-item .icon { font-size: 1.5rem; }
+    .contact-item h4 { font-size: 0.82rem; font-weight: 700; color: var(--navy); }
+    .contact-item p { font-size: 0.78rem; color: var(--gray); }
+    .contact-item a { color: var(--navy); text-decoration: none; font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--navy-dark); padding: 3rem 2rem 1.5rem; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .footer-brand p { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.7; margin-top: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 0.75rem; }
+    .footer-logo .logo-icon { width: 36px; height: 36px; font-size: 1rem; }
+    .footer-logo strong { color: white; font-size: 0.9rem; }
+    .footer-col h4 { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.5rem; }
+    .footer-col a { font-size: 0.82rem; color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--orange); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+    .footer-bottom a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--orange); }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 200; flex-direction: column; padding: 2rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--navy); }
+    .mobile-menu a { font-size: 1.1rem; font-weight: 600; color: var(--navy); text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .mobile-menu a:hover { color: var(--orange); }
+    .mobile-menu .mobile-btns { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-actions { display: none; }
+      .menu-btn { display: block; }
+      .hero-numbers { gap: 1.5rem; }
+      .how-grid { grid-template-columns: 1fr; }
+      .how-img { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .contact-strip { gap: 1.5rem; }
+      .top-bar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span>🏦 Est. 2022 · London, United Kingdom · FCA Regulated</span>
+    </div>
+    <div class="top-bar-right">
+      <span style="color:rgba(255,255,255,0.5);font-size:0.72rem;">🌍</span>
+      <div id="google_translate_element"></div>
+      <a href="tel:+442099469200">📞 +44 20 9946 9200</a>
+      <a href="mailto:officesupport.mlaj@gmail.com">✉️ Email Us</a>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">D</div>
+      <div class="logo-text">
+        <strong>Discover Bank</strong>
+        <span>Global Management plc</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#services">Personal</a>
+      <a href="#services">Business</a>
+      <a href="#rates">Savings & Rates</a>
+      <a href="#news">News & Offers</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-login">Log In</a>
+      <a href="signup.html" class="btn-open">Open Account</a>
+    </div>
+    <button class="menu-btn" onclick="openMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <div class="nav-logo">
+        <div class="logo-icon">D</div>
+        <div class="logo-text">
+          <strong>Discover Bank</strong>
+          <span>Global Management plc</span>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeMenu()">✕</button>
+    </div>
+    <a href="#services" onclick="closeMenu()">Personal Banking</a>
+    <a href="#services" onclick="closeMenu()">Business Banking</a>
+    <a href="#rates" onclick="closeMenu()">Savings & Rates</a>
+    <a href="#news" onclick="closeMenu()">News & Offers</a>
+    <a href="#contact" onclick="closeMenu()">Contact Us</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Use</a>
+    <div class="mobile-btns">
+      <a href="login.html" class="btn-login" style="text-align:center;padding:1rem;">Log In</a>
+      <a href="signup.html" class="btn-open" style="text-align:center;padding:1rem;">Open an Account</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-tag">🇬🇧 UK Licensed Bank · Est. 2022</div>
+      <h1>Treating People <span>Special</span> Is Kind of Our Thing</h1>
+      <p>Discover Bank Global Management plc delivers world-class personal and business banking from the heart of London. Secure, transparent, and built for you.</p>
+      <div class="hero-btns">
+        <a href="signup.html" class="hero-btn-primary">Open an Account</a>
+        <a href="login.html" class="hero-btn-secondary">Log In</a>
+      </div>
+      <div class="hero-numbers">
+        <div class="hero-num">
+          <div class="num">£2.4M+</div>
+          <div class="label">Assets Managed</div>
+        </div>
+        <div class="hero-num">
+          <div class="num">247+</div>
+          <div class="label">Active Customers</div>
+        </div>
+        <div class="hero-num">
+          <div class="num">14+</div>
+          <div class="label">Banking Services</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FDIC BAR -->
+  <div class="fdic-bar">
+    <div class="fdic-badge"><span>FCA</span> FCA Regulated & Authorised</div>
+    <div class="fdic-badge"><span>SSL</span> 256-bit Encryption</div>
+    <div class="fdic-badge"><span>PCI</span> PCI DSS Level 1</div>
+    <div class="fdic-badge"><span>24/7</span> Customer Support</div>
+    <div class="fdic-badge"><span>GDPR</span> UK GDPR Compliant</div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-header">
+      <div class="section-tag">How Can We Help?</div>
+      <h2 class="section-title">Banking Services for Everyone</h2>
+      <p class="section-sub">From personal savings to international business transfers — everything you need under one roof.</p>
+    </div>
+    <div class="services-grid">
+      <a href="signup.html" class="service-card">
+        <div class="service-icon">💳</div>
+        <h3>Personal Savings</h3>
+        <p>Grow your money with competitive interest rates on personal savings accounts.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="signup.html" class="service-card">
+        <div class="service-icon">🏢</div>
+        <h3>Business Banking</h3>
+        <p>Full-featured business accounts with multi-user access and invoicing tools.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="signup.html" class="service-card">
+        <div class="service-icon">💰</div>
+        <h3>Personal Loans</h3>
+        <p>Flexible personal loan options with transparent terms and competitive rates.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="signup.html" class="service-card">
+        <div class="service-icon">🌍</div>
+        <h3>International Transfers</h3>
+        <p>Send money worldwide at competitive exchange rates. Fast and secure.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="signup.html" class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>Mobile Banking</h3>
+        <p>Manage your accounts 24/7 from anywhere with our secure mobile platform.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="signup.html" class="service-card">
+        <div class="service-icon">📈</div>
+        <h3>Fixed Deposits</h3>
+        <p>Lock in guaranteed returns with our fixed deposit accounts. Zero risk.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="signup.html" class="service-card">
+        <div class="service-icon">🤝</div>
+        <h3>SME & Business Loans</h3>
+        <p>Flexible financing solutions for small and medium enterprises.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+      <a href="signup.html" class="service-card">
+        <div class="service-icon">💱</div>
+        <h3>Foreign Exchange</h3>
+        <p>Buy and sell foreign currencies at competitive rates with no hidden fees.</p>
+        <span class="arrow">Learn more →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="how-grid">
+      <div class="how-img">
+        <div class="big-icon">🏦</div>
+        <p>Open your account in minutes — no branch visit required</p>
+      </div>
+      <div>
+        <div class="section-tag">Getting Started</div>
+        <h2 class="section-title" style="text-align:left;margin-bottom:2rem;">Open Your Account in 4 Simple Steps</h2>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Apply Online</h4>
+              <p>Fill in your personal details and choose your account type. Takes less than 5 minutes.</p>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Verify Your Identity</h4>
+              <p>Submit your government-issued ID and proof of address. Our team verifies it quickly.</p>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Fund Your Account</h4>
+              <p>Make your initial deposit via bank transfer or card. Funds available immediately.</p>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>Start Banking</h4>
+              <p>Access mobile banking, request your debit card, and start managing your finances.</p>
+            </div>
+          </div>
+        </div>
+        <a href="signup.html" class="btn-open" style="display:inline-block;margin-top:2rem;padding:0.85rem 2rem;">Open Account Now →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RATES -->
+  <section class="rates-banner" id="rates">
+    <h2>Competitive Rates You'll Love</h2>
+    <p>Our rates are among the best in the UK — no hidden fees, no surprises</p>
+    <div class="rates-grid">
+      <div class="rate-item">
+        <div class="rate">4.85%</div>
+        <div class="rate-label">Savings APY</div>
+      </div>
+      <div class="rate-item">
+        <div class="rate">6.5%</div>
+        <div class="rate-label">Personal Loan Rate</div>
+      </div>
+      <div class="rate-item">
+        <div class="rate">£0</div>
+        <div class="rate-label">Monthly Fees</div>
+      </div>
+      <div class="rate-item">
+        <div class="rate">5.2%</div>
+        <div class="rate-label">Fixed Deposit Rate</div>
+      </div>
+    </div>
+    <a href="signup.html" class="hero-btn-primary">Get Started Today</a>
+  </section>
+
+  <!-- NEWS -->
+  <section class="news" id="news">
+    <div class="section-header">
+      <div class="section-tag">Latest Updates</div>
+      <h2 class="section-title">News & Special Offers</h2>
+      <p class="section-sub">Stay updated with the latest from Discover Bank Global Management plc</p>
+    </div>
+    <div class="news-grid">
+      <div class="news-card">
+        <div class="news-img blue">🎉</div>
+        <div class="news-body">
+          <div class="news-tag">Special Offer</div>
+          <h3>Open a Savings Account & Earn 4.85% APY</h3>
+          <p>New customers who open a personal savings account before 31 July 2026 will enjoy our highest ever rate of 4.85% APY.</p>
+          <a href="signup.html" class="news-link">Open Account →</a>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-img orange">💳</div>
+        <div class="news-body">
+          <div class="news-tag">New Product</div>
+          <h3>Introducing Our New Business Debit Card</h3>
+          <p>Our new business debit card comes with cashback rewards, zero foreign transaction fees, and contactless payments worldwide.</p>
+          <a href="signup.html" class="news-link">Apply Now →</a>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-img green">🌍</div>
+        <div class="news-body">
+          <div class="news-tag">International</div>
+          <h3>Send Money to 60+ Countries with Zero Fees</h3>
+          <p>We've expanded our international transfer service to cover 60+ countries with competitive exchange rates and zero transfer fees.</p>
+          <a href="signup.html" class="news-link">Learn More →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-strip">
+      <div class="contact-item">
+        <div class="icon">📍</div>
+        <div>
+          <h4>Our Address</h4>
+          <p>Suite 1, 7th Floor, 50 Broadway<br>London, SW1H 0BL, UK</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="icon">📞</div>
+        <div>
+          <h4>Call Us</h4>
+          <p><a href="tel:+442099469200">+44 20 9946 9200</a></p>
+          <p style="font-size:0.72rem;color:var(--gray);">Mon–Fri 8AM–6PM · Sat 9AM–2PM</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="icon">✉️</div>
+        <div>
+          <h4>Email Us</h4>
+          <p><a href="mailto:officesupport.mlaj@gmail.com">officesupport.mlaj@gmail.com</a></p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="icon">⏰</div>
+        <div>
+          <h4>Business Hours</h4>
+          <p>Mon–Fri: 8:00AM – 6:00PM GMT</p>
+          <p>Saturday: 9:00AM – 2:00PM GMT</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="logo-icon">D</div>
+          <strong>Discover Bank Global Management plc</strong>
+        </div>
+        <p>Suite 1, 7th Floor, 50 Broadway<br>London, SW1H 0BL, United Kingdom<br>Est. 2022 · FCA Regulated</p>
+      </div>
+      <div class="footer-col">
+        <h4>Personal</h4>
+        <ul>
+          <li><a href="signup.html">Savings Account</a></li>
+          <li><a href="signup.html">Current Account</a></li>
+          <li><a href="signup.html">Personal Loans</a></li>
+          <li><a href="signup.html">Debit Cards</a></li>
+          <li><a href="signup.html">Mobile Banking</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Business</h4>
+        <ul>
+          <li><a href="signup.html">Business Account</a></li>
+          <li><a href="signup.html">SME Loans</a></li>
+          <li><a href="signup.html">Fixed Deposits</a></li>
+          <li><a href="signup.html">Int'l Transfers</a></li>
+          <li><a href="signup.html">Foreign Exchange</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <ul>
+          <li><a href="login.html">Customer Login</a></li>
+          <li><a href="signup.html">Open Account</a></li>
+          <li><a href="mailto:officesupport.mlaj@gmail.com">Contact Us</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Discover Bank Global Management plc. All rights reserved. Registered in England & Wales.</span>
+      <span>
+        <a href="privacy-policy.html">Privacy</a> &nbsp;·&nbsp;
+        <a href="terms.html">Terms</a> &nbsp;·&nbsp;
+        <a href="mailto:officesupport.mlaj@gmail.com">Contact</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    function openMenu() { document.getElementById('mobileMenu').classList.add('open'); }
+    function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+  </script>
+</body>
+</html>
