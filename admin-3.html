@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — Discover Bank Global Management plc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0B1B2B; --ink: #152134; --slate: #2A3F55;
+      --gold: #C9A84C; --gold-lt: #E8C97A;
+      --cream: #F7F4EE; --white: #FFFFFF;
+      --muted: #8FA3B8; --border: rgba(201,168,76,0.25);
+      --success: #2ECC71; --error: #E74C3C; --warning: #F39C12;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--navy); color: var(--cream); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    .admin-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .login-card { width: 100%; max-width: 380px; background: var(--ink); border: 1px solid var(--border); border-radius: 4px; padding: 2.5rem; }
+    .login-card h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--gold); margin-bottom: 0.5rem; text-align: center; }
+    .login-card p { font-size: 0.82rem; color: var(--muted); text-align: center; margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .form-group input { width: 100%; background: var(--navy); border: 1px solid var(--border); border-radius: 2px; padding: 0.8rem 1rem; color: var(--cream); font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+    .form-group input:focus { border-color: var(--gold); }
+    .login-btn { width: 100%; padding: 0.9rem; background: var(--gold); color: var(--navy); font-weight: 700; font-size: 0.9rem; border: none; border-radius: 2px; cursor: pointer; letter-spacing: 0.08em; text-transform: uppercase; }
+    .login-btn:hover { background: var(--gold-lt); }
+    .error-msg { display: none; background: rgba(231,76,60,0.1); border: 1px solid var(--error); border-radius: 2px; padding: 0.75rem; text-align: center; font-size: 0.82rem; color: var(--error); margin-bottom: 1rem; }
+
+    /* ── DASHBOARD LAYOUT ── */
+    .dashboard { display: none; }
+    .dash-layout { display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px; min-height: 100vh;
+      background: var(--ink); border-right: 1px solid var(--border);
+      padding: 1.5rem 0; position: fixed; top: 0; left: 0; bottom: 0;
+      overflow-y: auto; z-index: 50;
+    }
+    .sidebar-logo { padding: 0 1.5rem 1.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+    .sidebar-logo h2 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--gold); }
+    .sidebar-logo p { font-size: 0.72rem; color: var(--muted); margin-top: 0.25rem; }
+    .nav-section { padding: 0.5rem 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1rem; }
+    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.5rem; cursor: pointer; font-size: 0.85rem; color: var(--muted); transition: all 0.2s; border-left: 2px solid transparent; }
+    .nav-item:hover { color: var(--cream); background: rgba(255,255,255,0.03); }
+    .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(201,168,76,0.05); }
+    .nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+    .nav-badge { margin-left: auto; background: var(--error); color: white; font-size: 0.65rem; padding: 0.1rem 0.4rem; border-radius: 10px; }
+
+    /* MAIN CONTENT */
+    .main-content { margin-left: 240px; flex: 1; }
+    .top-bar {
+      background: var(--ink); border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 40;
+    }
+    .top-bar h1 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--white); }
+    .top-bar-right { display: flex; align-items: center; gap: 1rem; }
+    .admin-info { font-size: 0.82rem; color: var(--muted); }
+    .logout-btn { font-size: 0.75rem; padding: 0.4rem 0.9rem; background: transparent; color: var(--error); border: 1px solid var(--error); border-radius: 2px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; }
+    .logout-btn:hover { background: var(--error); color: white; }
+
+    .page { display: none; padding: 2rem; }
+    .page.active { display: block; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: var(--ink); border: 1px solid var(--border); border-radius: 2px; padding: 1.25rem; }
+    .stat-card .num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: var(--gold); }
+    .stat-card .label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.25rem; }
+    .stat-card .change { font-size: 0.72rem; color: var(--success); margin-top: 0.25rem; }
+
+    /* TABLES */
+    .section-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; margin-top: 2rem; }
+    .table-wrap { background: var(--ink); border: 1px solid var(--border); border-radius: 2px; overflow-x: auto; margin-bottom: 1.5rem; }
+    table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    th { background: var(--slate); padding: 0.7rem 1rem; text-align: left; font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    td { padding: 0.8rem 1rem; font-size: 0.82rem; border-top: 1px solid var(--border); }
+    tr:hover td { background: rgba(201,168,76,0.03); }
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 2px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+    .badge-pending { background: rgba(243,156,18,0.15); color: var(--warning); }
+    .badge-approved, .badge-active, .badge-completed { background: rgba(46,204,113,0.15); color: var(--success); }
+    .badge-review { background: rgba(201,168,76,0.15); color: var(--gold); }
+    .badge-rejected, .badge-frozen, .badge-failed { background: rgba(231,76,60,0.15); color: var(--error); }
+    .badge-processing { background: rgba(52,152,219,0.15); color: #3498DB; }
+
+    .btn { padding: 0.3rem 0.7rem; font-size: 0.7rem; border: none; border-radius: 2px; cursor: pointer; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 0.3rem; transition: all 0.2s; }
+    .btn-approve { background: rgba(46,204,113,0.15); color: var(--success); }
+    .btn-approve:hover { background: var(--success); color: white; }
+    .btn-reject { background: rgba(231,76,60,0.15); color: var(--error); }
+    .btn-reject:hover { background: var(--error); color: white; }
+    .btn-freeze { background: rgba(243,156,18,0.15); color: var(--warning); }
+    .btn-freeze:hover { background: var(--warning); color: white; }
+    .btn-view { background: rgba(201,168,76,0.15); color: var(--gold); }
+    .btn-view:hover { background: var(--gold); color: var(--navy); }
+
+    /* TRANSACTION CONTROLS */
+    .controls-row { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .control-card { flex: 1; min-width: 200px; background: var(--ink); border: 1px solid var(--border); border-radius: 2px; padding: 1.25rem; }
+    .control-card h4 { font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+    .control-card select, .control-card input { width: 100%; background: var(--navy); border: 1px solid var(--border); border-radius: 2px; padding: 0.6rem; color: var(--cream); font-size: 0.85rem; outline: none; margin-bottom: 0.5rem; }
+    .control-card .apply-btn { width: 100%; padding: 0.6rem; background: var(--gold); color: var(--navy); font-weight: 700; font-size: 0.78rem; border: none; border-radius: 2px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* QUICK ACTIONS */
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+    .quick-card { background: var(--ink); border: 1px solid var(--border); border-radius: 2px; padding: 1.25rem; text-align: center; cursor: pointer; transition: border-color 0.2s; text-decoration: none; display: block; }
+    .quick-card:hover { border-color: var(--gold); }
+    .quick-card .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .quick-card h4 { font-size: 0.82rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
+    .quick-card p { font-size: 0.72rem; color: var(--muted); }
+
+    /* NOTIFICATION */
+    .notif { background: rgba(201,168,76,0.08); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 2px; padding: 1rem 1.25rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .notif p { font-size: 0.85rem; color: var(--cream); }
+    .notif span { font-size: 0.72rem; color: var(--muted); }
+    .notif-error { border-left-color: var(--error); background: rgba(231,76,60,0.05); }
+    .notif-success { border-left-color: var(--success); background: rgba(46,204,113,0.05); }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="admin-login" id="adminLogin">
+    <div class="login-card">
+      <h2>🔐 Admin Portal</h2>
+      <p>Discover Bank Global Management plc</p>
+      <div class="error-msg" id="loginError">Invalid credentials. Please try again.</div>
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label>Admin Email</label>
+          <input type="email" id="adminEmail" placeholder="admin@discoverjp.org" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="adminPass" placeholder="Enter admin password" required />
+        </div>
+        <button type="submit" class="login-btn">Login to Dashboard</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+    <div class="dash-layout">
+
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <h2>🏦 Admin Panel</h2>
+          <p>Discover Bank Global Mgmt</p>
+        </div>
+
+        <div class="nav-section">Overview</div>
+        <div class="nav-item active" onclick="showPage('overview', this)">
+          <span class="icon">📊</span> Dashboard
+        </div>
+        <div class="nav-item" onclick="showPage('notifications', this)">
+          <span class="icon">🔔</span> Notifications
+          <span class="nav-badge">3</span>
+        </div>
+
+        <div class="nav-section">Banking</div>
+        <div class="nav-item" onclick="showPage('transactions', this)">
+          <span class="icon">💸</span> Transactions
+        </div>
+        <div class="nav-item" onclick="showPage('accounts', this)">
+          <span class="icon">🏦</span> Accounts
+        </div>
+        <div class="nav-item" onclick="showPage('transfers', this)">
+          <span class="icon">🔄</span> Transfers
+        </div>
+        <div class="nav-item" onclick="showPage('loans', this)">
+          <span class="icon">💰</span> Loans
+        </div>
+
+        <div class="nav-section">Customers</div>
+        <div class="nav-item" onclick="showPage('applications', this)">
+          <span class="icon">📝</span> Applications
+          <span class="nav-badge">5</span>
+        </div>
+        <div class="nav-item" onclick="showPage('customers', this)">
+          <span class="icon">👥</span> Customers
+        </div>
+
+        <div class="nav-section">Settings</div>
+        <div class="nav-item" onclick="showPage('settings', this)">
+          <span class="icon">⚙️</span> Settings
+        </div>
+        <div class="nav-item" onclick="window.open('index.html', '_blank')">
+          <span class="icon">🌐</span> View Website
+        </div>
+        <div class="nav-item" onclick="logout()" style="color:var(--error); margin-top:1rem;">
+          <span class="icon">🚪</span> Logout
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main-content">
+        <div class="top-bar">
+          <h1 id="pageTitle">Dashboard Overview</h1>
+          <div class="top-bar-right">
+            <span class="admin-info" id="currentDate"></span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+          </div>
+        </div>
+
+        <!-- OVERVIEW PAGE -->
+        <div class="page active" id="page-overview">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="num">£2.4M</div>
+              <div class="label">Total Deposits</div>
+              <div class="change">↑ +12% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="num">£890K</div>
+              <div class="label">Total Withdrawals</div>
+              <div class="change">↓ -3% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="num">247</div>
+              <div class="label">Active Customers</div>
+              <div class="change">↑ +18 new</div>
+            </div>
+            <div class="stat-card">
+              <div class="num">£450K</div>
+              <div class="label">Loans Outstanding</div>
+              <div class="change">↑ +5% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="num">12</div>
+              <div class="label">Pending Applications</div>
+              <div class="change" style="color:var(--warning)">⚠ Needs review</div>
+            </div>
+            <div class="stat-card">
+              <div class="num">£1.5M</div>
+              <div class="label">Net Balance</div>
+              <div class="change">↑ +8% this month</div>
+            </div>
+          </div>
+
+          <div class="section-label">Recent Transactions</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Customer</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span style="font-family:monospace;color:var(--gold)">TXN-001</span></td>
+                  <td>James Wilson</td>
+                  <td>Deposit</td>
+                  <td style="color:var(--success)">+£5,000</td>
+                  <td>26 Jun 2026</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+                <tr>
+                  <td><span style="font-family:monospace;color:var(--gold)">TXN-002</span></td>
+                  <td>Amina Okafor</td>
+                  <td>Transfer</td>
+                  <td style="color:var(--error)">-£2,500</td>
+                  <td>26 Jun 2026</td>
+                  <td><span class="badge badge-processing">Processing</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span style="font-family:monospace;color:var(--gold)">TXN-003</span></td>
+                  <td>Chen Wei</td>
+                  <td>Withdrawal</td>
+                  <td style="color:var(--error)">-£1,200</td>
+                  <td>25 Jun 2026</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+                <tr>
+                  <td><span style="font-family:monospace;color:var(--gold)">TXN-004</span></td>
+                  <td>Sarah Johnson</td>
+                  <td>Int'l Transfer</td>
+                  <td style="color:var(--error)">-£8,000</td>
+                  <td>25 Jun 2026</td>
+                  <td><span class="badge badge-pending">Pending</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span style="font-family:monospace;color:var(--gold)">TXN-005</span></td>
+                  <td>Mohammed Al-Rashid</td>
+                  <td>Deposit</td>
+                  <td style="color:var(--success)">+£15,000</td>
+                  <td>24 Jun 2026</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TRANSACTIONS PAGE -->
+        <div class="page" id="page-transactions">
+          <div class="controls-row">
+            <div class="control-card">
+              <h4>🔍 Filter Transactions</h4>
+              <select>
+                <option>All Types</option>
+                <option>Deposits</option>
+                <option>Withdrawals</option>
+                <option>Transfers</option>
+                <option>International</option>
+              </select>
+              <select>
+                <option>All Status</option>
+                <option>Pending</option>
+                <option>Processing</option>
+                <option>Completed</option>
+                <option>Failed</option>
+              </select>
+              <button class="apply-btn">Apply Filter</button>
+            </div>
+            <div class="control-card">
+              <h4>💸 Transaction Limits</h4>
+              <input type="number" placeholder="Daily limit (£)" value="50000" />
+              <input type="number" placeholder="Int'l limit (£)" value="20000" />
+              <button class="apply-btn">Update Limits</button>
+            </div>
+            <div class="control-card">
+              <h4>🔒 Transaction Controls</h4>
+              <select>
+                <option>Select Action</option>
+                <option>Freeze All Transfers</option>
+                <option>Enable All Transfers</option>
+                <option>Block International</option>
+                <option>Allow International</option>
+              </select>
+              <input type="text" placeholder="Reason for action..." />
+              <button class="apply-btn" style="background:var(--error);color:white;">Apply Control</button>
+            </div>
+          </div>
+
+          <div class="section-label">All Transactions</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Customer</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>From/To</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TXN-001</td>
+                  <td>James Wilson</td>
+                  <td>Deposit</td>
+                  <td style="color:var(--success)">+£5,000</td>
+                  <td>Bank Transfer</td>
+                  <td>26 Jun 2026</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TXN-002</td>
+                  <td>Amina Okafor</td>
+                  <td>Int'l Transfer</td>
+                  <td style="color:var(--error)">-£2,500</td>
+                  <td>Nigeria → GTB</td>
+                  <td>26 Jun 2026</td>
+                  <td><span class="badge badge-processing">Processing</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TXN-003</td>
+                  <td>Chen Wei</td>
+                  <td>Withdrawal</td>
+                  <td style="color:var(--error)">-£1,200</td>
+                  <td>ATM London</td>
+                  <td>25 Jun 2026</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TXN-004</td>
+                  <td>Sarah Johnson</td>
+                  <td>Transfer</td>
+                  <td style="color:var(--error)">-£8,000</td>
+                  <td>HSBC UK</td>
+                  <td>25 Jun 2026</td>
+                  <td><span class="badge badge-pending">Pending</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TXN-005</td>
+                  <td>Mohammed Al-Rashid</td>
+                  <td>Deposit</td>
+                  <td style="color:var(--success)">+£15,000</td>
+                  <td>Wire Transfer</td>
+                  <td>24 Jun 2026</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TXN-006</td>
+                  <td>Emily Brown</td>
+                  <td>Bill Payment</td>
+                  <td style="color:var(--error)">-£350</td>
+                  <td>British Gas</td>
+                  <td>24 Jun 2026</td>
+                  <td><span class="badge badge-completed">Completed</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TXN-007</td>
+                  <td>David Osei</td>
+                  <td>Int'l Transfer</td>
+                  <td style="color:var(--error)">-£3,000</td>
+                  <td>Ghana → Ecobank</td>
+                  <td>23 Jun 2026</td>
+                  <td><span class="badge badge-failed">Failed</span></td>
+                  <td>
+                    <button class="btn btn-approve">Retry</button>
+                    <button class="btn btn-view">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ACCOUNTS PAGE -->
+        <div class="page" id="page-accounts">
+          <div class="controls-row">
+            <div class="control-card">
+              <h4>🔍 Search Account</h4>
+              <input type="text" placeholder="Search by name or account no..." />
+              <button class="apply-btn">Search</button>
+            </div>
+            <div class="control-card">
+              <h4>⚙️ Account Action</h4>
+              <select>
+                <option>Select Account</option>
+                <option>ACC-001 — James Wilson</option>
+                <option>ACC-002 — Amina Okafor</option>
+                <option>ACC-003 — Chen Wei</option>
+              </select>
+              <select>
+                <option>Select Action</option>
+                <option>Freeze Account</option>
+                <option>Unfreeze Account</option>
+                <option>Close Account</option>
+                <option>Reset Password</option>
+                <option>Upgrade Account</option>
+              </select>
+              <button class="apply-btn" style="background:var(--error);color:white;">Apply Action</button>
+            </div>
+          </div>
+
+          <div class="section-label">All Customer Accounts</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Account No</th>
+                  <th>Customer</th>
+                  <th>Type</th>
+                  <th>Balance</th>
+                  <th>Country</th>
+                  <th>Opened</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">ACC-001</td>
+                  <td>James Wilson</td>
+                  <td>Personal Savings</td>
+                  <td>£12,450</td>
+                  <td>🇬🇧 UK</td>
+                  <td>Jan 2026</td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td>
+                    <button class="btn btn-freeze">Freeze</button>
+                    <button class="btn btn-view">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">ACC-002</td>
+                  <td>Amina Okafor</td>
+                  <td>Business Savings</td>
+                  <td>£45,200</td>
+                  <td>🇳🇬 Nigeria</td>
+                  <td>Feb 2026</td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td>
+                    <button class="btn btn-freeze">Freeze</button>
+                    <button class="btn btn-view">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">ACC-003</td>
+                  <td>Chen Wei</td>
+                  <td>Fixed Deposit</td>
+                  <td>£80,000</td>
+                  <td>🇨🇳 China</td>
+                  <td>Mar 2026</td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td>
+                    <button class="btn btn-freeze">Freeze</button>
+                    <button class="btn btn-view">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">ACC-004</td>
+                  <td>Sarah Johnson</td>
+                  <td>Salary Account</td>
+                  <td>£3,800</td>
+                  <td>🇬🇧 UK</td>
+                  <td>Apr 2026</td>
+                  <td><span class="badge badge-frozen">Frozen</span></td>
+                  <td>
+                    <button class="btn btn-approve">Unfreeze</button>
+                    <button class="btn btn-view">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">ACC-005</td>
+                  <td>Mohammed Al-Rashid</td>
+                  <td>Personal Savings</td>
+                  <td>£95,000</td>
+                  <td>🇦🇪 UAE</td>
+                  <td>May 2026</td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td>
+                    <button class="btn btn-freeze">Freeze</button>
+                    <button class="btn btn-view">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TRANSFERS PAGE -->
+        <div class="page" id="page-transfers">
+          <div class="controls-row">
+            <div class="control-card">
+              <h4>🔄 Pending Transfers</h4>
+              <select>
+                <option>All Transfers</option>
+                <option>Domestic Only</option>
+                <option>International Only</option>
+              </select>
+              <button class="apply-btn">Filter</button>
+            </div>
+            <div class="control-card">
+              <h4>⚡ Bulk Actions</h4>
+              <select>
+                <option>Select Action</option>
+                <option>Approve All Pending</option>
+                <option>Reject All Pending</option>
+                <option>Hold All International</option>
+              </select>
+              <button class="apply-btn" style="background:var(--error);color:white;">Execute</button>
+            </div>
+          </div>
+
+          <div class="section-label">Pending Transfers — Requires Approval</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ref</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Requested</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TRF-001</td>
+                  <td>Amina Okafor</td>
+                  <td>GTBank Nigeria</td>
+                  <td>£2,500</td>
+                  <td>International</td>
+                  <td>26 Jun 2026</td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TRF-002</td>
+                  <td>Sarah Johnson</td>
+                  <td>HSBC UK</td>
+                  <td>£8,000</td>
+                  <td>Domestic</td>
+                  <td>25 Jun 2026</td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">TRF-003</td>
+                  <td>David Osei</td>
+                  <td>Ecobank Ghana</td>
+                  <td>£3,000</td>
+                  <td>International</td>
+                  <td>23 Jun 2026</td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- LOANS PAGE -->
+        <div class="page" id="page-loans">
+          <div class="section-label">Loan Applications</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Loan ID</th>
+                  <th>Customer</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Term</th>
+                  <th>Rate</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">LN-001</td>
+                  <td>James Wilson</td>
+                  <td>Personal Loan</td>
+                  <td>£10,000</td>
+                  <td>24 months</td>
+                  <td>6.5%</td>
+                  <td><span class="badge badge-pending">Pending</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">LN-002</td>
+                  <td>Amina Okafor</td>
+                  <td>SME Loan</td>
+                  <td>£50,000</td>
+                  <td>36 months</td>
+                  <td>8.2%</td>
+                  <td><span class="badge badge-review">In Review</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">LN-003</td>
+                  <td>David Osei</td>
+                  <td>Business Loan</td>
+                  <td>£25,000</td>
+                  <td>48 months</td>
+                  <td>7.8%</td>
+                  <td><span class="badge badge-approved">Approved</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- APPLICATIONS PAGE -->
+        <div class="page" id="page-applications">
+          <div class="section-label">New Account Applications</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Account Type</th>
+                  <th>Country</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>James Wilson</td>
+                  <td>james.w@email.com</td>
+                  <td>Personal Savings</td>
+                  <td>🇬🇧 UK</td>
+                  <td>26 Jun 2026</td>
+                  <td><span class="badge badge-pending">Pending</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Amina Okafor</td>
+                  <td>amina.o@email.com</td>
+                  <td>Business Savings</td>
+                  <td>🇳🇬 Nigeria</td>
+                  <td>25 Jun 2026</td>
+                  <td><span class="badge badge-review">In Review</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Chen Wei</td>
+                  <td>chen.w@email.com</td>
+                  <td>Fixed Deposit</td>
+                  <td>🇨🇳 China</td>
+                  <td>24 Jun 2026</td>
+                  <td><span class="badge badge-approved">Approved</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+                <tr>
+                  <td>Sarah Johnson</td>
+                  <td>sarah.j@email.com</td>
+                  <td>Salary Account</td>
+                  <td>🇬🇧 UK</td>
+                  <td>23 Jun 2026</td>
+                  <td><span class="badge badge-approved">Approved</span></td>
+                  <td><button class="btn btn-view">View</button></td>
+                </tr>
+                <tr>
+                  <td>Mohammed Al-Rashid</td>
+                  <td>m.rashid@email.com</td>
+                  <td>Personal Savings</td>
+                  <td>🇦🇪 UAE</td>
+                  <td>22 Jun 2026</td>
+                  <td><span class="badge badge-pending">Pending</span></td>
+                  <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CUSTOMERS PAGE -->
+        <div class="page" id="page-customers">
+          <div class="section-label">All Customers</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Country</th>
+                  <th>Accounts</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">CUS-001</td>
+                  <td>James Wilson</td>
+                  <td>james.w@email.com</td>
+                  <td>+44 7700 111111</td>
+                  <td>🇬🇧 UK</td>
+                  <td>2</td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td>
+                    <button class="btn btn-view">View</button>
+                    <button class="btn btn-freeze">Suspend</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">CUS-002</td>
+                  <td>Amina Okafor</td>
+                  <td>amina.o@email.com</td>
+                  <td>+234 800 000000</td>
+                  <td>🇳🇬 Nigeria</td>
+                  <td>1</td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td>
+                    <button class="btn btn-view">View</button>
+                    <button class="btn btn-freeze">Suspend</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">CUS-003</td>
+                  <td>Chen Wei</td>
+                  <td>chen.w@email.com</td>
+                  <td>+86 138 0000 0000</td>
+                  <td>🇨🇳 China</td>
+                  <td>1</td>
+                  <td><span class="badge badge-active">Active</span></td>
+                  <td>
+                    <button class="btn btn-view">View</button>
+                    <button class="btn btn-freeze">Suspend</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;color:var(--gold)">CUS-004</td>
+                  <td>Sarah Johnson</td>
+                  <td>sarah.j@email.com</td>
+                  <td>+44 7700 222222</td>
+                  <td>🇬🇧 UK</td>
+                  <td>1</td>
+                  <td><span class="badge badge-frozen">Suspended</span></td>
+                  <td>
+                    <button class="btn btn-view">View</button>
+                    <button class="btn btn-approve">Reinstate</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS PAGE -->
+        <div class="page" id="page-notifications">
+          <div class="section-label">System Notifications</div>
+          <div class="notif notif-error">
+            <p>🚨 Large international transfer pending: £8,000 from Sarah Johnson to HSBC UK — requires approval</p>
+            <span>2 hours ago</span>
+          </div>
+          <div class="notif">
+            <p>📝 New account application received from Mohammed Al-Rashid (UAE)</p>
+            <span>5 hours ago</span>
+          </div>
+          <div class="notif notif-success">
+            <p>✅ Transaction TXN-001 completed successfully — £5,000 deposit by James Wilson</p>
+            <span>6 hours ago</span>
+          </div>
+          <div class="notif">
+            <p>👤 New customer registration: David Osei from Ghana</p>
+            <span>Yesterday</span>
+          </div>
+          <div class="notif notif-error">
+            <p>⚠️ Transaction TXN-007 failed — International transfer to Ecobank Ghana rejected by correspondent bank</p>
+            <span>Yesterday</span>
+          </div>
+          <div class="notif notif-success">
+            <p>✅ Loan LN-003 approved for David Osei — £25,000 Business Loan</p>
+            <span>2 days ago</span>
+          </div>
+        </div>
+
+        <!-- SETTINGS PAGE -->
+        <div class="page" id="page-settings">
+          <div class="controls-row">
+            <div class="control-card">
+              <h4>🔐 Change Admin Password</h4>
+              <input type="password" placeholder="Current password" />
+              <input type="password" placeholder="New password" />
+              <input type="password" placeholder="Confirm new password" />
+              <button class="apply-btn">Update Password</button>
+            </div>
+            <div class="control-card">
+              <h4>🏦 Bank Settings</h4>
+              <input type="text" placeholder="Bank Name" value="Discover Bank Global Management plc" />
+              <input type="email" placeholder="Support Email" value="officesupport.mlaj@gmail.com" />
+              <input type="tel" placeholder="Phone" value="+44 20 9946 9200" />
+              <button class="apply-btn">Save Settings</button>
+            </div>
+            <div class="control-card">
+              <h4>🌐 Website Links</h4>
+              <a href="index.html" target="_blank" style="display:block;color:var(--gold);font-size:0.82rem;margin-bottom:0.5rem;">🌐 Main Website</a>
+              <a href="signup.html" target="_blank" style="display:block;color:var(--gold);font-size:0.82rem;margin-bottom:0.5rem;">📝 Sign Up Page</a>
+              <a href="login.html" target="_blank" style="display:block;color:var(--gold);font-size:0.82rem;margin-bottom:0.5rem;">🔐 Login Page</a>
+              <a href="https://analytics.google.com" target="_blank" style="display:block;color:var(--gold);font-size:0.82rem;margin-bottom:0.5rem;">📊 Google Analytics</a>
+              <a href="https://github.com" target="_blank" style="display:block;color:var(--gold);font-size:0.82rem;">💻 GitHub</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set date
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-GB', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+
+    // Admin login
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value;
+      const pass = document.getElementById('adminPass').value;
+      if (email === 'officesupport.mlaj@gmail.com' && pass === 'admin2026') {
+        document.getElementById('adminLogin').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    });
+
+    // Navigation
+    function showPage(pageId, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page-' + pageId).classList.add('active');
+      if(el) el.classList.add('active');
+      const titles = {
+        overview: 'Dashboard Overview',
+        transactions: 'Transaction Management',
+        accounts: 'Account Management',
+        transfers: 'Transfer Controls',
+        loans: 'Loan Management',
+        applications: 'Account Applications',
+        customers: 'Customer Management',
+        notifications: 'Notifications',
+        settings: 'Settings'
+      };
+      document.getElementById('pageTitle').textContent = titles[pageId] || 'Dashboard';
+    }
+
+    // Logout
+    function logout() {
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('adminLogin').style.display = 'flex';
+      document.getElementById('adminEmail').value = '';
+      document.getElementById('adminPass').value = '';
+    }
+
+    // Action buttons
+    document.addEventListener('click', function(e) {
+      if(e.target.classList.contains('btn-approve')) {
+        const badge = e.target.closest('tr')?.querySelector('.badge');
+        if(badge) { badge.className = 'badge badge-approved'; badge.textContent = 'Approved'; }
+        e.target.textContent = 'Done ✓';
+        e.target.disabled = true;
+        e.target.style.opacity = '0.5';
+      }
+      if(e.target.classList.contains('btn-reject')) {
+        if(confirm('Are you sure you want to reject this?')) {
+          const badge = e.target.closest('tr')?.querySelector('.badge');
+          if(badge) { badge.className = 'badge badge-rejected'; badge.textContent = 'Rejected'; }
+          e.target.textContent = 'Rejected';
+          e.target.disabled = true;
+          e.target.style.opacity = '0.5';
+        }
+      }
+      if(e.target.classList.contains('btn-freeze')) {
+        if(confirm('Are you sure you want to freeze this account?')) {
+          const badge = e.target.closest('tr')?.querySelector('.badge');
+          if(badge) { badge.className = 'badge badge-frozen'; badge.textContent = 'Frozen'; }
+          e.target.textContent = 'Frozen';
+          e.target.disabled = true;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
