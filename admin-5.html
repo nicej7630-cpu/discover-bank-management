@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — Discover Bank Global Management plc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #00325F; --navy-dark: #001F3F; --navy-light: #1a5276;
+      --orange: #E87722; --orange-lt: #F59A4F;
+      --white: #FFFFFF; --cream: #F8F9FA; --gray: #6C757D;
+      --light-gray: #E9ECEF; --border: #DEE2E6; --text: #212529;
+      --success: #28A745; --error: #DC3545; --warning: #FFC107; --info: #17A2B8;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--navy-dark), var(--navy)); }
+    .login-card { background: white; border-radius: 12px; padding: 2.5rem; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-logo { text-align: center; margin-bottom: 2rem; }
+    .login-logo .icon { width: 60px; height: 60px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900; color: var(--orange); margin: 0 auto 1rem; }
+    .login-logo h2 { font-size: 1.4rem; font-weight: 700; color: var(--navy); }
+    .login-logo p { font-size: 0.82rem; color: var(--gray); margin-top: 0.25rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 6px; font-size: 0.9rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; background: white; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--navy); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .btn-primary { background: var(--navy); color: white; width: 100%; padding: 0.9rem; font-size: 0.95rem; }
+    .btn-primary:hover { background: var(--navy-dark); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: var(--error); color: white; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-warning { background: var(--warning); color: var(--text); }
+    .btn-warning:hover { background: #e0a800; }
+    .btn-info { background: var(--info); color: white; }
+    .btn-info:hover { background: #138496; }
+    .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+    .btn-outline:hover { background: var(--navy); color: white; }
+    .btn-orange { background: var(--orange); color: white; }
+    .btn-orange:hover { background: var(--orange-lt); }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.78rem; }
+    .error-msg { display: none; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 0.75rem; text-align: center; font-size: 0.85rem; color: var(--error); margin-bottom: 1rem; }
+
+    /* ── LAYOUT ── */
+    .dashboard { display: none; }
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: 250px; background: var(--navy-dark); min-height: 100vh; position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; z-index: 50; display: flex; flex-direction: column; }
+    .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .sidebar-header .logo { display: flex; align-items: center; gap: 0.75rem; }
+    .sidebar-header .logo-icon { width: 38px; height: 38px; background: var(--orange); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 1rem; }
+    .sidebar-header h2 { font-size: 0.9rem; font-weight: 700; color: white; line-height: 1.3; }
+    .sidebar-header p { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+    .nav-section { padding: 1rem 1rem 0.25rem; font-size: 0.65rem; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.12em; }
+    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1rem; cursor: pointer; font-size: 0.85rem; color: rgba(255,255,255,0.7); transition: all 0.2s; border-left: 3px solid transparent; margin: 0.1rem 0; }
+    .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
+    .nav-item.active { color: white; border-left-color: var(--orange); background: rgba(232,119,34,0.1); }
+    .nav-item .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+    .nav-badge { margin-left: auto; background: var(--error); color: white; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 10px; }
+    .nav-badge.orange { background: var(--orange); }
+    .sidebar-footer { margin-top: auto; padding: 1rem; border-top: 1px solid rgba(255,255,255,0.1); }
+
+    /* ── MAIN ── */
+    .main { margin-left: 250px; flex: 1; display: flex; flex-direction: column; }
+    .topbar { background: white; border-bottom: 1px solid var(--border); padding: 0.9rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 40; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .topbar h1 { font-size: 1.2rem; font-weight: 700; color: var(--navy); }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .topbar-date { font-size: 0.8rem; color: var(--gray); }
+    .btn-logout { padding: 0.4rem 1rem; background: var(--error); color: white; border: none; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+
+    /* ── PAGES ── */
+    .page { display: none; padding: 1.5rem; }
+    .page.active { display: block; }
+
+    /* ── CARDS ── */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: white; border-radius: 10px; padding: 1.25rem; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .stat-card .stat-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .stat-card .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--navy); }
+    .stat-card .stat-label { font-size: 0.75rem; color: var(--gray); margin-top: 0.2rem; }
+    .stat-card .stat-change { font-size: 0.72rem; margin-top: 0.3rem; }
+    .stat-card .stat-change.up { color: var(--success); }
+    .stat-card .stat-change.down { color: var(--error); }
+    .stat-card.orange { border-left: 4px solid var(--orange); }
+    .stat-card.green { border-left: 4px solid var(--success); }
+    .stat-card.red { border-left: 4px solid var(--error); }
+    .stat-card.blue { border-left: 4px solid var(--info); }
+
+    /* ── SECTION ── */
+    .section-card { background: white; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04); overflow: hidden; }
+    .section-head { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .section-head h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); }
+    .section-body { padding: 1.25rem; }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 500px; }
+    th { padding: 0.7rem 1rem; text-align: left; font-size: 0.72rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; background: var(--cream); border-bottom: 1px solid var(--border); }
+    td { padding: 0.85rem 1rem; font-size: 0.85rem; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8f9ff; }
+    .badge { display: inline-flex; align-items: center; padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-danger { background: #f8d7da; color: #721c24; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+    .badge-info { background: #d1ecf1; color: #0c5460; }
+    .badge-secondary { background: #e2e3e5; color: #383d41; }
+    .badge-orange { background: #fde8d8; color: #8b4000; }
+
+    /* ── MODAL ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 12px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .modal-header h3 { font-size: 1rem; font-weight: 700; color: var(--navy); }
+    .modal-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--gray); padding: 0.25rem; }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 0.75rem; justify-content: flex-end; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-section-title { font-size: 0.72rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+
+    /* ── NOTIFICATION ── */
+    .notif { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem; }
+    .notif.red { background: #fdf2f2; border: 1px solid #f5c6cb; }
+    .notif.green { background: #f0fdf4; border: 1px solid #c3e6cb; }
+    .notif.orange { background: #fff8f0; border: 1px solid #ffd7a8; }
+    .notif.blue { background: #f0f8ff; border: 1px solid #b8daff; }
+    .notif-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .notif-content h4 { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+    .notif-content p { font-size: 0.78rem; color: var(--gray); }
+    .notif-time { font-size: 0.7rem; color: var(--gray); margin-left: auto; flex-shrink: 0; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+    .tab { padding: 0.75rem 1.25rem; font-size: 0.85rem; font-weight: 500; color: var(--gray); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+    .tab.active { color: var(--navy); border-bottom-color: var(--orange); font-weight: 600; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── QUICK ACTIONS ── */
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+    .quick-card { background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 1.25rem; text-align: center; cursor: pointer; transition: all 0.2s; text-decoration: none; display: block; }
+    .quick-card:hover { border-color: var(--orange); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .quick-card .icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .quick-card h4 { font-size: 0.8rem; font-weight: 600; color: var(--navy); }
+
+    /* ── PROFILE ── */
+    .profile-header { display: flex; align-items: center; gap: 1rem; padding: 1.5rem; background: linear-gradient(135deg, var(--navy-dark), var(--navy)); border-radius: 10px; margin-bottom: 1.5rem; }
+    .profile-avatar { width: 60px; height: 60px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; color: white; flex-shrink: 0; }
+    .profile-info h3 { font-size: 1.1rem; font-weight: 700; color: white; }
+    .profile-info p { font-size: 0.82rem; color: rgba(255,255,255,0.7); }
+    .profile-badges { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .profile-badge { font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; background: rgba(255,255,255,0.15); color: white; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginWrap">
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-logo">
+          <div class="icon">D</div>
+          <h2>Admin Portal</h2>
+          <p>Discover Bank Global Management plc</p>
+        </div>
+        <div class="error-msg" id="loginError">❌ Invalid credentials. Please try again.</div>
+        <form id="loginForm">
+          <div class="form-group">
+            <label>Admin Email</label>
+            <input type="email" id="adminEmail" placeholder="Enter admin email" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="adminPass" placeholder="Enter password" required />
+          </div>
+          <button type="submit" class="btn btn-primary">🔐 Login to Dashboard</button>
+        </form>
+        <p style="text-align:center;margin-top:1rem;font-size:0.75rem;color:var(--gray);">🔒 Secure Admin Access Only</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+    <div class="layout">
+
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <div class="logo-icon">D</div>
+            <div>
+              <h2>Admin Panel</h2>
+              <p>Discover Bank Global Mgmt</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-section">Overview</div>
+        <div class="nav-item active" onclick="showPage('dashboard-page', this)">
+          <span class="nav-icon">📊</span> Dashboard
+        </div>
+        <div class="nav-item" onclick="showPage('notifications-page', this)">
+          <span class="nav-icon">🔔</span> Notifications
+          <span class="nav-badge">4</span>
+        </div>
+
+        <div class="nav-section">Banking</div>
+        <div class="nav-item" onclick="showPage('transactions-page', this)">
+          <span class="nav-icon">💸</span> Transactions
+        </div>
+        <div class="nav-item" onclick="showPage('accounts-page', this)">
+          <span class="nav-icon">🏦</span> Accounts
+        </div>
+        <div class="nav-item" onclick="showPage('transfers-page', this)">
+          <span class="nav-icon">🔄</span> Transfers
+          <span class="nav-badge orange">3</span>
+        </div>
+        <div class="nav-item" onclick="showPage('loans-page', this)">
+          <span class="nav-icon">💰</span> Loans
+        </div>
+
+        <div class="nav-section">Customers</div>
+        <div class="nav-item" onclick="showPage('applications-page', this)">
+          <span class="nav-icon">📝</span> Applications
+          <span class="nav-badge">5</span>
+        </div>
+        <div class="nav-item" onclick="showPage('customers-page', this)">
+          <span class="nav-icon">👥</span> Customers
+        </div>
+        <div class="nav-item" onclick="showPage('kyc-page', this)">
+          <span class="nav-icon">✅</span> KYC Verification
+          <span class="nav-badge">3</span>
+        </div>
+
+        <div class="nav-section">Settings</div>
+        <div class="nav-item" onclick="showPage('settings-page', this)">
+          <span class="nav-icon">⚙️</span> Settings
+        </div>
+        <div class="nav-item" onclick="window.open('index.html','_blank')">
+          <span class="nav-icon">🌐</span> View Website
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="nav-item" onclick="logout()" style="color:#ff6b6b;">
+            <span class="nav-icon">🚪</span> Logout
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="main">
+        <div class="topbar">
+          <h1 id="pageTitle">Dashboard Overview</h1>
+          <div class="topbar-right">
+            <span class="topbar-date" id="currentDate"></span>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+          </div>
+        </div>
+
+        <!-- ── DASHBOARD PAGE ── -->
+        <div class="page active" id="dashboard-page">
+          <div class="stats-row">
+            <div class="stat-card orange">
+              <div class="stat-icon">💷</div>
+              <div class="stat-num">£2.4M</div>
+              <div class="stat-label">Total Deposits</div>
+              <div class="stat-change up">↑ +12% this month</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-icon">👥</div>
+              <div class="stat-num">247</div>
+              <div class="stat-label">Active Customers</div>
+              <div class="stat-change up">↑ +18 new</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-icon">⏳</div>
+              <div class="stat-num">12</div>
+              <div class="stat-label">Pending Applications</div>
+              <div class="stat-change down">⚠ Needs review</div>
+            </div>
+            <div class="stat-card blue">
+              <div class="stat-icon">💰</div>
+              <div class="stat-num">£450K</div>
+              <div class="stat-label">Loans Outstanding</div>
+              <div class="stat-change up">↑ +5%</div>
+            </div>
+            <div class="stat-card orange">
+              <div class="stat-icon">🔄</div>
+              <div class="stat-num">£890K</div>
+              <div class="stat-label">Total Withdrawals</div>
+              <div class="stat-change down">↓ -3%</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-icon">📈</div>
+              <div class="stat-num">£1.5M</div>
+              <div class="stat-label">Net Balance</div>
+              <div class="stat-change up">↑ +8%</div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-head">
+              <h3>⚡ Quick Actions</h3>
+            </div>
+            <div class="section-body">
+              <div class="quick-grid">
+                <div class="quick-card" onclick="showPage('applications-page', null)">
+                  <div class="icon">📝</div>
+                  <h4>Review Applications</h4>
+                </div>
+                <div class="quick-card" onclick="showPage('kyc-page', null)">
+                  <div class="icon">✅</div>
+                  <h4>KYC Verification</h4>
+                </div>
+                <div class="quick-card" onclick="showPage('transfers-page', null)">
+                  <div class="icon">🔄</div>
+                  <h4>Approve Transfers</h4>
+                </div>
+                <div class="quick-card" onclick="showPage('transactions-page', null)">
+                  <div class="icon">💸</div>
+                  <h4>Transactions</h4>
+                </div>
+                <div class="quick-card" onclick="showPage('customers-page', null)">
+                  <div class="icon">👥</div>
+                  <h4>Manage Customers</h4>
+                </div>
+                <div class="quick-card" onclick="showPage('loans-page', null)">
+                  <div class="icon">💰</div>
+                  <h4>Loan Requests</h4>
+                </div>
+                <div class="quick-card" onclick="openModal('sendMessageModal')">
+                  <div class="icon">📧</div>
+                  <h4>Send Message</h4>
+                </div>
+                <div class="quick-card" onclick="showPage('settings-page', null)">
+                  <div class="icon">⚙️</div>
+                  <h4>Settings</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-head">
+              <h3>🕐 Recent Activity</h3>
+              <button class="btn btn-outline btn-sm" onclick="showPage('transactions-page', null)">View All</button>
+            </div>
+            <div class="section-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th><th>Customer</th><th>Type</th><th>Amount</th><th>Date</th><th>Status</th><th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>TXN-001</strong></td><td>James Wilson</td><td>Deposit</td>
+                      <td style="color:var(--success);font-weight:600">+£5,000</td><td>03 Jul 2026</td>
+                      <td><span class="badge badge-success">Completed</span></td>
+                      <td><button class="btn btn-info btn-sm" onclick="viewTransaction('TXN-001','James Wilson','Deposit','£5,000','Completed')">View</button></td>
+                    </tr>
+                    <tr>
+                      <td><strong>TXN-002</strong></td><td>Amina Okafor</td><td>Int'l Transfer</td>
+                      <td style="color:var(--error);font-weight:600">-£2,500</td><td>03 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('TXN-002','transfer')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('TXN-002','transfer')">Reject</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>TXN-003</strong></td><td>Chen Wei</td><td>Withdrawal</td>
+                      <td style="color:var(--error);font-weight:600">-£1,200</td><td>02 Jul 2026</td>
+                      <td><span class="badge badge-success">Completed</span></td>
+                      <td><button class="btn btn-info btn-sm" onclick="viewTransaction('TXN-003','Chen Wei','Withdrawal','£1,200','Completed')">View</button></td>
+                    </tr>
+                    <tr>
+                      <td><strong>TXN-004</strong></td><td>Sarah Johnson</td><td>Transfer</td>
+                      <td style="color:var(--error);font-weight:600">-£8,000</td><td>02 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('TXN-004','transfer')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('TXN-004','transfer')">Reject</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TRANSACTIONS PAGE ── -->
+        <div class="page" id="transactions-page">
+          <div class="section-card">
+            <div class="section-head">
+              <h3>💸 Transaction Management</h3>
+              <button class="btn btn-orange btn-sm" onclick="openModal('addTransactionModal')">+ Add Transaction</button>
+            </div>
+            <div class="section-body">
+              <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+                <select style="padding:0.5rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+                  <option>All Types</option><option>Deposits</option><option>Withdrawals</option><option>Transfers</option>
+                </select>
+                <select style="padding:0.5rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+                  <option>All Status</option><option>Pending</option><option>Completed</option><option>Failed</option>
+                </select>
+                <input type="text" placeholder="Search transactions..." style="padding:0.5rem 1rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;flex:1;min-width:200px;" />
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Customer</th><th>Type</th><th>Amount</th><th>From/To</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>TXN-001</strong></td><td>James Wilson</td><td>Deposit</td>
+                      <td style="color:var(--success);font-weight:600">+£5,000</td><td>Bank Transfer</td><td>03 Jul 2026</td>
+                      <td><span class="badge badge-success">Completed</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="viewTransaction('TXN-001','James Wilson','Deposit','£5,000','Completed')">View</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editTransactionModal')">Edit</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>TXN-002</strong></td><td>Amina Okafor</td><td>Int'l Transfer</td>
+                      <td style="color:var(--error);font-weight:600">-£2,500</td><td>GTBank Nigeria</td><td>03 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('TXN-002','transaction')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('TXN-002','transaction')">Reject</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>TXN-003</strong></td><td>Chen Wei</td><td>Withdrawal</td>
+                      <td style="color:var(--error);font-weight:600">-£1,200</td><td>ATM London</td><td>02 Jul 2026</td>
+                      <td><span class="badge badge-success">Completed</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="viewTransaction('TXN-003','Chen Wei','Withdrawal','£1,200','Completed')">View</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editTransactionModal')">Edit</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>TXN-004</strong></td><td>Sarah Johnson</td><td>Transfer</td>
+                      <td style="color:var(--error);font-weight:600">-£8,000</td><td>HSBC UK</td><td>02 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('TXN-004','transaction')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('TXN-004','transaction')">Reject</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>TXN-005</strong></td><td>Mohammed Al-Rashid</td><td>Deposit</td>
+                      <td style="color:var(--success);font-weight:600">+£15,000</td><td>Wire Transfer</td><td>01 Jul 2026</td>
+                      <td><span class="badge badge-success">Completed</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="viewTransaction('TXN-005','Mohammed Al-Rashid','Deposit','£15,000','Completed')">View</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editTransactionModal')">Edit</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>TXN-006</strong></td><td>David Osei</td><td>Int'l Transfer</td>
+                      <td style="color:var(--error);font-weight:600">-£3,000</td><td>Ecobank Ghana</td><td>30 Jun 2026</td>
+                      <td><span class="badge badge-danger">Failed</span></td>
+                      <td>
+                        <button class="btn btn-orange btn-sm" onclick="approveItem('TXN-006','transaction')">Retry</button>
+                        <button class="btn btn-info btn-sm" onclick="viewTransaction('TXN-006','David Osei','Int\'l Transfer','£3,000','Failed')">View</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-head"><h3>🔒 Transaction Controls</h3></div>
+            <div class="section-body">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+                <div>
+                  <label style="font-size:0.78rem;font-weight:600;color:var(--gray);display:block;margin-bottom:0.4rem;">Daily Transaction Limit</label>
+                  <input type="number" value="50000" style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:6px;margin-bottom:0.5rem;" />
+                  <button class="btn btn-primary btn-sm" style="width:100%;" onclick="showSuccess('Daily limit updated!')">Update Limit</button>
+                </div>
+                <div>
+                  <label style="font-size:0.78rem;font-weight:600;color:var(--gray);display:block;margin-bottom:0.4rem;">International Transfer Limit</label>
+                  <input type="number" value="20000" style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:6px;margin-bottom:0.5rem;" />
+                  <button class="btn btn-primary btn-sm" style="width:100%;" onclick="showSuccess('Int\'l limit updated!')">Update Limit</button>
+                </div>
+                <div>
+                  <label style="font-size:0.78rem;font-weight:600;color:var(--gray);display:block;margin-bottom:0.4rem;">Emergency Controls</label>
+                  <button class="btn btn-danger btn-sm" style="width:100%;margin-bottom:0.5rem;" onclick="confirmAction('Freeze ALL transactions?')">🔒 Freeze All Transfers</button>
+                  <button class="btn btn-success btn-sm" style="width:100%;" onclick="showSuccess('All transfers enabled!')">✅ Enable All Transfers</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ACCOUNTS PAGE ── -->
+        <div class="page" id="accounts-page">
+          <div class="section-card">
+            <div class="section-head">
+              <h3>🏦 Account Management</h3>
+              <button class="btn btn-orange btn-sm" onclick="openModal('addAccountModal')">+ Add Account</button>
+            </div>
+            <div class="section-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Account No</th><th>Customer</th><th>Type</th><th>Balance</th><th>Country</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>ACC-001</strong></td><td>James Wilson</td><td>Personal Savings</td>
+                      <td><strong>£12,450</strong></td><td>🇬🇧 UK</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('James Wilson','ACC-001','£12,450','Personal Savings','Active','james.w@email.com','+44 7700 111111','London, UK')">View Profile</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editAccountModal')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmAction('Freeze ACC-001?')">Freeze</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>ACC-002</strong></td><td>Amina Okafor</td><td>Business Savings</td>
+                      <td><strong>£45,200</strong></td><td>🇳🇬 Nigeria</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('Amina Okafor','ACC-002','£45,200','Business Savings','Active','amina.o@email.com','+234 800 000000','Lagos, Nigeria')">View Profile</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editAccountModal')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmAction('Freeze ACC-002?')">Freeze</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>ACC-003</strong></td><td>Chen Wei</td><td>Fixed Deposit</td>
+                      <td><strong>£80,000</strong></td><td>🇨🇳 China</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('Chen Wei','ACC-003','£80,000','Fixed Deposit','Active','chen.w@email.com','+86 138 0000 0000','Beijing, China')">View Profile</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editAccountModal')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmAction('Freeze ACC-003?')">Freeze</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>ACC-004</strong></td><td>Sarah Johnson</td><td>Salary Account</td>
+                      <td><strong>£3,800</strong></td><td>🇬🇧 UK</td>
+                      <td><span class="badge badge-danger">Frozen</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('Sarah Johnson','ACC-004','£3,800','Salary Account','Frozen','sarah.j@email.com','+44 7700 222222','Manchester, UK')">View Profile</button>
+                        <button class="btn btn-success btn-sm" onclick="showSuccess('ACC-004 unfrozen!')">Unfreeze</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editAccountModal')">Edit</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>ACC-005</strong></td><td>Mohammed Al-Rashid</td><td>Personal Savings</td>
+                      <td><strong>£95,000</strong></td><td>🇦🇪 UAE</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('Mohammed Al-Rashid','ACC-005','£95,000','Personal Savings','Active','m.rashid@email.com','+971 50 000 0000','Dubai, UAE')">View Profile</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editAccountModal')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmAction('Freeze ACC-005?')">Freeze</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TRANSFERS PAGE ── -->
+        <div class="page" id="transfers-page">
+          <div class="section-card">
+            <div class="section-head"><h3>🔄 Pending Transfers — Requires Approval</h3></div>
+            <div class="section-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Ref</th><th>From</th><th>To Bank</th><th>Amount</th><th>Type</th><th>Requested</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>TRF-001</strong></td><td>Amina Okafor</td><td>GTBank Nigeria</td>
+                      <td style="font-weight:600">£2,500</td><td><span class="badge badge-orange">International</span></td>
+                      <td>03 Jul 2026</td><td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('TRF-001','transfer')">✅ Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('TRF-001','transfer')">❌ Reject</button>
+                        <button class="btn btn-info btn-sm" onclick="openModal('transferDetailModal')">View</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>TRF-002</strong></td><td>Sarah Johnson</td><td>HSBC UK</td>
+                      <td style="font-weight:600">£8,000</td><td><span class="badge badge-info">Domestic</span></td>
+                      <td>02 Jul 2026</td><td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('TRF-002','transfer')">✅ Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('TRF-002','transfer')">❌ Reject</button>
+                        <button class="btn btn-info btn-sm" onclick="openModal('transferDetailModal')">View</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>TRF-003</strong></td><td>David Osei</td><td>Ecobank Ghana</td>
+                      <td style="font-weight:600">£3,000</td><td><span class="badge badge-orange">International</span></td>
+                      <td>01 Jul 2026</td><td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('TRF-003','transfer')">✅ Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('TRF-003','transfer')">❌ Reject</button>
+                        <button class="btn btn-info btn-sm" onclick="openModal('transferDetailModal')">View</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── LOANS PAGE ── -->
+        <div class="page" id="loans-page">
+          <div class="section-card">
+            <div class="section-head">
+              <h3>💰 Loan Management</h3>
+              <button class="btn btn-orange btn-sm" onclick="openModal('addLoanModal')">+ Add Loan</button>
+            </div>
+            <div class="section-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Loan ID</th><th>Customer</th><th>Type</th><th>Amount</th><th>Term</th><th>Rate</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>LN-001</strong></td><td>James Wilson</td><td>Personal Loan</td>
+                      <td>£10,000</td><td>24 months</td><td>6.5%</td>
+                      <td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('LN-001','loan')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('LN-001','loan')">Reject</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editLoanModal')">Edit</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>LN-002</strong></td><td>Amina Okafor</td><td>SME Loan</td>
+                      <td>£50,000</td><td>36 months</td><td>8.2%</td>
+                      <td><span class="badge badge-info">In Review</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('LN-002','loan')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('LN-002','loan')">Reject</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editLoanModal')">Edit</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>LN-003</strong></td><td>David Osei</td><td>Business Loan</td>
+                      <td>£25,000</td><td>48 months</td><td>7.8%</td>
+                      <td><span class="badge badge-success">Approved</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="viewTransaction('LN-003','David Osei','Business Loan','£25,000','Approved')">View</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editLoanModal')">Edit</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── APPLICATIONS PAGE ── -->
+        <div class="page" id="applications-page">
+          <div class="section-card">
+            <div class="section-head"><h3>📝 New Account Applications</h3></div>
+            <div class="section-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Name</th><th>Email</th><th>Account Type</th><th>Country</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>James Wilson</strong></td><td>james.w@email.com</td><td>Personal Savings</td>
+                      <td>🇬🇧 UK</td><td>03 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openModal('reviewApplicationModal')">Review</button>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('James Wilson','application')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('James Wilson','application')">Reject</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Amina Okafor</strong></td><td>amina.o@email.com</td><td>Business Savings</td>
+                      <td>🇳🇬 Nigeria</td><td>02 Jul 2026</td>
+                      <td><span class="badge badge-info">In Review</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openModal('reviewApplicationModal')">Review</button>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('Amina Okafor','application')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('Amina Okafor','application')">Reject</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Mohammed Al-Rashid</strong></td><td>m.rashid@email.com</td><td>Personal Savings</td>
+                      <td>🇦🇪 UAE</td><td>01 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openModal('reviewApplicationModal')">Review</button>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('Mohammed Al-Rashid','application')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('Mohammed Al-Rashid','application')">Reject</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── CUSTOMERS PAGE ── -->
+        <div class="page" id="customers-page">
+          <div class="section-card">
+            <div class="section-head">
+              <h3>👥 Customer Management</h3>
+              <div style="display:flex;gap:0.5rem;">
+                <input type="text" placeholder="Search customers..." style="padding:0.4rem 0.75rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;" />
+                <button class="btn btn-orange btn-sm" onclick="openModal('addCustomerModal')">+ Add Customer</button>
+              </div>
+            </div>
+            <div class="section-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Country</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>CUS-001</strong></td><td>James Wilson</td><td>james.w@email.com</td>
+                      <td>+44 7700 111111</td><td>🇬🇧 UK</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('James Wilson','ACC-001','£12,450','Personal Savings','Active','james.w@email.com','+44 7700 111111','London, UK')">Profile</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editCustomerModal')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmAction('Suspend James Wilson?')">Suspend</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CUS-002</strong></td><td>Amina Okafor</td><td>amina.o@email.com</td>
+                      <td>+234 800 000000</td><td>🇳🇬 Nigeria</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('Amina Okafor','ACC-002','£45,200','Business Savings','Active','amina.o@email.com','+234 800 000000','Lagos, Nigeria')">Profile</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editCustomerModal')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmAction('Suspend Amina Okafor?')">Suspend</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CUS-003</strong></td><td>Chen Wei</td><td>chen.w@email.com</td>
+                      <td>+86 138 0000 0000</td><td>🇨🇳 China</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('Chen Wei','ACC-003','£80,000','Fixed Deposit','Active','chen.w@email.com','+86 138 0000 0000','Beijing, China')">Profile</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editCustomerModal')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmAction('Suspend Chen Wei?')">Suspend</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CUS-004</strong></td><td>Sarah Johnson</td><td>sarah.j@email.com</td>
+                      <td>+44 7700 222222</td><td>🇬🇧 UK</td>
+                      <td><span class="badge badge-danger">Suspended</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('Sarah Johnson','ACC-004','£3,800','Salary Account','Suspended','sarah.j@email.com','+44 7700 222222','Manchester, UK')">Profile</button>
+                        <button class="btn btn-success btn-sm" onclick="showSuccess('Sarah Johnson reinstated!')">Reinstate</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editCustomerModal')">Edit</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CUS-005</strong></td><td>Mohammed Al-Rashid</td><td>m.rashid@email.com</td>
+                      <td>+971 50 000 0000</td><td>🇦🇪 UAE</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openCustomerProfile('Mohammed Al-Rashid','ACC-005','£95,000','Personal Savings','Active','m.rashid@email.com','+971 50 000 0000','Dubai, UAE')">Profile</button>
+                        <button class="btn btn-warning btn-sm" onclick="openModal('editCustomerModal')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmAction('Suspend Mohammed Al-Rashid?')">Suspend</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── KYC PAGE ── -->
+        <div class="page" id="kyc-page">
+          <div class="section-card">
+            <div class="section-head"><h3>✅ KYC Verification — Identity Checks</h3></div>
+            <div class="section-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Customer</th><th>Document Type</th><th>Submitted</th><th>KYC Status</th><th>Risk Level</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>James Wilson</strong></td><td>UK Passport</td><td>03 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending Review</span></td>
+                      <td><span class="badge badge-success">Low Risk</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openModal('kycModal')">Review Documents</button>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('James Wilson','KYC')">✅ Verify</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('James Wilson','KYC')">❌ Reject</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Amina Okafor</strong></td><td>Nigerian Passport</td><td>02 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending Review</span></td>
+                      <td><span class="badge badge-warning">Medium Risk</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openModal('kycModal')">Review Documents</button>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('Amina Okafor','KYC')">✅ Verify</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('Amina Okafor','KYC')">❌ Reject</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Mohammed Al-Rashid</strong></td><td>UAE National ID</td><td>01 Jul 2026</td>
+                      <td><span class="badge badge-warning">Pending Review</span></td>
+                      <td><span class="badge badge-success">Low Risk</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openModal('kycModal')">Review Documents</button>
+                        <button class="btn btn-success btn-sm" onclick="approveItem('Mohammed Al-Rashid','KYC')">✅ Verify</button>
+                        <button class="btn btn-danger btn-sm" onclick="rejectItem('Mohammed Al-Rashid','KYC')">❌ Reject</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Chen Wei</strong></td><td>Chinese Passport</td><td>30 Jun 2026</td>
+                      <td><span class="badge badge-success">Verified</span></td>
+                      <td><span class="badge badge-success">Low Risk</span></td>
+                      <td>
+                        <button class="btn btn-info btn-sm" onclick="openModal('kycModal')">View Documents</button>
+                        <button class="btn btn-warning btn-sm" onclick="confirmAction('Revoke KYC for Chen Wei?')">Revoke</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── NOTIFICATIONS PAGE ── -->
+        <div class="page" id="notifications-page">
+          <div class="section-card">
+            <div class="section-head"><h3>🔔 System Notifications</h3>
+              <button class="btn btn-outline btn-sm" onclick="showSuccess('All notifications cleared!')">Clear All</button>
+            </div>
+            <div class="section-body">
+              <div class="notif red">
+                <div class="notif-icon">🚨</div>
+                <div class="notif-content">
+                  <h4>Large Transfer Pending Approval</h4>
+                  <p>£8,000 transfer from Sarah Johnson to HSBC UK requires your approval</p>
+                </div>
+                <div class="notif-time">2 hours ago</div>
+              </div>
+              <div class="notif orange">
+                <div class="notif-icon">📝</div>
+                <div class="notif-content">
+                  <h4>New Account Application</h4>
+                  <p>Mohammed Al-Rashid from UAE has submitted an account application</p>
+                </div>
+                <div class="notif-time">5 hours ago</div>
+              </div>
+              <div class="notif green">
+                <div class="notif-icon">✅</div>
+                <div class="notif-content">
+                  <h4>Transaction Completed</h4>
+                  <p>£5,000 deposit by James Wilson completed successfully — TXN-001</p>
+                </div>
+                <div class="notif-time">6 hours ago</div>
+              </div>
+              <div class="notif blue">
+                <div class="notif-icon">👤</div>
+                <div class="notif-content">
+                  <h4>New Customer Registration</h4>
+                  <p>David Osei from Ghana has registered and submitted KYC documents</p>
+                </div>
+                <div class="notif-time">Yesterday</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SETTINGS PAGE ── -->
+        <div class="page" id="settings-page">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;">
+            <div class="section-card">
+              <div class="section-head"><h3>🔐 Change Password</h3></div>
+              <div class="section-body">
+                <div class="form-group"><label>Current Password</label><input type="password" placeholder="Enter current password" /></div>
+                <div class="form-group"><label>New Password</label><input type="password" placeholder="Enter new password" /></div>
+                <div class="form-group"><label>Confirm Password</label><input type="password" placeholder="Confirm new password" /></div>
+                <button class="btn btn-primary" style="width:100%;" onclick="showSuccess('Password updated successfully!')">Update Password</button>
+              </div>
+            </div>
+            <div class="section-card">
+              <div class="section-head"><h3>🏦 Bank Settings</h3></div>
+              <div class="section-body">
+                <div class="form-group"><label>Bank Name</label><input type="text" value="Discover Bank Global Management plc" /></div>
+                <div class="form-group"><label>Support Email</label><input type="email" value="officesupport.mlaj@gmail.com" /></div>
+                <div class="form-group"><label>Phone</label><input type="tel" value="+44 20 9946 9200" /></div>
+                <div class="form-group"><label>Address</label><textarea>Suite 1, 7th Floor, 50 Broadway, London, SW1H 0BL, UK</textarea></div>
+                <button class="btn btn-primary" style="width:100%;" onclick="showSuccess('Bank settings saved!')">Save Settings</button>
+              </div>
+            </div>
+            <div class="section-card">
+              <div class="section-head"><h3>🌐 Quick Links</h3></div>
+              <div class="section-body">
+                <a href="index.html" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text);margin-bottom:0.5rem;font-size:0.85rem;">🌐 Main Website</a>
+                <a href="signup.html" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text);margin-bottom:0.5rem;font-size:0.85rem;">📝 Sign Up Page</a>
+                <a href="login.html" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text);margin-bottom:0.5rem;font-size:0.85rem;">🔐 Login Page</a>
+                <a href="https://analytics.google.com" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text);margin-bottom:0.5rem;font-size:0.85rem;">📊 Google Analytics</a>
+                <a href="https://github.com" target="_blank" style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text);font-size:0.85rem;">💻 GitHub Repository</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODALS ══ -->
+
+  <!-- Customer Profile Modal -->
+  <div class="modal-overlay" id="customerProfileModal">
+    <div class="modal" style="max-width:620px;">
+      <div class="modal-header">
+        <h3>👤 Customer Profile</h3>
+        <button class="modal-close" onclick="closeModal('customerProfileModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="profile-header">
+          <div class="profile-avatar" id="profileAvatar">JW</div>
+          <div class="profile-info">
+            <h3 id="profileName">James Wilson</h3>
+            <p id="profileEmail">james.w@email.com</p>
+            <div class="profile-badges">
+              <span class="profile-badge" id="profileStatus">Active</span>
+              <span class="profile-badge" id="profileType">Personal Savings</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:var(--cream);padding:1rem;border-radius:8px;">
+            <div style="font-size:0.72rem;color:var(--gray);text-transform:uppercase;font-weight:600;margin-bottom:0.25rem;">Account Number</div>
+            <div style="font-weight:700;color:var(--navy)" id="profileAccNum">ACC-001</div>
+          </div>
+          <div style="background:var(--cream);padding:1rem;border-radius:8px;">
+            <div style="font-size:0.72rem;color:var(--gray);text-transform:uppercase;font-weight:600;margin-bottom:0.25rem;">Current Balance</div>
+            <div style="font-weight:700;color:var(--success);font-size:1.1rem;" id="profileBalance">£12,450</div>
+          </div>
+          <div style="background:var(--cream);padding:1rem;border-radius:8px;">
+            <div style="font-size:0.72rem;color:var(--gray);text-transform:uppercase;font-weight:600;margin-bottom:0.25rem;">Phone</div>
+            <div style="font-weight:600;" id="profilePhone">+44 7700 111111</div>
+          </div>
+          <div style="background:var(--cream);padding:1rem;border-radius:8px;">
+            <div style="font-size:0.72rem;color:var(--gray);text-transform:uppercase;font-weight:600;margin-bottom:0.25rem;">Location</div>
+            <div style="font-weight:600;" id="profileLocation">London, UK</div>
+          </div>
+        </div>
+        <div class="form-section-title">Admin Actions</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+          <button class="btn btn-success" onclick="showSuccess('Account verified!');closeModal('customerProfileModal')">✅ Verify Account</button>
+          <button class="btn btn-warning" onclick="openModal('editAccountModal');closeModal('customerProfileModal')">✏️ Edit Account</button>
+          <button class="btn btn-info" onclick="openModal('addBalanceModal');closeModal('customerProfileModal')">💰 Adjust Balance</button>
+          <button class="btn btn-outline" onclick="openModal('sendMessageModal');closeModal('customerProfileModal')">📧 Send Message</button>
+          <button class="btn btn-danger" onclick="confirmAction('Freeze this account?');closeModal('customerProfileModal')">🔒 Freeze Account</button>
+          <button class="btn btn-warning" onclick="showSuccess('Password reset email sent!');closeModal('customerProfileModal')">🔑 Reset Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Account Modal -->
+  <div class="modal-overlay" id="editAccountModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>✏️ Edit Account</h3>
+        <button class="modal-close" onclick="closeModal('editAccountModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-section-title">Account Information</div>
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" value="James" /></div>
+          <div class="form-group"><label>Last Name</label><input type="text" value="Wilson" /></div>
+        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" value="james.w@email.com" /></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" value="+44 7700 111111" /></div>
+        <div class="form-group"><label>Address</label><textarea>London, UK</textarea></div>
+        <div class="form-section-title">Account Settings</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Account Type</label>
+            <select>
+              <option>Personal Savings</option>
+              <option>Business Savings</option>
+              <option>Fixed Deposit</option>
+              <option>Salary Account</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Account Status</label>
+            <select>
+              <option>Active</option>
+              <option>Frozen</option>
+              <option>Suspended</option>
+              <option>Closed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label>Notes</label><textarea placeholder="Add admin notes..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('editAccountModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Account updated!');closeModal('editAccountModal')">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Balance Modal -->
+  <div class="modal-overlay" id="addBalanceModal">
+    <div class="modal" style="max-width:420px;">
+      <div class="modal-header">
+        <h3>💰 Adjust Account Balance</h3>
+        <button class="modal-close" onclick="closeModal('addBalanceModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Action</label>
+          <select>
+            <option>Add Funds (Credit)</option>
+            <option>Remove Funds (Debit)</option>
+            <option>Set Balance</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Amount (£)</label><input type="number" placeholder="Enter amount" /></div>
+        <div class="form-group"><label>Reference / Reason</label><input type="text" placeholder="e.g. Manual deposit, correction..." /></div>
+        <div class="form-group"><label>Admin Password (confirm)</label><input type="password" placeholder="Confirm with password" /></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('addBalanceModal')">Cancel</button>
+        <button class="btn btn-success" onclick="showSuccess('Balance adjusted successfully!');closeModal('addBalanceModal')">Apply Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Send Message Modal -->
+  <div class="modal-overlay" id="sendMessageModal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>📧 Send Message to Customer</h3>
+        <button class="modal-close" onclick="closeModal('sendMessageModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Send To</label>
+          <select>
+            <option>James Wilson — james.w@email.com</option>
+            <option>Amina Okafor — amina.o@email.com</option>
+            <option>Chen Wei — chen.w@email.com</option>
+            <option>Sarah Johnson — sarah.j@email.com</option>
+            <option>Mohammed Al-Rashid — m.rashid@email.com</option>
+            <option>All Customers</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Subject</label><input type="text" placeholder="Message subject..." /></div>
+        <div class="form-group"><label>Message</label><textarea placeholder="Type your message here..." style="min-height:120px;"></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('sendMessageModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Message sent successfully!');closeModal('sendMessageModal')">📤 Send Message</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Application Modal -->
+  <div class="modal-overlay" id="reviewApplicationModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>📝 Review Application</h3>
+        <button class="modal-close" onclick="closeModal('reviewApplicationModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-section-title">Applicant Details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">Full Name</div><strong>James Wilson</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">Date of Birth</div><strong>15 Mar 1985</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">Email</div><strong>james.w@email.com</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">Phone</div><strong>+44 7700 111111</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">Nationality</div><strong>British</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">Account Type</div><strong>Personal Savings</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">ID Number</div><strong>P12345678</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">Initial Deposit</div><strong>£500</strong></div>
+        </div>
+        <div style="background:var(--cream);padding:0.75rem;border-radius:6px;margin-bottom:1.5rem;"><div style="font-size:0.7rem;color:var(--gray);margin-bottom:0.2rem;">Address</div><strong>123 Baker Street, London, W1U 6TY, UK</strong></div>
+        <div class="form-section-title">Verification Checklist</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> ID Document Verified</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> Proof of Address Verified</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> AML Check Passed</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> Sanctions Check Passed</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> PEP Check Passed</label>
+        </div>
+        <div class="form-group"><label>Admin Notes</label><textarea placeholder="Add review notes..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="showSuccess('Application rejected!');closeModal('reviewApplicationModal')">❌ Reject</button>
+        <button class="btn btn-warning" onclick="showSuccess('Application flagged for further review!');closeModal('reviewApplicationModal')">⚠️ Request More Info</button>
+        <button class="btn btn-success" onclick="showSuccess('Application approved! Account created.');closeModal('reviewApplicationModal')">✅ Approve & Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KYC Modal -->
+  <div class="modal-overlay" id="kycModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>✅ KYC Document Review</h3>
+        <button class="modal-close" onclick="closeModal('kycModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-section-title">Submitted Documents</div>
+        <div style="display:grid;gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-weight:600;font-size:0.9rem;">🪪 National Passport</div><div style="font-size:0.78rem;color:var(--gray);">Submitted: 03 Jul 2026 · Expires: 2030</div></div>
+            <div style="display:flex;gap:0.5rem;">
+              <button class="btn btn-success btn-sm" onclick="showSuccess('Document verified!')">✅ Verify</button>
+              <button class="btn btn-danger btn-sm" onclick="showSuccess('Document rejected!')">❌ Reject</button>
+            </div>
+          </div>
+          <div style="background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-weight:600;font-size:0.9rem;">🏠 Proof of Address — Utility Bill</div><div style="font-size:0.78rem;color:var(--gray);">Submitted: 03 Jul 2026 · Issued: Jun 2026</div></div>
+            <div style="display:flex;gap:0.5rem;">
+              <button class="btn btn-success btn-sm" onclick="showSuccess('Document verified!')">✅ Verify</button>
+              <button class="btn btn-danger btn-sm" onclick="showSuccess('Document rejected!')">❌ Reject</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-section-title">Compliance Checks</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> AML (Anti-Money Laundering) Check</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> Sanctions List Check (OFAC/UN)</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> PEP (Politically Exposed Person) Check</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;"><input type="checkbox" /> Fraud Database Check</label>
+        </div>
+        <div class="form-group">
+          <label>Risk Assessment</label>
+          <select>
+            <option>Low Risk</option>
+            <option>Medium Risk</option>
+            <option>High Risk</option>
+          </select>
+        </div>
+        <div class="form-group"><label>KYC Notes</label><textarea placeholder="Add compliance notes..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="showSuccess('KYC rejected! Customer notified.');closeModal('kycModal')">❌ Fail KYC</button>
+        <button class="btn btn-success" onclick="showSuccess('KYC approved! Customer verified.');closeModal('kycModal')">✅ Pass KYC</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transfer Detail Modal -->
+  <div class="modal-overlay" id="transferDetailModal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>🔄 Transfer Details</h3>
+        <button class="modal-close" onclick="closeModal('transferDetailModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:grid;gap:0.75rem;margin-bottom:1.5rem;">
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Reference</span><strong>TRF-001</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">From</span><strong>Amina Okafor (ACC-002)</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">To Bank</span><strong>GTBank Nigeria</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Amount</span><strong style="color:var(--error);">£2,500</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Type</span><strong>International Transfer</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Requested</span><strong>03 Jul 2026</strong></div>
+        </div>
+        <div class="form-group"><label>Rejection Reason (if rejecting)</label><textarea placeholder="Enter reason for rejection..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="showSuccess('Transfer rejected!');closeModal('transferDetailModal')">❌ Reject Transfer</button>
+        <button class="btn btn-success" onclick="showSuccess('Transfer approved!');closeModal('transferDetailModal')">✅ Approve Transfer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transaction View Modal -->
+  <div class="modal-overlay" id="transactionViewModal">
+    <div class="modal" style="max-width:420px;">
+      <div class="modal-header">
+        <h3>💸 Transaction Details</h3>
+        <button class="modal-close" onclick="closeModal('transactionViewModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:grid;gap:0.75rem;">
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Transaction ID</span><strong id="txnId">TXN-001</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Customer</span><strong id="txnCustomer">James Wilson</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Type</span><strong id="txnType">Deposit</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Amount</span><strong id="txnAmount">£5,000</strong></div>
+          <div style="background:var(--cream);padding:0.75rem;border-radius:6px;display:flex;justify-content:space-between;"><span style="color:var(--gray);font-size:0.82rem;">Status</span><span class="badge badge-success" id="txnStatus">Completed</span></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('transactionViewModal')">Close</button>
+        <button class="btn btn-warning" onclick="showSuccess('Transaction flagged!');closeModal('transactionViewModal')">⚠️ Flag Transaction</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Customer Modal -->
+  <div class="modal-overlay" id="addCustomerModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>➕ Add New Customer</h3>
+        <button class="modal-close" onclick="closeModal('addCustomerModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" placeholder="First name" /></div>
+          <div class="form-group"><label>Last Name</label><input type="text" placeholder="Last name" /></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="Email address" /></div>
+        <div class="form-row">
+          <div class="form-group"><label>Phone</label><input type="tel" placeholder="+44 7700 000000" /></div>
+          <div class="form-group"><label>Country</label><select><option>United Kingdom</option><option>Nigeria</option><option>Ghana</option><option>UAE</option><option>China</option><option>Other</option></select></div>
+        </div>
+        <div class="form-group"><label>Account Type</label><select><option>Personal Savings</option><option>Business Savings</option><option>Fixed Deposit</option><option>Salary Account</option></select></div>
+        <div class="form-group"><label>Initial Balance (£)</label><input type="number" placeholder="0.00" /></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('addCustomerModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Customer added successfully!');closeModal('addCustomerModal')">Add Customer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Customer Modal -->
+  <div class="modal-overlay" id="editCustomerModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>✏️ Edit Customer</h3>
+        <button class="modal-close" onclick="closeModal('editCustomerModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" value="James" /></div>
+          <div class="form-group"><label>Last Name</label><input type="text" value="Wilson" /></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" value="james.w@email.com" /></div>
+        <div class="form-row">
+          <div class="form-group"><label>Phone</label><input type="tel" value="+44 7700 111111" /></div>
+          <div class="form-group"><label>Country</label><select><option>United Kingdom</option><option>Nigeria</option><option>Ghana</option></select></div>
+        </div>
+        <div class="form-group"><label>Address</label><textarea>London, UK</textarea></div>
+        <div class="form-group"><label>Status</label><select><option>Active</option><option>Suspended</option><option>Frozen</option></select></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('editCustomerModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Customer updated!');closeModal('editCustomerModal')">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Transaction Modal -->
+  <div class="modal-overlay" id="addTransactionModal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>➕ Add Transaction</h3>
+        <button class="modal-close" onclick="closeModal('addTransactionModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>Customer</label><select><option>James Wilson</option><option>Amina Okafor</option><option>Chen Wei</option><option>Sarah Johnson</option></select></div>
+        <div class="form-row">
+          <div class="form-group"><label>Type</label><select><option>Deposit</option><option>Withdrawal</option><option>Transfer</option><option>Int'l Transfer</option></select></div>
+          <div class="form-group"><label>Amount (£)</label><input type="number" placeholder="0.00" /></div>
+        </div>
+        <div class="form-group"><label>Description</label><input type="text" placeholder="Transaction description" /></div>
+        <div class="form-group"><label>Status</label><select><option>Completed</option><option>Pending</option><option>Processing</option></select></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('addTransactionModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Transaction added!');closeModal('addTransactionModal')">Add Transaction</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Transaction Modal -->
+  <div class="modal-overlay" id="editTransactionModal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>✏️ Edit Transaction</h3>
+        <button class="modal-close" onclick="closeModal('editTransactionModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>Transaction ID</label><input type="text" value="TXN-001" readonly style="background:var(--cream);" /></div>
+        <div class="form-group"><label>Customer</label><input type="text" value="James Wilson" /></div>
+        <div class="form-row">
+          <div class="form-group"><label>Amount (£)</label><input type="number" value="5000" /></div>
+          <div class="form-group"><label>Status</label><select><option>Completed</option><option>Pending</option><option>Failed</option></select></div>
+        </div>
+        <div class="form-group"><label>Notes</label><textarea placeholder="Admin notes..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('editTransactionModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Transaction updated!');closeModal('editTransactionModal')">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Loan Modal -->
+  <div class="modal-overlay" id="addLoanModal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>➕ Add Loan</h3>
+        <button class="modal-close" onclick="closeModal('addLoanModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>Customer</label><select><option>James Wilson</option><option>Amina Okafor</option><option>Chen Wei</option></select></div>
+        <div class="form-group"><label>Loan Type</label><select><option>Personal Loan</option><option>SME Loan</option><option>Business Loan</option></select></div>
+        <div class="form-row">
+          <div class="form-group"><label>Amount (£)</label><input type="number" placeholder="0.00" /></div>
+          <div class="form-group"><label>Interest Rate (%)</label><input type="number" placeholder="6.5" step="0.1" /></div>
+        </div>
+        <div class="form-group"><label>Term</label><select><option>12 months</option><option>24 months</option><option>36 months</option><option>48 months</option><option>60 months</option></select></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('addLoanModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Loan created!');closeModal('addLoanModal')">Create Loan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Loan Modal -->
+  <div class="modal-overlay" id="editLoanModal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>✏️ Edit Loan</h3>
+        <button class="modal-close" onclick="closeModal('editLoanModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>Loan ID</label><input type="text" value="LN-001" readonly style="background:var(--cream);" /></div>
+        <div class="form-row">
+          <div class="form-group"><label>Amount (£)</label><input type="number" value="10000" /></div>
+          <div class="form-group"><label>Interest Rate (%)</label><input type="number" value="6.5" step="0.1" /></div>
+        </div>
+        <div class="form-group"><label>Status</label><select><option>Pending</option><option>In Review</option><option>Approved</option><option>Rejected</option><option>Active</option></select></div>
+        <div class="form-group"><label>Notes</label><textarea placeholder="Admin notes..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('editLoanModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Loan updated!');closeModal('editLoanModal')">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Account Modal -->
+  <div class="modal-overlay" id="addAccountModal">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-header">
+        <h3>➕ Create New Account</h3>
+        <button class="modal-close" onclick="closeModal('addAccountModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>Customer Name</label><input type="text" placeholder="Full name" /></div>
+        <div class="form-group"><label>Account Type</label><select><option>Personal Savings</option><option>Business Savings</option><option>Fixed Deposit</option><option>Salary Account</option></select></div>
+        <div class="form-group"><label>Initial Balance (£)</label><input type="number" placeholder="0.00" /></div>
+        <div class="form-group"><label>Country</label><select><option>United Kingdom</option><option>Nigeria</option><option>Ghana</option><option>UAE</option><option>Other</option></select></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('addAccountModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="showSuccess('Account created!');closeModal('addAccountModal')">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Toast -->
+  <div id="successToast" style="display:none;position:fixed;bottom:2rem;right:2rem;background:#28a745;color:white;padding:1rem 1.5rem;border-radius:8px;font-weight:600;font-size:0.9rem;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,0.2);max-width:300px;">
+    ✅ <span id="toastMsg">Action completed!</span>
+  </div>
+
+  <script>
+    // Set date
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-GB', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value;
+      const pass = document.getElementById('adminPass').value;
+      if (email === 'officesupport.mlaj@gmail.com' && pass === 'admin2026') {
+        document.getElementById('loginWrap').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    });
+
+    // Navigation
+    function showPage(pageId, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const page = document.getElementById(pageId);
+      if (page) page.classList.add('active');
+      if (el) el.classList.add('active');
+      const titles = {
+        'dashboard-page': 'Dashboard Overview',
+        'transactions-page': 'Transaction Management',
+        'accounts-page': 'Account Management',
+        'transfers-page': 'Transfer Controls',
+        'loans-page': 'Loan Management',
+        'applications-page': 'Account Applications',
+        'customers-page': 'Customer Management',
+        'kyc-page': 'KYC Verification',
+        'notifications-page': 'Notifications',
+        'settings-page': 'Settings'
+      };
+      document.getElementById('pageTitle').textContent = titles[pageId] || 'Dashboard';
+    }
+
+    // Logout
+    function logout() {
+      if(confirm('Are you sure you want to logout?')) {
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('loginWrap').style.display = 'flex';
+        document.getElementById('adminEmail').value = '';
+        document.getElementById('adminPass').value = '';
+        document.getElementById('loginError').style.display = 'none';
+      }
+    }
+
+    // Modals
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+      });
+    });
+
+    // Customer Profile
+    function openCustomerProfile(name, accNum, balance, type, status, email, phone, location) {
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileEmail').textContent = email;
+      document.getElementById('profileAccNum').textContent = accNum;
+      document.getElementById('profileBalance').textContent = balance;
+      document.getElementById('profileType').textContent = type;
+      document.getElementById('profileStatus').textContent = status;
+      document.getElementById('profilePhone').textContent = phone;
+      document.getElementById('profileLocation').textContent = location;
+      document.getElementById('profileAvatar').textContent = name.split(' ').map(n=>n[0]).join('');
+      document.getElementById('profileStatus').style.background = status === 'Active' ? 'rgba(40,167,69,0.3)' : 'rgba(220,53,69,0.3)';
+      openModal('customerProfileModal');
+    }
+
+    // View Transaction
+    function viewTransaction(id, customer, type, amount, status) {
+      document.getElementById('txnId').textContent = id;
+      document.getElementById('txnCustomer').textContent = customer;
+      document.getElementById('txnType').textContent = type;
+      document.getElementById('txnAmount').textContent = amount;
+      document.getElementById('txnStatus').textContent = status;
+      openModal('transactionViewModal');
+    }
+
+    // Approve/Reject
+    function approveItem(id, type) {
+      showSuccess(type.charAt(0).toUpperCase() + type.slice(1) + ' ' + id + ' approved!');
+    }
+    function rejectItem(id, type) {
+      if(confirm('Are you sure you want to reject ' + id + '?')) {
+        showSuccess(type.charAt(0).toUpperCase() + type.slice(1) + ' ' + id + ' rejected!');
+      }
+    }
+
+    // Confirm action
+    function confirmAction(msg) {
+      if(confirm(msg)) showSuccess('Action completed successfully!');
+    }
+
+    // Success toast
+    function showSuccess(msg) {
+      const toast = document.getElementById('successToast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+  </script>
+</body>
+</html>
