@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Open an Account — Discover Bank Global Management plc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SFKZ5QX58J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SFKZ5QX58J');
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0B1B2B; --ink: #152134; --slate: #2A3F55;
+      --gold: #C9A84C; --gold-lt: #E8C97A;
+      --cream: #F7F4EE; --white: #FFFFFF;
+      --muted: #8FA3B8; --border: rgba(201,168,76,0.25);
+      --success: #2ECC71; --error: #E74C3C;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--navy); color: var(--cream); min-height: 100vh; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 4rem;
+      background: rgba(11,27,43,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold); text-decoration: none; }
+    .nav-logo span { color: var(--cream); font-weight: 400; }
+    .nav-back { font-size: 0.82rem; font-weight: 600; padding: 0.55rem 1.4rem; background: transparent; color: var(--cream); border: 1px solid var(--border); border-radius: 2px; text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; }
+    .nav-back:hover { border-color: var(--gold); color: var(--gold); }
+
+    .page-wrap { padding: 8rem 2rem 4rem; max-width: 700px; margin: 0 auto; }
+    .page-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: var(--white); margin-bottom: 0.75rem; }
+    .page-sub { font-size: 0.95rem; color: var(--muted); line-height: 1.7; margin-bottom: 2.5rem; }
+
+    .form-card { background: var(--ink); border: 1px solid var(--border); border-radius: 4px; padding: 2.5rem; }
+    .form-section { margin-bottom: 2rem; }
+    .form-section-title { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.2rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+    .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      background: var(--navy); border: 1px solid var(--border);
+      border-radius: 2px; padding: 0.75rem 1rem;
+      color: var(--cream); font-size: 0.9rem; font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
+    .form-group select option { background: var(--navy); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .checkbox-group { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; }
+    .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--gold); flex-shrink: 0; }
+    .checkbox-group label { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+    .checkbox-group a { color: var(--gold); text-decoration: none; }
+    .submit-btn {
+      width: 100%; padding: 1rem;
+      background: var(--gold); color: var(--navy);
+      font-weight: 700; font-size: 1rem;
+      border: none; border-radius: 2px; cursor: pointer;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 1rem;
+    }
+    .submit-btn:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .success-msg { display: none; background: rgba(46,204,113,0.1); border: 1px solid var(--success); border-radius: 4px; padding: 1.5rem; text-align: center; margin-top: 1rem; }
+    .success-msg h3 { color: var(--success); font-family: 'Playfair Display', serif; margin-bottom: 0.5rem; }
+    .success-msg p { color: var(--muted); font-size: 0.9rem; }
+    footer { background: var(--ink); border-top: 1px solid var(--border); padding: 1.5rem 4rem; text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 4rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.5rem; }
+      .page-wrap { padding: 7rem 1.5rem 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-card { padding: 1.5rem; }
+      footer { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Discover<span> Bank Global Management plc</span></a>
+    <a href="index.html" class="nav-back">← Home</a>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-label">Get Started</div>
+    <h1 class="page-title">Open Your Account</h1>
+    <p class="page-sub">Fill in the form below to apply for an account with Discover Bank Global Management plc. Our team will review your application and contact you within 1-2 business days.</p>
+
+    <div class="form-card">
+      <form id="signupForm" action="https://formspree.io/f/xojoypey" method="POST">
+
+        <!-- Personal Information -->
+        <div class="form-section">
+          <div class="form-section-title">Personal Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name *</label>
+              <input type="text" name="firstName" placeholder="John" required />
+            </div>
+            <div class="form-group">
+              <label>Last Name *</label>
+              <input type="text" name="lastName" placeholder="Smith" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date of Birth *</label>
+              <input type="date" name="dob" required />
+            </div>
+            <div class="form-group">
+              <label>Nationality *</label>
+              <input type="text" name="nationality" placeholder="British" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>National ID / Passport Number *</label>
+            <input type="text" name="idNumber" placeholder="Enter ID or Passport number" required />
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="form-section">
+          <div class="form-section-title">Contact Information</div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" name="email" placeholder="john.smith@email.com" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" name="phone" placeholder="+44 7700 000000" required />
+            </div>
+            <div class="form-group">
+              <label>Country *</label>
+              <select name="country" required>
+                <option value="">Select country</option>
+                <option>United Kingdom</option>
+                <option>Nigeria</option>
+                <option>Ghana</option>
+                <option>United States</option>
+                <option>Canada</option>
+                <option>France</option>
+                <option>Germany</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Home Address *</label>
+            <textarea name="address" placeholder="Enter your full home address" required></textarea>
+          </div>
+        </div>
+
+        <!-- Account Type -->
+        <div class="form-section">
+          <div class="form-section-title">Account Type</div>
+          <div class="form-group">
+            <label>Select Account Type *</label>
+            <select name="accountType" required>
+              <option value="">Choose account type</option>
+              <option>Personal Savings Account</option>
+              <option>Business Savings Account</option>
+              <option>Fixed Deposit Account</option>
+              <option>Salary Account</option>
+              <option>Current Account</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Initial Deposit Amount (£)</label>
+            <input type="number" name="deposit" placeholder="e.g. 500" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Additional Information</label>
+            <textarea name="message" placeholder="Any additional information or questions..."></textarea>
+          </div>
+        </div>
+
+        <!-- Agreement -->
+        <div class="form-section">
+          <div class="form-section-title">Agreement</div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="terms" name="terms" required />
+            <label for="terms">I agree to the <a href="terms.html" target="_blank">Terms of Use</a> and <a href="privacy-policy.html" target="_blank">Privacy Policy</a> of Discover Bank Global Management plc *</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="accurate" name="accurate" required />
+            <label for="accurate">I confirm that all information provided is accurate and truthful *</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="marketing" name="marketing" />
+            <label for="marketing">I would like to receive updates and offers from Discover Bank Global Management plc (optional)</label>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Application</button>
+      </form>
+
+      <div class="success-msg" id="successMsg">
+        <h3>✅ Application Submitted!</h3>
+        <p>Thank you for applying! Our team will review your application and contact you at your provided email within 1-2 business days.</p>
+        <p style="margin-top:0.5rem;">For urgent enquiries call: <strong style="color:var(--gold)">+44 20 9946 9200</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Discover Bank Global Management plc. All rights reserved.</p>
+    <p style="margin-top:0.5rem;"><a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy-policy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a></p>
+  </footer>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
