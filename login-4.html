@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Login — Discover Bank Global Management plc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #00325F; --navy-dark: #001F3F;
+      --orange: #E87722; --orange-lt: #F59A4F;
+      --white: #fff; --cream: #F8F9FA; --gray: #6C757D;
+      --border: #DEE2E6; --text: #212529;
+      --success: #28A745; --error: #DC3545;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* NAV */
+    nav { background: white; border-bottom: 3px solid var(--orange); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 70px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .logo-circle { width: 40px; height: 40px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 900; color: var(--orange); font-family: 'Merriweather', serif; }
+    .logo-text strong { display: block; font-size: 0.95rem; font-weight: 700; color: var(--navy); }
+    .logo-text span { font-size: 0.68rem; color: var(--gray); }
+    .nav-right { display: flex; gap: 0.75rem; }
+    .btn { padding: 0.55rem 1.4rem; font-weight: 600; font-size: 0.85rem; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-navy { background: var(--navy); color: white; }
+    .btn-orange { background: var(--orange); color: white; }
+
+    /* LOGIN WRAP */
+    .login-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem; background: linear-gradient(135deg, rgba(0,50,95,0.05), rgba(232,119,34,0.05)); }
+    .login-container { display: grid; grid-template-columns: 1fr 1fr; gap: 0; max-width: 900px; width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+    .login-left { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+    .login-left h2 { font-family: 'Merriweather', serif; font-size: 1.8rem; font-weight: 900; color: white; margin-bottom: 1rem; line-height: 1.2; }
+    .login-left h2 span { color: var(--orange); }
+    .login-left p { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 2rem; }
+    .features-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .features-list li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: rgba(255,255,255,0.85); }
+    .features-list li .check { width: 24px; height: 24px; background: rgba(232,119,34,0.2); border: 1px solid var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: var(--orange); flex-shrink: 0; }
+    .login-right { padding: 3rem 2.5rem; }
+    .login-right h3 { font-family: 'Merriweather', serif; font-size: 1.4rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
+    .login-right p { font-size: 0.85rem; color: var(--gray); margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+    .form-group input { width: 100%; padding: 0.8rem 1rem; border: 1.5px solid var(--border); border-radius: 6px; font-size: 0.9rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
+    .form-group input:focus { border-color: var(--navy); }
+    .forgot { text-align: right; margin-bottom: 1.5rem; }
+    .forgot a { font-size: 0.8rem; color: var(--orange); text-decoration: none; font-weight: 500; }
+    .login-btn { width: 100%; padding: 0.9rem; background: var(--navy); color: white; font-weight: 700; font-size: 0.95rem; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; font-family: 'Inter', sans-serif; }
+    .login-btn:hover { background: var(--navy-dark); }
+    .divider { text-align: center; margin: 1.5rem 0; font-size: 0.8rem; color: var(--gray); position: relative; }
+    .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+    .divider span { background: white; padding: 0 1rem; position: relative; }
+    .signup-link { text-align: center; font-size: 0.85rem; color: var(--gray); margin-top: 1rem; }
+    .signup-link a { color: var(--orange); text-decoration: none; font-weight: 600; }
+    .security-note { margin-top: 1.5rem; padding: 0.75rem 1rem; background: #f0f8ff; border: 1px solid #b8daff; border-radius: 6px; text-align: center; font-size: 0.75rem; color: #0c5460; }
+    .error-msg { display: none; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; padding: 0.75rem; text-align: center; font-size: 0.85rem; color: var(--error); margin-bottom: 1rem; }
+
+    /* FOOTER */
+    footer { background: var(--navy-dark); padding: 1.5rem 2rem; text-align: center; font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; margin: 0 0.5rem; }
+
+    @media (max-width: 768px) {
+      .login-container { grid-template-columns: 1fr; }
+      .login-left { display: none; }
+      nav { padding: 0 1rem; }
+      .logo-text span { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-circle">D</div>
+      <div class="logo-text"><strong>DISCOVER</strong><span>Bank Global Management plc</span></div>
+    </a>
+    <div class="nav-right">
+      <a href="index.html" class="btn btn-navy">← Home</a>
+      <a href="signup.html" class="btn btn-orange">Open Account</a>
+    </div>
+  </nav>
+
+  <div class="login-wrap">
+    <div class="login-container">
+      <!-- LEFT PANEL -->
+      <div class="login-left">
+        <h2>Welcome Back to <span>Discover Bank</span></h2>
+        <p>Securely access your account and manage your finances from anywhere in the world.</p>
+        <ul class="features-list">
+          <li><div class="check">✓</div> View your account balance & statements</li>
+          <li><div class="check">✓</div> Make domestic & international transfers</li>
+          <li><div class="check">✓</div> Pay bills and manage standing orders</li>
+          <li><div class="check">✓</div> Download transaction history</li>
+          <li><div class="check">✓</div> Update your personal details</li>
+          <li><div class="check">✓</div> 256-bit encryption security</li>
+        </ul>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="login-right">
+        <h3>Customer Login</h3>
+        <p>Sign in to access your Discover Bank account</p>
+        <div class="error-msg" id="errorMsg">❌ Invalid account number or password. Please try again or contact us.</div>
+        <form id="loginForm">
+          <div class="form-group">
+            <label>Account Number</label>
+            <input type="text" id="accNum" placeholder="e.g. DBG-10293847" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required />
+          </div>
+          <div class="forgot">
+            <a href="contact.html">Forgot password? Contact us</a>
+          </div>
+          <button type="submit" class="login-btn">🔐 Sign In Securely</button>
+        </form>
+        <div class="divider"><span>New to Discover Bank?</span></div>
+        <div class="signup-link"><a href="signup.html">Open an Account →</a></div>
+        <div class="security-note">🔒 Your connection is protected with 256-bit SSL encryption</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Discover Bank Global Management plc · <a href="privacy-policy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="contact.html">Help</a></p>
+    <p style="margin-top:0.5rem;">Need help? Call <a href="tel:+442099469200">+44 20 9946 9200</a></p>
+  </footer>
+
+  <script>
+    // Customer accounts database
+    // Admin adds customers here via customer-setup.html
+    const customers = {
+      'DBG-10293847': { password: 'James2026!', name: 'James Wilson', type: 'Personal Savings', balance: '£12,450.00', sortCode: '40-22-11', iban: 'GB29DISC40221110293847', email: 'james.w@email.com', phone: '+44 7700 111111', address: 'London, UK', joined: 'January 2026', status: 'Active' },
+      'DBG-20384756': { password: 'Amina2026!', name: 'Amina Okafor', type: 'Business Savings', balance: '£45,200.00', sortCode: '40-22-12', iban: 'GB29DISC40221220384756', email: 'amina.o@email.com', phone: '+234 800 000000', address: 'Lagos, Nigeria', joined: 'February 2026', status: 'Active' },
+      'DBG-30495867': { password: 'Chen2026!', name: 'Chen Wei', type: 'Fixed Deposit', balance: '£80,000.00', sortCode: '40-22-13', iban: 'GB29DISC40221330495867', email: 'chen.w@email.com', phone: '+86 138 0000 0000', address: 'Beijing, China', joined: 'March 2026', status: 'Active' },
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const accNum = document.getElementById('accNum').value.trim().toUpperCase();
+      const password = document.getElementById('password').value;
+      const customer = customers[accNum];
+      if (customer && customer.password === password && customer.status === 'Active') {
+        // Save to session
+        sessionStorage.setItem('customer', JSON.stringify({...customer, accNum}));
+        window.location.href = 'dashboard.html';
+      } else {
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
