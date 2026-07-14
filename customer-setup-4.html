@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Customer Setup Tool — Discover Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#00325F;--dark:#001F3F;--orange:#E87722;--cream:#F8F9FA;--gray:#6C757D;--border:#DEE2E6;--text:#212529;--green:#28A745;--red:#DC3545;--blue:#17A2B8}
+body{font-family:'Inter',sans-serif;background:var(--cream);min-height:100vh}
+
+/* TOP BAR */
+.topbar{background:var(--dark);padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.topbar-logo{display:flex;align-items:center;gap:0.7rem}
+.tlogo-icon{width:34px;height:34px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;font-size:1rem}
+.tlogo-text strong{display:block;font-size:0.85rem;font-weight:700;color:white}
+.tlogo-text span{font-size:0.62rem;color:rgba(255,255,255,0.5)}
+.topbar-links{display:flex;gap:0.75rem}
+.topbar-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.78rem;padding:0.35rem 0.75rem;border:1px solid rgba(255,255,255,0.2);border-radius:5px}
+.topbar-links a:hover{color:white;background:rgba(255,255,255,0.08)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--dark),var(--navy));padding:2rem 1.5rem;text-align:center;color:white}
+.hero h1{font-size:1.5rem;font-weight:700;margin-bottom:0.5rem}
+.hero p{font-size:0.88rem;color:rgba(255,255,255,0.7);max-width:500px;margin:0 auto}
+
+/* STEPS */
+.steps{display:flex;justify-content:center;gap:0;margin:1.5rem auto;max-width:700px;padding:0 1rem}
+.step{flex:1;text-align:center;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:16px;left:60%;width:80%;height:2px;background:var(--border)}
+.step.done:not(:last-child)::after{background:var(--green)}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--border);color:var(--gray);font-size:0.82rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 0.4rem;position:relative;z-index:1}
+.step.active .step-num{background:var(--orange);color:white}
+.step.done .step-num{background:var(--green);color:white}
+.step-label{font-size:0.68rem;color:var(--gray);font-weight:600}
+.step.active .step-label{color:var(--navy);font-weight:700}
+.step.done .step-label{color:var(--green)}
+
+/* LAYOUT */
+.wrap{max-width:900px;margin:0 auto;padding:1.5rem}
+
+/* CARDS */
+.card{background:white;border-radius:10px;border:1px solid var(--border);margin-bottom:1.5rem;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border);background:white;display:flex;align-items:center;gap:0.75rem}
+.card-head h2{font-size:0.95rem;font-weight:700;color:var(--navy)}
+.card-head p{font-size:0.78rem;color:var(--gray);margin-top:0.15rem}
+.card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.card-body{padding:1.25rem}
+
+/* FORM */
+.fg{margin-bottom:1rem}
+.fg label{display:block;font-size:0.72rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.38rem}
+.fg label span.req{color:var(--red)}
+.fg input,.fg select,.fg textarea{width:100%;padding:0.72rem 0.95rem;border:1.5px solid var(--border);border-radius:7px;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s;background:white}
+.fg input:focus,.fg select:focus{border-color:var(--navy)}
+.fg input.error{border-color:var(--red)}
+.fg .hint{font-size:0.7rem;color:var(--gray);margin-top:0.3rem}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+
+/* BUTTONS */
+.btn{padding:0.6rem 1.2rem;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.4rem}
+.btn-navy{background:var(--navy);color:white}.btn-navy:hover{background:var(--dark)}
+.btn-orange{background:var(--orange);color:white}.btn-orange:hover{opacity:0.9}
+.btn-green{background:var(--green);color:white}
+.btn-red{background:#EA4335;color:white}
+.btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}.btn-outline:hover{background:var(--navy);color:white}
+.btn-gray{background:var(--gray);color:white}
+.btn-full{width:100%;justify-content:center;padding:0.8rem}
+.btn-lg{padding:0.85rem 2rem;font-size:0.95rem}
+
+/* ACCOUNT DISPLAY */
+.acc-display{background:linear-gradient(135deg,var(--dark),var(--navy));border-radius:10px;padding:1.5rem;color:white;margin-bottom:1rem}
+.acc-num-label{font-size:0.62rem;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem}
+.acc-num{font-size:2rem;font-weight:700;color:var(--orange);font-family:monospace;letter-spacing:0.05em}
+.acc-meta{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1rem}
+.acc-meta-item{background:rgba(255,255,255,0.08);padding:0.6rem 0.75rem;border-radius:6px}
+.acc-meta-item label{font-size:0.6rem;color:rgba(255,255,255,0.5);text-transform:uppercase;display:block;margin-bottom:0.2rem}
+.acc-meta-item span{font-size:0.82rem;font-weight:600;color:white;font-family:monospace}
+
+/* PREVIEW CARD */
+.preview-card{background:var(--cream);border:1.5px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+.preview-card h3{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.4rem}
+.preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+.pi{background:white;padding:0.6rem 0.75rem;border-radius:6px;border:1px solid var(--border)}
+.pi label{font-size:0.6rem;color:var(--gray);text-transform:uppercase;display:block;margin-bottom:0.12rem}
+.pi strong{font-size:0.82rem;color:var(--text);word-break:break-all}
+
+/* CODE BOX */
+.code-box{background:#1e1e2e;border-radius:8px;padding:1.1rem;font-family:monospace;font-size:0.78rem;color:#cdd6f4;line-height:1.6;overflow-x:auto;margin-bottom:0.75rem;white-space:pre;max-height:280px;overflow-y:auto}
+.code-box .k{color:#89b4fa}
+.code-box .s{color:#a6e3a1}
+.code-box .v{color:#f9e2af}
+.code-box .c{color:#6c7086}
+
+/* EMAIL TEMPLATE */
+.email-box{background:white;border:1px solid var(--border);border-radius:8px;padding:1.1rem;font-size:0.82rem;line-height:1.7;color:var(--text);margin-bottom:0.75rem;white-space:pre-wrap;max-height:320px;overflow-y:auto}
+
+/* STATUS BADGES */
+.badge{display:inline-flex;align-items:center;padding:0.18rem 0.6rem;border-radius:20px;font-size:0.68rem;font-weight:700}
+.badge-green{background:#d4edda;color:#155724}
+.badge-orange{background:#fde8d8;color:#8b4000}
+.badge-blue{background:#d1ecf1;color:#0c5460}
+
+/* ACTIONS ROW */
+.actions-row{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem}
+
+/* SUCCESS SCREEN */
+.success-screen{text-align:center;padding:2.5rem 1.5rem}
+.success-icon{font-size:4rem;margin-bottom:1rem}
+.success-screen h2{font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem}
+.success-screen p{font-size:0.88rem;color:var(--gray);margin-bottom:1.5rem}
+.success-checklist{display:flex;flex-direction:column;gap:0.5rem;max-width:400px;margin:0 auto 1.5rem;text-align:left}
+.sc-item{display:flex;align-items:center;gap:0.65rem;padding:0.65rem 0.9rem;background:var(--cream);border-radius:7px;font-size:0.83rem}
+.sc-item .sci{font-size:1rem}
+
+/* TOAST */
+#toast{display:none;position:fixed;bottom:1.5rem;right:1.5rem;padding:0.85rem 1.3rem;border-radius:8px;font-weight:600;font-size:0.83rem;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.2);max-width:320px}
+#toast.s{background:var(--green);color:white}
+#toast.e{background:var(--red);color:white}
+#toast.i{background:var(--blue);color:white}
+#toast.w{background:#FFC107;color:var(--text)}
+
+/* SECTIONS */
+.section{display:none}
+.section.active{display:block}
+
+/* SEPARATOR */
+.sep{border:none;border-top:1px solid var(--border);margin:1rem 0}
+
+/* INFO BOX */
+.info-box{background:#e8f4fd;border:1px solid #b8daff;border-radius:7px;padding:0.9rem;font-size:0.8rem;color:#0c5460;margin-bottom:1rem}
+.warn-box{background:#fff3cd;border:1px solid #ffc107;border-radius:7px;padding:0.9rem;font-size:0.8rem;color:#856404;margin-bottom:1rem}
+
+@media(max-width:640px){.fr,.fr3{grid-template-columns:1fr}.acc-meta{grid-template-columns:1fr}.preview-grid{grid-template-columns:1fr}.steps{gap:0}.step-label{font-size:0.6rem}}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="tlogo-icon">D</div>
+    <div class="tlogo-text"><strong>Customer Setup Tool</strong><span>Discover Bank Global Management plc</span></div>
+  </div>
+  <div class="topbar-links">
+    <a href="admin.html">← Admin</a>
+    <a href="login.html" target="_blank">Customer Login</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>⚙️ Customer Setup Tool</h1>
+  <p>Fill in the customer details below — the tool will generate everything automatically. No manual coding needed!</p>
+</div>
+
+<!-- STEPS -->
+<div class="steps" id="stepsBar">
+  <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">Customer Info</div></div>
+  <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">Account Details</div></div>
+  <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">Review & Generate</div></div>
+  <div class="step" id="step4"><div class="step-num">4</div><div class="step-label">Send to Customer</div></div>
+</div>
+
+<div class="wrap">
+
+  <!-- SECTION 1: CUSTOMER INFO -->
+  <div class="section active" id="sec1">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon" style="background:#e8f4fd">👤</div>
+        <div>
+          <h2>Step 1 — Customer Personal Information</h2>
+          <p>Enter the customer's personal details exactly as on their ID</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="fr">
+          <div class="fg">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="firstName" placeholder="e.g. James"/>
+          </div>
+          <div class="fg">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" id="lastName" placeholder="e.g. Wilson"/>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="e.g. james.wilson@email.com"/>
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" placeholder="e.g. +44 7700 000000"/>
+          </div>
+          <div class="fg">
+            <label>Date of Birth</label>
+            <input type="date" id="dob"/>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Home Address <span class="req">*</span></label>
+          <input type="text" id="address" placeholder="e.g. 123 Baker Street, London, UK"/>
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label>City</label>
+            <input type="text" id="city" placeholder="e.g. London"/>
+          </div>
+          <div class="fg">
+            <label>Country <span class="req">*</span></label>
+            <select id="country">
+              <option value="United Kingdom">🇬🇧 United Kingdom</option>
+              <option value="Nigeria">🇳🇬 Nigeria</option>
+              <option value="Ghana">🇬🇭 Ghana</option>
+              <option value="UAE">🇦🇪 United Arab Emirates</option>
+              <option value="USA">🇺🇸 United States</option>
+              <option value="China">🇨🇳 China</option>
+              <option value="South Africa">🇿🇦 South Africa</option>
+              <option value="Kenya">🇰🇪 Kenya</option>
+              <option value="Canada">🇨🇦 Canada</option>
+              <option value="Australia">🇦🇺 Australia</option>
+              <option value="Germany">🇩🇪 Germany</option>
+              <option value="France">🇫🇷 France</option>
+              <option value="Saudi Arabia">🇸🇦 Saudi Arabia</option>
+              <option value="India">🇮🇳 India</option>
+              <option value="Other">🌍 Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions-row">
+          <button class="btn btn-orange btn-lg" onclick="goStep2()">Next: Account Details →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: ACCOUNT DETAILS -->
+  <div class="section" id="sec2">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon" style="background:#fff3cd">🏦</div>
+        <div>
+          <h2>Step 2 — Account Configuration</h2>
+          <p>Set up the account type, balance and login credentials</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="fr">
+          <div class="fg">
+            <label>Account Type <span class="req">*</span></label>
+            <select id="accType">
+              <option value="Personal Savings">Personal Savings</option>
+              <option value="Business Savings">Business Savings</option>
+              <option value="Fixed Deposit">Fixed Deposit</option>
+              <option value="Salary Account">Salary Account</option>
+              <option value="Current Account">Current Account</option>
+              <option value="Joint Account">Joint Account</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Account Status</label>
+            <select id="accStatus">
+              <option value="Active">Active</option>
+              <option value="Pending">Pending Activation</option>
+              <option value="Frozen">Frozen</option>
+            </select>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label>Initial Balance (£) <span class="req">*</span></label>
+            <input type="number" id="balance" placeholder="e.g. 5000" min="0" step="0.01"/>
+            <div class="hint">Enter 0 if no initial deposit</div>
+          </div>
+          <div class="fg">
+            <label>Login Password <span class="req">*</span></label>
+            <input type="text" id="password" placeholder="e.g. James2026!"/>
+            <div class="hint">Recommend: Name + Year + Symbol</div>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Date Account Opened</label>
+          <input type="month" id="joinedMonth" value="2026-07"/>
+        </div>
+
+        <hr class="sep"/>
+        <div class="info-box">
+          🔢 <strong>Account Number</strong> will be auto-generated when you click Next. You can regenerate it if needed.
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-outline" onclick="goSection(1)">← Back</button>
+          <button class="btn btn-orange btn-lg" onclick="goStep3()">Next: Review & Generate →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: REVIEW & GENERATE CODE -->
+  <div class="section" id="sec3">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon" style="background:#d4edda">✅</div>
+        <div>
+          <h2>Step 3 — Review & Generate Code</h2>
+          <p>Review the details and copy the generated code into your files</p>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <!-- ACCOUNT NUMBER DISPLAY -->
+        <div class="acc-display">
+          <div class="acc-num-label">Generated Account Number</div>
+          <div class="acc-num" id="genAccNum">DBG-00000000</div>
+          <div class="acc-meta">
+            <div class="acc-meta-item"><label>Sort Code</label><span id="genSort">40-00-00</span></div>
+            <div class="acc-meta-item"><label>IBAN</label><span id="genIBAN">GB00DISC00000000</span></div>
+            <div class="acc-meta-item"><label>BIC/SWIFT</label><span>DISCGB2L</span></div>
+            <div class="acc-meta-item"><label>Account Type</label><span id="genTypeDisp">—</span></div>
+          </div>
+        </div>
+        <button class="btn btn-outline" onclick="regenerateAcc()" style="margin-bottom:1rem">🔄 Regenerate Account Number</button>
+
+        <!-- CUSTOMER PREVIEW -->
+        <div class="preview-card">
+          <h3>👤 Customer Summary</h3>
+          <div class="preview-grid" id="previewGrid">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <!-- HOW TO ADD -->
+        <div class="warn-box">
+          📌 <strong>How to add this customer:</strong> Copy the code below → Go to <strong>GitHub → login.html</strong> → Find <code>const customers = {</code> → Paste the code inside → Also paste into <strong>admin.html</strong> inside <code>const CUSTOMERS = {</code> → Click Commit. Done! ✅
+        </div>
+
+        <!-- LOGIN.HTML CODE -->
+        <div class="preview-card">
+          <h3>📋 Code for login.html & admin.html — Copy & Paste into GitHub</h3>
+          <div class="code-box" id="loginCode"><!-- generated --></div>
+          <div class="actions-row">
+            <button class="btn btn-navy" onclick="copyCode('loginCode')">📋 Copy Code</button>
+            <button class="btn btn-outline" onclick="goStep4()">Next: Send Welcome Email →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: SEND WELCOME EMAIL -->
+  <div class="section" id="sec4">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon" style="background:#fde8d8">📧</div>
+        <div>
+          <h2>Step 4 — Send Welcome Email to Customer</h2>
+          <p>Send the customer their account details and login information</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="info-box">
+          ✅ <strong>Almost done!</strong> The welcome email below is pre-filled with all the customer's details. Just click <strong>"Open in Gmail"</strong> to send it!
+        </div>
+
+        <div class="fg">
+          <label>Sending To</label>
+          <input type="email" id="emailTo" readonly style="background:var(--cream);font-weight:600"/>
+        </div>
+        <div class="fg">
+          <label>Email Subject</label>
+          <input type="text" id="emailSubject" readonly style="background:var(--cream)"/>
+        </div>
+        <div class="fg">
+          <label>Welcome Email Message</label>
+          <div class="email-box" id="emailBody"><!-- generated --></div>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-red btn-lg" onclick="openGmail()">📤 Open in Gmail & Send</button>
+          <button class="btn btn-navy" onclick="copyEmail()">📋 Copy Email</button>
+          <button class="btn btn-outline" onclick="goSection(3)">← Back</button>
+        </div>
+
+        <hr class="sep"/>
+
+        <!-- SUCCESS -->
+        <div class="success-screen">
+          <div class="success-icon">🎉</div>
+          <h2>Customer Setup Complete!</h2>
+          <p>Once you paste the code into GitHub and send the email, the customer is fully set up!</p>
+          <div class="success-checklist">
+            <div class="sc-item"><span class="sci">✅</span> Account number generated</div>
+            <div class="sc-item"><span class="sci">✅</span> Login code ready to paste</div>
+            <div class="sc-item"><span class="sci">✅</span> Welcome email ready to send</div>
+            <div class="sc-item"><span class="sci">⬜</span> Paste code into login.html on GitHub</div>
+            <div class="sc-item"><span class="sci">⬜</span> Paste code into admin.html on GitHub</div>
+            <div class="sc-item"><span class="sci">⬜</span> Send welcome email to customer</div>
+          </div>
+          <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-navy btn-lg" onclick="location.reload()">➕ Add Another Customer</button>
+            <a href="admin.html" class="btn btn-orange btn-lg">← Back to Admin</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<div id="toast"></div>
+
+<script>
+// ── STATE ──
+let custData = {};
+let accData = {};
+
+// ── STEP 1 → STEP 2 ──
+function goStep2(){
+  const fn = document.getElementById('firstName').value.trim();
+  const ln = document.getElementById('lastName').value.trim();
+  const em = document.getElementById('email').value.trim();
+  const ph = document.getElementById('phone').value.trim();
+  const ad = document.getElementById('address').value.trim();
+  if(!fn){toast('Please enter first name','e');document.getElementById('firstName').focus();return;}
+  if(!ln){toast('Please enter last name','e');document.getElementById('lastName').focus();return;}
+  if(!em||!em.includes('@')){toast('Please enter a valid email address','e');document.getElementById('email').focus();return;}
+  if(!ph){toast('Please enter phone number','e');document.getElementById('phone').focus();return;}
+  if(!ad){toast('Please enter address','e');document.getElementById('address').focus();return;}
+  custData = {
+    firstName:fn, lastName:ln, name:fn+' '+ln,
+    email:em, phone:ph,
+    address:ad, country:document.getElementById('country').value,
+    dob:document.getElementById('dob').value
+  };
+  goSection(2);
+}
+
+// ── STEP 2 → STEP 3 ──
+function goStep3(){
+  const bal = document.getElementById('balance').value;
+  const pw  = document.getElementById('password').value.trim();
+  if(bal===''){toast('Please enter initial balance (use 0 if none)','e');document.getElementById('balance').focus();return;}
+  if(!pw){toast('Please enter a login password','e');document.getElementById('password').focus();return;}
+  if(pw.length < 6){toast('Password must be at least 6 characters','e');return;}
+
+  // Get joined month
+  const jm = document.getElementById('joinedMonth').value;
+  const jDate = jm ? new Date(jm+'-01') : new Date();
+  const joinedStr = jDate.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+
+  custData.accType   = document.getElementById('accType').value;
+  custData.status    = document.getElementById('accStatus').value;
+  custData.balance   = parseFloat(bal).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+  custData.password  = pw;
+  custData.joined    = joinedStr;
+
+  generateAccNum();
+  buildPreview();
+  buildCode();
+  goSection(3);
+}
+
+// ── STEP 3 → STEP 4 ──
+function goStep4(){
+  buildEmail();
+  goSection(4);
+}
+
+// ── GENERATE ACCOUNT NUMBER ──
+function generateAccNum(){
+  const n='DBG-'+Math.floor(10000000+Math.random()*90000000);
+  const s=[Math.floor(10+Math.random()*90),Math.floor(10+Math.random()*90),Math.floor(10+Math.random()*90)];
+  const sort=s.join('-');
+  const iban='GB'+Math.floor(10+Math.random()*90)+'DISC'+s.join('')+Math.floor(10000000+Math.random()*90000000);
+  accData={num:n,sort,iban};
+  document.getElementById('genAccNum').textContent=n;
+  document.getElementById('genSort').textContent=sort;
+  document.getElementById('genIBAN').textContent=iban;
+  document.getElementById('genTypeDisp').textContent=custData.accType||'—';
+}
+
+function regenerateAcc(){
+  generateAccNum();
+  buildCode();
+  toast('New account number generated!','s');
+}
+
+// ── BUILD PREVIEW ──
+function buildPreview(){
+  const d=custData;
+  const a=accData;
+  const items=[
+    ['Full Name',d.name],
+    ['Email',d.email],
+    ['Phone',d.phone],
+    ['Country',d.country],
+    ['Address',d.address],
+    ['Account Type',d.accType],
+    ['Initial Balance','£'+d.balance],
+    ['Login Password',d.password],
+    ['Status',d.status],
+    ['Date Joined',d.joined],
+  ];
+  document.getElementById('previewGrid').innerHTML=items.map(([l,v])=>`
+    <div class="pi"><label>${l}</label><strong>${v||'—'}</strong></div>
+  `).join('');
+}
+
+// ── BUILD CODE ──
+function buildCode(){
+  const d=custData;
+  const a=accData;
+  const bal='£'+d.balance;
+  const code=`  '${a.num}': {
+    password: '${d.password}',
+    name: '${d.name}',
+    type: '${d.accType}',
+    balance: '${bal}',
+    sortCode: '${a.sort}',
+    iban: '${a.iban}',
+    email: '${d.email}',
+    phone: '${d.phone}',
+    address: '${d.address}, ${d.country}',
+    joined: '${d.joined}',
+    status: '${d.status}',
+    color: '#00325F'
+  },`;
+  document.getElementById('loginCode').textContent=code;
+}
+
+// ── BUILD EMAIL ──
+function buildEmail(){
+  const d=custData;
+  const a=accData;
+  const subj=`Welcome to Discover Bank Global Management plc — Your Account is Ready!`;
+  document.getElementById('emailTo').value=d.email;
+  document.getElementById('emailSubject').value=subj;
+  const body=`Dear ${d.name},
+
+We are pleased to inform you that your account has been successfully opened at Discover Bank Global Management plc.
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+YOUR ACCOUNT DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━
+Account Holder: ${d.name}
+Account Number: ${a.num}
+Account Type:   ${d.accType}
+Sort Code:      ${a.sort}
+IBAN:           ${a.iban}
+BIC/SWIFT:      DISCGB2L
+Balance:        £${d.balance}
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+YOUR LOGIN DETAILS:
+Website:  https://discoverjp.org/login.html
+Account:  ${a.num}
+Password: ${d.password}
+
+⚠️ For security, please change your password after your first login.
+
+WHAT YOU CAN DO WITH YOUR ACCOUNT:
+• View your balance and transactions
+• Make domestic and international transfers
+• Apply for loans
+• Download account statements
+• Manage your profile and cards
+
+NEED HELP?
+📞 Phone:  +44 20 9946 9200
+✉️ Email:  officesupport.mlaj@gmail.com
+🕐 Hours:  Mon–Fri 8AM–6PM GMT | Sat 9AM–2PM GMT
+
+We look forward to serving you.
+
+Best regards,
+Customer Service Team
+Discover Bank Global Management plc
+Suite 1, 7th Floor, 50 Broadway
+London, SW1H 0BL, United Kingdom
+FCA Regulated | Est. 2022`;
+  document.getElementById('emailBody').textContent=body;
+}
+
+// ── OPEN GMAIL ──
+function openGmail(){
+  const to=document.getElementById('emailTo').value;
+  const subj=document.getElementById('emailSubject').value;
+  const body=document.getElementById('emailBody').textContent;
+  const url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(to)+'&su='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+  const win=window.open(url,'_blank');
+  if(!win){
+    const txt=`To: ${to}\nSubject: ${subj}\n\n${body}`;
+    navigator.clipboard.writeText(txt).then(()=>toast('Popup blocked! Email copied to clipboard. Open Gmail and paste.','w'));
+  } else {
+    toast('Gmail opened! Send the email to complete setup.','s');
+  }
+}
+
+// ── COPY EMAIL ──
+function copyEmail(){
+  const to=document.getElementById('emailTo').value;
+  const subj=document.getElementById('emailSubject').value;
+  const body=document.getElementById('emailBody').textContent;
+  navigator.clipboard.writeText(`To: ${to}\nSubject: ${subj}\n\n${body}`)
+    .then(()=>toast('Email copied to clipboard!','s'));
+}
+
+// ── COPY CODE ──
+function copyCode(id){
+  const txt=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    toast('✅ Code copied! Now paste it into login.html AND admin.html on GitHub.','s');
+  }).catch(()=>{
+    const el=document.getElementById(id);
+    const r=document.createRange();
+    r.selectNodeContents(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(r);
+    toast('Text selected — press Ctrl+C (or Cmd+C) to copy','i');
+  });
+}
+
+// ── NAVIGATE SECTIONS ──
+function goSection(n){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec'+n).classList.add('active');
+  // Update steps
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById('step'+i);
+    el.classList.remove('active','done');
+    if(i<n)el.classList.add('done');
+    else if(i===n)el.classList.add('active');
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── TOAST ──
+function toast(msg,type='s'){
+  const t=document.getElementById('toast');
+  const icons={s:'✅',e:'❌',i:'ℹ️',w:'⚠️'};
+  t.textContent=(icons[type]||'')+' '+msg;
+  t.className=type;
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',4500);
+}
+</script>
+</body>
+</html>
