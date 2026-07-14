@@ -1,0 +1,73 @@
+═══════════════════════════════════════════════════════════════
+   DISCOVER BANK PWA SETUP INSTRUCTIONS
+   Follow these steps to activate your app!
+═══════════════════════════════════════════════════════════════
+
+STEP 1 — UPLOAD THESE FILES TO GITHUB
+───────────────────────────────────────
+Upload ALL of these files to your GitHub repository:
+  ✅ manifest.json
+  ✅ sw.js
+  ✅ offline.html
+  ✅ pwa-install.js
+  ✅ generate-icons.html
+  ✅ customers-data.js (new shared customer file)
+  ✅ login.html (updated version)
+
+STEP 2 — GENERATE YOUR APP ICONS
+───────────────────────────────────────
+1. Open: discoverjp.org/generate-icons.html
+2. Click "Download icon-192.png"
+3. Click "Download icon-512.png"
+4. Upload BOTH icon files to GitHub root folder
+
+STEP 3 — ADD PWA CODE TO YOUR PAGES
+───────────────────────────────────────
+Add these 3 lines inside the <head> section of:
+  - index.html
+  - login.html
+  - dashboard.html
+
+Paste this inside <head>:
+────────────────────────────────────────────────
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#00325F"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Discover Bank"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
+────────────────────────────────────────────────
+
+And add this just before </body> on each page:
+────────────────────────────────────────────────
+<script src="/pwa-install.js"></script>
+────────────────────────────────────────────────
+
+STEP 4 — TEST YOUR APP
+───────────────────────────────────────
+1. Visit discoverjp.org on your phone (Chrome)
+2. You will see a banner: "Install Discover Bank App"
+3. Tap "Install App"
+4. The app icon appears on your home screen! 📱
+
+For iPhone (Safari):
+1. Open discoverjp.org in Safari
+2. Tap the Share button (box with arrow)
+3. Tap "Add to Home Screen"
+4. Tap "Add" — Done! 📱
+
+STEP 5 — PUBLISH ON GOOGLE SEARCH
+───────────────────────────────────────
+1. Go to: https://search.google.com/search-console
+2. Click "Add Property"
+3. Enter: discoverjp.org
+4. Choose "URL prefix" method
+5. Download the verification HTML file
+6. Upload it to your GitHub repository
+7. Click "Verify" in Google Search Console
+8. Go to "Sitemaps" → add: discoverjp.org/sitemap.xml
+9. Google will index your site in 1-2 weeks ✅
+
+═══════════════════════════════════════════════════════════════
+   That's it! Your bank website is now a real app! 🎉
+═══════════════════════════════════════════════════════════════

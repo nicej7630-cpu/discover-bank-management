@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Generate App Icons — Discover Bank</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f4f4;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+.wrap{background:white;border-radius:12px;padding:2rem;max-width:500px;width:100%;box-shadow:0 4px 20px rgba(0,0,0,0.1);text-align:center}
+h2{color:#00325F;margin-bottom:0.5rem}
+p{color:#6C757D;font-size:0.88rem;margin-bottom:1.5rem}
+canvas{border-radius:16px;margin:0.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.btn{display:inline-block;margin:0.5rem;padding:0.7rem 1.4rem;background:#00325F;color:white;border:none;border-radius:6px;font-size:0.88rem;font-weight:600;cursor:pointer}
+.btn-o{background:#E87722}
+.note{background:#e8f4fd;border:1px solid #b8daff;border-radius:7px;padding:0.9rem;font-size:0.8rem;color:#0c5460;margin-top:1rem;text-align:left}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>🎨 Discover Bank App Icons</h2>
+  <p>Click the buttons below to download your app icons, then upload them to GitHub.</p>
+  <div>
+    <canvas id="c192" width="192" height="192"></canvas>
+    <canvas id="c512" width="512" height="512"></canvas>
+  </div>
+  <div>
+    <button class="btn" onclick="download('c192','icon-192.png')">⬇️ Download icon-192.png</button>
+    <button class="btn btn-o" onclick="download('c512','icon-512.png')">⬇️ Download icon-512.png</button>
+  </div>
+  <div class="note">
+    <strong>📌 After downloading:</strong><br/>
+    Upload both <code>icon-192.png</code> and <code>icon-512.png</code> to your GitHub repository root folder. These are your app icons!
+  </div>
+</div>
+<script>
+function drawIcon(canvasId, size) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  const s = size;
+  const r = s * 0.18; // border radius
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0, 0, s, s);
+  grad.addColorStop(0, '#001F3F');
+  grad.addColorStop(1, '#00325F');
+
+  // Rounded rectangle background
+  ctx.beginPath();
+  ctx.moveTo(r, 0);
+  ctx.lineTo(s - r, 0);
+  ctx.quadraticCurveTo(s, 0, s, r);
+  ctx.lineTo(s, s - r);
+  ctx.quadraticCurveTo(s, s, s - r, s);
+  ctx.lineTo(r, s);
+  ctx.quadraticCurveTo(0, s, 0, s - r);
+  ctx.lineTo(0, r);
+  ctx.quadraticCurveTo(0, 0, r, 0);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Orange circle
+  const cx = s / 2;
+  const cy = s / 2;
+  const cr = s * 0.32;
+  ctx.beginPath();
+  ctx.arc(cx, cy, cr, 0, Math.PI * 2);
+  ctx.fillStyle = '#E87722';
+  ctx.fill();
+
+  // "D" letter
+  ctx.fillStyle = 'white';
+  ctx.font = `900 ${s * 0.38}px Arial`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('D', cx, cy + s * 0.02);
+
+  // Bottom text
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.font = `600 ${s * 0.055}px Arial`;
+  ctx.fillText('DISCOVER BANK', cx, s * 0.88);
+}
+
+function download(canvasId, filename) {
+  const canvas = document.getElementById(canvasId);
+  const link = document.createElement('a');
+  link.download = filename;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// Draw both icons
+drawIcon('c192', 192);
+drawIcon('c512', 512);
+</script>
+</body>
+</html>
