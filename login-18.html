@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+<title>Discover Bank Global Management plc</title>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#00325F"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Discover Bank"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#00325F;--dark:#001F3F;--orange:#E87722;--orange-lt:#F59A4F;--gray:#6C757D;--border:#DEE2E6;--green:#28A745;--red:#DC3545}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif}
+
+/* ── WELCOME SCREEN ── */
+#welcomeScreen{
+  position:fixed;inset:0;
+  background:linear-gradient(160deg,#001020 0%,#001F3F 40%,#00325F 70%,#004d8a 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  padding:3rem 2rem 2.5rem;z-index:100;overflow:hidden;
+  animation:fadeIn 0.6s ease;
+}
+
+/* Animated background circles */
+#welcomeScreen::before{
+  content:'';position:absolute;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(232,119,34,0.15) 0%,transparent 70%);
+  border-radius:50%;top:-100px;right:-100px;animation:pulse 4s ease-in-out infinite;
+}
+#welcomeScreen::after{
+  content:'';position:absolute;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(0,50,95,0.4) 0%,transparent 70%);
+  border-radius:50%;bottom:-50px;left:-80px;animation:pulse 5s ease-in-out infinite reverse;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:0.7}50%{transform:scale(1.1);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:none}}
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+
+/* TOP SECTION */
+.welcome-top{display:flex;flex-direction:column;align-items:center;gap:1rem;z-index:1;animation:slideDown 0.8s ease 0.2s both}
+.app-logo-wrap{position:relative}
+.app-logo{width:88px;height:88px;background:linear-gradient(135deg,var(--orange),var(--orange-lt));border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;font-weight:900;color:white;box-shadow:0 8px 32px rgba(232,119,34,0.4),0 0 0 8px rgba(232,119,34,0.12)}
+.logo-dot{position:absolute;bottom:-4px;right:-4px;width:24px;height:24px;background:var(--green);border-radius:50%;border:3px solid #001F3F;display:flex;align-items:center;justify-content:center;font-size:0.7rem}
+.app-name{font-size:1.4rem;font-weight:800;color:white;letter-spacing:0.5px;text-align:center}
+.app-tagline{font-size:0.82rem;color:rgba(255,255,255,0.55);letter-spacing:1.5px;text-transform:uppercase;text-align:center}
+
+/* MIDDLE SECTION */
+.welcome-mid{z-index:1;text-align:center;animation:slideUp 0.8s ease 0.4s both}
+.welcome-headline{font-size:2rem;font-weight:900;color:white;line-height:1.2;margin-bottom:1rem}
+.welcome-headline span{
+  background:linear-gradient(90deg,var(--orange),var(--orange-lt),var(--orange));
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmer 3s linear infinite;
+}
+.welcome-sub{font-size:0.92rem;color:rgba(255,255,255,0.65);line-height:1.7;max-width:300px;margin:0 auto 1.5rem}
+
+/* FEATURE PILLS */
+.features{display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;margin-bottom:1.5rem}
+.feat{display:flex;align-items:center;gap:0.4rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:0.38rem 0.85rem;font-size:0.75rem;color:rgba(255,255,255,0.8)}
+.feat span{font-size:0.9rem}
+
+/* STATS ROW */
+.stats-row{display:flex;gap:1.5rem;justify-content:center}
+.stat{text-align:center}
+.stat-num{font-size:1.2rem;font-weight:800;color:var(--orange)}
+.stat-lbl{font-size:0.65rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em}
+
+/* BOTTOM SECTION */
+.welcome-bottom{z-index:1;width:100%;max-width:360px;animation:slideUp 0.8s ease 0.6s both}
+.btn-login{
+  width:100%;padding:1.1rem;
+  background:linear-gradient(135deg,var(--orange),var(--orange-lt));
+  color:white;border:none;border-radius:14px;
+  font-size:1rem;font-weight:700;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 8px 24px rgba(232,119,34,0.4);
+  transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.6rem;
+  margin-bottom:0.85rem;
+}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(232,119,34,0.5)}
+.btn-login:active{transform:translateY(0)}
+.btn-open{
+  width:100%;padding:1rem;
+  background:rgba(255,255,255,0.08);
+  color:white;border:1.5px solid rgba(255,255,255,0.2);border-radius:14px;
+  font-size:0.95rem;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:0.6rem;
+  margin-bottom:1.2rem;
+}
+.btn-open:hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.35)}
+.welcome-footer{text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.3);line-height:1.6}
+.welcome-footer a{color:rgba(255,255,255,0.45);text-decoration:none}
+
+/* ── LOGIN SCREEN ── */
+#loginScreen{
+  position:fixed;inset:0;
+  display:none;flex-direction:column;
+  background:linear-gradient(160deg,#001020 0%,#001F3F 50%,#00325F 100%);
+  overflow-y:auto;
+}
+#loginScreen.show{display:flex}
+
+.login-nav{padding:1.1rem 1.5rem;display:flex;align-items:center;gap:0.75rem}
+.back-btn{width:36px;height:36px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:1rem;flex-shrink:0}
+.login-nav-title{font-size:0.88rem;font-weight:600;color:white}
+
+.login-hero{padding:1.5rem 1.5rem 0;text-align:center}
+.login-logo-sm{width:56px;height:56px;background:linear-gradient(135deg,var(--orange),var(--orange-lt));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:white;margin:0 auto 1rem;box-shadow:0 4px 16px rgba(232,119,34,0.35)}
+.login-hero h2{font-size:1.35rem;font-weight:800;color:white;margin-bottom:0.4rem}
+.login-hero p{font-size:0.82rem;color:rgba(255,255,255,0.55)}
+
+.login-card{background:white;border-radius:24px 24px 0 0;margin-top:1.5rem;padding:1.75rem 1.5rem 2rem;flex:1;min-height:400px}
+.alert{display:none;padding:0.75rem 1rem;border-radius:10px;margin-bottom:1.1rem;font-size:0.83rem;font-weight:500}
+.alert-error{background:#fdf2f2;border:1px solid #f5c6cb;color:var(--red)}
+.alert-suspended{background:#fff3cd;border:1px solid #ffc107;color:#856404}
+
+.fg{margin-bottom:1.1rem}
+.fg label{display:block;font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.42rem}
+.fg input{width:100%;padding:0.9rem 1rem;border:1.5px solid var(--border);border-radius:12px;font-size:0.95rem;font-family:'Inter',sans-serif;outline:none;transition:all 0.2s;background:#FAFAFA;color:#212529}
+.fg input:focus{border-color:var(--navy);background:white;box-shadow:0 0 0 3px rgba(0,50,95,0.08)}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:3rem}
+.pw-eye{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--gray)}
+
+.login-btn{
+  width:100%;padding:1.05rem;
+  background:linear-gradient(135deg,var(--navy),var(--dark));
+  color:white;border:none;border-radius:12px;
+  font-size:0.98rem;font-weight:700;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 4px 16px rgba(0,50,95,0.3);
+  transition:all 0.2s;margin-top:0.3rem;
+  display:flex;align-items:center;justify-content:center;gap:0.5rem;
+}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,50,95,0.4)}
+.login-btn:disabled{opacity:0.65;cursor:not-allowed;transform:none}
+
+.divider{display:flex;align-items:center;gap:0.9rem;margin:1.3rem 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{font-size:0.75rem;color:var(--gray);white-space:nowrap}
+
+.help-box{background:#f0f7ff;border:1px solid #b8daff;border-radius:12px;padding:1rem;text-align:center}
+.help-box p{font-size:0.78rem;color:#0c5460;margin-bottom:0.5rem;font-weight:500}
+.help-box a{color:var(--navy);font-weight:700;font-size:0.82rem;text-decoration:none;display:block;margin-top:0.3rem}
+
+.open-acc-row{display:flex;align-items:center;justify-content:center;gap:0.4rem;margin-top:1.25rem}
+.open-acc-row span{font-size:0.82rem;color:var(--gray)}
+.open-acc-row a{font-size:0.82rem;color:var(--navy);font-weight:700;text-decoration:none}
+
+.security-strip{display:flex;align-items:center;justify-content:center;gap:1.2rem;padding:1rem;border-top:1px solid var(--border);margin-top:1rem;flex-wrap:wrap}
+.ss-item{display:flex;align-items:center;gap:0.35rem;font-size:0.68rem;color:var(--gray)}
+.ss-dot{width:6px;height:6px;background:var(--green);border-radius:50%}
+
+/* TRANSITIONS */
+.slide-out{animation:slideOutLeft 0.35s ease forwards}
+.slide-in{animation:slideInRight 0.35s ease forwards}
+@keyframes slideOutLeft{to{opacity:0;transform:translateX(-40px)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- Load shared customer data -->
+<script src="customers-data.js"></script>
+
+<!-- ══════════════════════════════════ -->
+<!-- WELCOME SCREEN                    -->
+<!-- ══════════════════════════════════ -->
+<div id="welcomeScreen">
+
+  <!-- TOP: Logo & Name -->
+  <div class="welcome-top">
+    <div class="app-logo-wrap">
+      <div class="app-logo">D</div>
+      <div class="logo-dot">✓</div>
+    </div>
+    <div>
+      <div class="app-name">DISCOVER BANK</div>
+      <div class="app-tagline">Global Management plc</div>
+    </div>
+  </div>
+
+  <!-- MIDDLE: Headline & Features -->
+  <div class="welcome-mid">
+    <div class="welcome-headline">
+      Banking Made<br/><span>Simple & Secure</span>
+    </div>
+    <div class="welcome-sub">
+      Experience world-class banking from anywhere in the world. Your money, your control — anytime, anywhere. 🌍
+    </div>
+    <div class="features">
+      <div class="feat"><span>🔒</span> Bank-Level Security</div>
+      <div class="feat"><span>🌍</span> Global Transfers</div>
+      <div class="feat"><span>⚡</span> Instant Payments</div>
+      <div class="feat"><span>💳</span> Virtual Cards</div>
+      <div class="feat"><span>📊</span> Live Balance</div>
+      <div class="feat"><span>🇬🇧</span> FCA Regulated</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">247+</div><div class="stat-lbl">Customers</div></div>
+      <div class="stat"><div class="stat-num">£2.4M+</div><div class="stat-lbl">Deposits</div></div>
+      <div class="stat"><div class="stat-num">30+</div><div class="stat-lbl">Countries</div></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM: Buttons -->
+  <div class="welcome-bottom">
+    <button class="btn-login" onclick="showLogin()">
+      🔐 Login to My Account
+    </button>
+    <button class="btn-open" onclick="window.location.href='signup.html'">
+      ✨ Open a New Account
+    </button>
+    <div class="welcome-footer">
+      By continuing you agree to our
+      <a href="terms.html">Terms of Service</a> &
+      <a href="privacy-policy.html">Privacy Policy</a><br/>
+      🔒 256-bit SSL Encrypted · FCA Regulated · Est. 2022
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- LOGIN SCREEN                      -->
+<!-- ══════════════════════════════════ -->
+<div id="loginScreen">
+
+  <!-- Back nav -->
+  <div class="login-nav">
+    <div class="back-btn" onclick="showWelcome()">←</div>
+    <div class="login-nav-title">Sign In</div>
+  </div>
+
+  <!-- Top hero -->
+  <div class="login-hero">
+    <div class="login-logo-sm">D</div>
+    <h2>Welcome Back! 👋</h2>
+    <p>Sign in securely to your Discover Bank account</p>
+  </div>
+
+  <!-- Login card -->
+  <div class="login-card">
+    <div class="alert alert-error" id="errMsg">❌ Invalid account number or password. Please try again or contact support.</div>
+    <div class="alert alert-suspended" id="suspMsg">⚠️ Your account has been suspended. Please contact: +44 20 9946 9200</div>
+
+    <form id="loginForm">
+      <div class="fg">
+        <label>Account Number</label>
+        <input type="text" id="accNum" placeholder="e.g. DBG-10293847" required autocomplete="username"/>
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password"/>
+          <button type="button" class="pw-eye" onclick="togglePw()">👁️</button>
+        </div>
+      </div>
+      <button type="submit" class="login-btn" id="loginBtn">
+        🔐 Sign In Securely
+      </button>
+    </form>
+
+    <div class="divider"><span>Need help accessing your account?</span></div>
+
+    <div class="help-box">
+      <p>Forgot your account number or password?</p>
+      <a href="tel:+442099469200">📞 Call Us: +44 20 9946 9200</a>
+      <a href="mailto:officesupport.mlaj@gmail.com">✉️ officesupport.mlaj@gmail.com</a>
+    </div>
+
+    <div class="open-acc-row">
+      <span>Don't have an account?</span>
+      <a href="signup.html">Open Account →</a>
+    </div>
+
+    <div class="security-strip">
+      <div class="ss-item"><div class="ss-dot"></div>256-bit SSL</div>
+      <div class="ss-item"><div class="ss-dot"></div>FCA Regulated</div>
+      <div class="ss-item"><div class="ss-dot"></div>Bank-Level Security</div>
+    </div>
+  </div>
+</div>
+
+<script src="/pwa-install.js"></script>
+<script>
+// ── SCREEN TRANSITIONS ──
+function showLogin(){
+  const ws=document.getElementById('welcomeScreen');
+  const ls=document.getElementById('loginScreen');
+  ws.classList.add('slide-out');
+  setTimeout(()=>{
+    ws.style.display='none';
+    ls.classList.add('show','slide-in');
+    setTimeout(()=>ls.classList.remove('slide-in'),400);
+  },300);
+}
+
+function showWelcome(){
+  const ws=document.getElementById('welcomeScreen');
+  const ls=document.getElementById('loginScreen');
+  ls.classList.remove('show');
+  ws.style.display='flex';
+  ws.style.animation='fadeIn 0.3s ease';
+  ws.classList.remove('slide-out');
+}
+
+// ── PASSWORD TOGGLE ──
+function togglePw(){
+  const f=document.getElementById('password');
+  f.type=f.type==='password'?'text':'password';
+}
+
+// ── LOGIN FORM ──
+document.getElementById('loginForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const acc=document.getElementById('accNum').value.trim().toUpperCase();
+  const pw=document.getElementById('password').value;
+  const btn=document.getElementById('loginBtn');
+  const err=document.getElementById('errMsg');
+  const susp=document.getElementById('suspMsg');
+  err.style.display='none';
+  susp.style.display='none';
+  btn.disabled=true;
+  btn.innerHTML='⏳ Verifying...';
+
+  setTimeout(function(){
+    const customers = typeof BANK_CUSTOMERS !== 'undefined' ? BANK_CUSTOMERS : {};
+    const cust=customers[acc];
+    if(!cust){
+      err.style.display='block';
+      btn.disabled=false;btn.innerHTML='🔐 Sign In Securely';
+      return;
+    }
+    if(cust.status==='Suspended'||cust.status==='Frozen'){
+      susp.style.display='block';
+      btn.disabled=false;btn.innerHTML='🔐 Sign In Securely';
+      return;
+    }
+    if(cust.password!==pw){
+      err.style.display='block';
+      btn.disabled=false;btn.innerHTML='🔐 Sign In Securely';
+      return;
+    }
+    // SUCCESS
+    const data=JSON.stringify({...cust,accNum:acc});
+    try{sessionStorage.setItem('dbg_customer',data);}catch(ex){}
+    try{localStorage.setItem('dbg_customer',data);}catch(ex){}
+    btn.innerHTML='✅ Success! Loading...';
+    setTimeout(()=>window.location.href='dashboard.html',600);
+  },900);
+});
+</script>
+</body>
+</html>
