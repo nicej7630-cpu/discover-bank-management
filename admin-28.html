@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Portal — Discover Bank Global Management plc</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#00325F;--dark:#001F3F;--orange:#E87722;--orange-lt:#F59A4F;
+  --cream:#F8F9FA;--gray:#6C757D;--border:#E2E8F0;--text:#1A202C;
+  --green:#10B981;--red:#EF4444;--blue:#3B82F6;--yellow:#F59E0B;
+  --purple:#8B5CF6;--sidebar:#0F172A;--sidebar-hover:#1E293B;
+}
+body{font-family:'Inter',sans-serif;background:#F1F5F9;color:var(--text);min-height:100vh}
+
+/* ── LOGIN ── */
+#loginScreen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#0F172A 0%,#001F3F 50%,#00325F 100%);
+  padding:1rem;position:relative;overflow:hidden;
+}
+#loginScreen::before{
+  content:'';position:absolute;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(232,119,34,0.08) 0%,transparent 70%);
+  border-radius:50%;top:-200px;right:-200px;
+}
+#loginScreen::after{
+  content:'';position:absolute;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(59,130,246,0.06) 0%,transparent 70%);
+  border-radius:50%;bottom:-100px;left:-100px;
+}
+.login-card{
+  background:white;border-radius:20px;padding:2.5rem;
+  width:100%;max-width:420px;
+  box-shadow:0 25px 50px rgba(0,0,0,0.35);
+  position:relative;z-index:1;
+}
+.login-top{text-align:center;margin-bottom:2rem}
+.login-logo{
+  width:72px;height:72px;
+  background:linear-gradient(135deg,var(--orange),var(--orange-lt));
+  border-radius:20px;display:flex;align-items:center;justify-content:center;
+  font-size:2rem;font-weight:900;color:white;margin:0 auto 1rem;
+  box-shadow:0 8px 24px rgba(232,119,34,0.35);
+}
+.login-top h2{font-size:1.5rem;font-weight:800;color:var(--dark);margin-bottom:0.25rem}
+.login-top p{font-size:0.82rem;color:var(--gray)}
+.login-badge{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  background:#f0fdf4;border:1px solid #bbf7d0;
+  padding:0.3rem 0.85rem;border-radius:20px;
+  font-size:0.72rem;font-weight:600;color:#166534;margin-top:0.5rem;
+}
+.err-box{
+  display:none;background:#fef2f2;border:1px solid #fecaca;
+  border-radius:10px;padding:0.75rem 1rem;
+  font-size:0.82rem;color:var(--red);margin-bottom:1rem;
+  display:none;align-items:center;gap:0.5rem;
+}
+.fg{margin-bottom:1.1rem}
+.fg label{
+  display:block;font-size:0.72rem;font-weight:700;
+  color:#475569;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem;
+}
+.fg input{
+  width:100%;padding:0.85rem 1rem;
+  border:1.5px solid #E2E8F0;border-radius:10px;
+  font-size:0.92rem;font-family:'Inter',sans-serif;
+  outline:none;transition:all 0.2s;background:#F8FAFC;
+}
+.fg input:focus{border-color:var(--navy);background:white;box-shadow:0 0 0 3px rgba(0,50,95,0.08)}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:3rem}
+.pw-eye{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--gray)}
+.login-btn{
+  width:100%;padding:1rem;
+  background:linear-gradient(135deg,var(--navy),var(--dark));
+  color:white;border:none;border-radius:10px;
+  font-size:0.95rem;font-weight:700;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 4px 16px rgba(0,50,95,0.3);
+  transition:all 0.2s;
+}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,50,95,0.4)}
+.login-btn:disabled{opacity:0.65;cursor:not-allowed;transform:none}
+.login-footer{text-align:center;margin-top:1.5rem;font-size:0.72rem;color:#94A3B8}
+
+/* ── APP ── */
+#app{display:none;min-height:100vh}
+.layout{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:260px;background:var(--sidebar);
+  min-height:100vh;position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;display:flex;flex-direction:column;z-index:50;
+}
+.sb-head{
+  padding:1.5rem 1.25rem;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.sb-logo{display:flex;align-items:center;gap:0.85rem}
+.sb-logo-icon{
+  width:40px;height:40px;
+  background:linear-gradient(135deg,var(--orange),var(--orange-lt));
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-weight:900;color:white;font-size:1.1rem;flex-shrink:0;
+}
+.sb-logo-text h2{font-size:0.88rem;font-weight:700;color:white;line-height:1.2}
+.sb-logo-text p{font-size:0.62rem;color:rgba(255,255,255,0.4);margin-top:0.1rem}
+
+/* ADMIN PROFILE IN SIDEBAR */
+.sb-profile{
+  padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex;align-items:center;gap:0.75rem;
+}
+.sb-av{
+  width:36px;height:36px;background:var(--orange);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.85rem;font-weight:700;color:white;flex-shrink:0;
+}
+.sb-av-info h4{font-size:0.78rem;font-weight:600;color:white}
+.sb-av-info p{font-size:0.65rem;color:rgba(255,255,255,0.4)}
+.sb-online{
+  margin-left:auto;width:8px;height:8px;
+  background:var(--green);border-radius:50%;flex-shrink:0;
+}
+
+.nav-sec{
+  padding:0.75rem 1.25rem 0.25rem;
+  font-size:0.58rem;font-weight:700;
+  color:rgba(255,255,255,0.25);
+  text-transform:uppercase;letter-spacing:0.12em;
+}
+.nvi{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.65rem 1.25rem;cursor:pointer;
+  font-size:0.82rem;color:rgba(255,255,255,0.55);
+  transition:all 0.18s;border-left:3px solid transparent;
+  user-select:none;position:relative;
+}
+.nvi:hover{color:rgba(255,255,255,0.9);background:var(--sidebar-hover)}
+.nvi.active{
+  color:white;border-left-color:var(--orange);
+  background:linear-gradient(90deg,rgba(232,119,34,0.15),transparent);
+}
+.ni{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.nbadge{
+  margin-left:auto;background:var(--red);color:white;
+  font-size:0.58rem;font-weight:700;
+  padding:0.12rem 0.42rem;border-radius:10px;
+}
+.nbadge.orange{background:var(--orange)}
+.nbadge.green{background:var(--green)}
+.sb-foot{
+  margin-top:auto;padding:1rem 1.25rem;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+
+/* ── MAIN ── */
+.main{margin-left:260px;flex:1;min-height:100vh;display:flex;flex-direction:column}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:white;border-bottom:1px solid var(--border);
+  padding:0 1.75rem;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:40;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+.topbar-left{display:flex;align-items:center;gap:1rem}
+.topbar-left h1{font-size:1.05rem;font-weight:700;color:var(--dark)}
+.breadcrumb{font-size:0.75rem;color:var(--gray);display:flex;align-items:center;gap:0.4rem}
+.topbar-right{display:flex;align-items:center;gap:0.85rem}
+.tb-date{
+  font-size:0.75rem;color:var(--gray);
+  background:#F8FAFC;border:1px solid var(--border);
+  padding:0.35rem 0.85rem;border-radius:8px;
+}
+.tb-notif{
+  width:36px;height:36px;background:#F8FAFC;border:1px solid var(--border);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;font-size:1rem;
+}
+.tb-notif-dot{
+  position:absolute;top:6px;right:6px;width:8px;height:8px;
+  background:var(--red);border-radius:50%;border:2px solid white;
+}
+.tb-logout{
+  padding:0.42rem 1rem;background:var(--red);color:white;
+  border:none;border-radius:8px;font-size:0.78rem;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;
+}
+.tb-logout:hover{opacity:0.88}
+
+/* ── PAGES ── */
+.page{display:none;padding:1.75rem;animation:fi 0.2s ease;flex:1}
+.page.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;margin-bottom:1.75rem}
+.stat-card{
+  background:white;border-radius:14px;padding:1.4rem;
+  border:1px solid var(--border);
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  transition:all 0.2s;
+}
+.stat-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.08);transform:translateY(-2px)}
+.stat-info h3{font-size:0.75rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem}
+.stat-num{font-size:1.8rem;font-weight:800;color:var(--dark);line-height:1}
+.stat-change{font-size:0.72rem;margin-top:0.4rem;display:flex;align-items:center;gap:0.3rem;font-weight:500}
+.up{color:var(--green)}.dn{color:var(--red)}
+.stat-icon{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;
+}
+.ic-orange{background:#FEF3E8}.ic-green{background:#ECFDF5}
+.ic-red{background:#FEF2F2}.ic-blue{background:#EFF6FF}
+.ic-purple{background:#F5F3FF}.ic-yellow{background:#FFFBEB}
+
+/* ── CARDS ── */
+.card{
+  background:white;border-radius:14px;border:1px solid var(--border);
+  margin-bottom:1.5rem;overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+.card-head{
+  padding:1rem 1.4rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:0.5rem;background:white;
+}
+.card-head h3{font-size:0.92rem;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:0.5rem}
+.card-body{padding:1.4rem}
+
+/* ── BUTTONS ── */
+.btn{
+  padding:0.52rem 1.1rem;border:none;border-radius:8px;
+  font-size:0.8rem;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all 0.18s;
+  display:inline-flex;align-items:center;gap:0.35rem;
+}
+.btn-navy{background:var(--navy);color:white}.btn-navy:hover{background:var(--dark)}
+.btn-green{background:var(--green);color:white}.btn-green:hover{opacity:0.88}
+.btn-red{background:var(--red);color:white}.btn-red:hover{opacity:0.88}
+.btn-orange{background:var(--orange);color:white}.btn-orange:hover{opacity:0.9}
+.btn-yellow{background:var(--yellow);color:white}
+.btn-blue{background:var(--blue);color:white}
+.btn-purple{background:var(--purple);color:white}
+.btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}.btn-outline:hover{background:var(--navy);color:white}
+.btn-ghost{background:#F1F5F9;color:#475569;border:1px solid var(--border)}.btn-ghost:hover{background:#E2E8F0}
+.btn-sm{padding:0.32rem 0.7rem;font-size:0.72rem;border-radius:6px}
+.btn-full{width:100%;justify-content:center;padding:0.85rem}
+
+/* ── TABLE ── */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:500px}
+thead{background:#F8FAFC}
+th{
+  padding:0.75rem 1rem;text-align:left;
+  font-size:0.68rem;font-weight:700;color:#64748B;
+  text-transform:uppercase;letter-spacing:0.06em;
+  border-bottom:1px solid var(--border);white-space:nowrap;
+}
+td{padding:0.85rem 1rem;font-size:0.82rem;border-bottom:1px solid #F1F5F9;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFBFF}
+.td-name{display:flex;align-items:center;gap:0.65rem}
+.td-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;color:white;flex-shrink:0}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:0.22rem 0.65rem;border-radius:20px;font-size:0.65rem;font-weight:700;gap:0.3rem}
+.b-green{background:#DCFCE7;color:#166534}
+.b-red{background:#FEE2E2;color:#991B1B}
+.b-yellow{background:#FEF3C7;color:#92400E}
+.b-blue{background:#DBEAFE;color:#1E40AF}
+.b-orange{background:#FED7AA;color:#9A3412}
+.b-purple{background:#EDE9FE;color:#5B21B6}
+.b-gray{background:#F1F5F9;color:#475569}
+
+/* ── FORM ── */
+.fg2{margin-bottom:1rem}
+.fg2 label{display:block;font-size:0.72rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.38rem}
+.fg2 input,.fg2 select,.fg2 textarea{width:100%;padding:0.72rem 0.95rem;border:1.5px solid var(--border);border-radius:8px;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:all 0.2s;background:#F8FAFC}
+.fg2 input:focus,.fg2 select:focus,.fg2 textarea:focus{border-color:var(--navy);background:white;box-shadow:0 0 0 3px rgba(0,50,95,0.06)}
+.fg2 textarea{resize:vertical;min-height:90px}
+.fg2 .hint{font-size:0.7rem;color:var(--gray);margin-top:0.28rem}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+
+/* ── CUSTOMER CARDS ── */
+.cust-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.25rem}
+.cust-card{
+  background:white;border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;transition:all 0.2s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+.cust-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.1);transform:translateY(-2px)}
+.cust-card-hero{padding:1.25rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid #F1F5F9}
+.cust-av-lg{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:white;flex-shrink:0}
+.cust-hero-info h3{font-size:0.95rem;font-weight:700;color:var(--dark)}
+.cust-hero-info p{font-size:0.75rem;color:var(--gray);margin-top:0.1rem}
+.cust-bal{font-size:1.3rem;font-weight:800;color:var(--green);margin-left:auto;text-align:right}
+.cust-acc{font-size:0.65rem;color:var(--gray);text-align:right;margin-top:0.1rem;font-family:monospace}
+.cust-details{padding:1rem 1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+.cd-item{background:#F8FAFC;padding:0.6rem 0.75rem;border-radius:8px;border:1px solid #F1F5F9}
+.cd-item label{font-size:0.58rem;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:0.12rem}
+.cd-item strong{font-size:0.8rem;color:var(--dark);word-break:break-all}
+.cust-actions{padding:1rem 1.25rem;display:flex;gap:0.45rem;flex-wrap:wrap;border-top:1px solid #F1F5F9;background:#FAFBFF}
+
+/* ── QUICK ACTIONS ── */
+.qa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem}
+.qa-card{
+  background:white;border:1px solid var(--border);border-radius:12px;
+  padding:1.25rem 1rem;text-align:center;cursor:pointer;
+  transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+.qa-card:hover{border-color:var(--orange);transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.1)}
+.qa-icon{font-size:1.8rem;margin-bottom:0.5rem}
+.qa-card h4{font-size:0.75rem;font-weight:600;color:var(--dark)}
+.qa-card p{font-size:0.65rem;color:var(--gray);margin-top:0.2rem}
+
+/* ── ACC GENERATOR ── */
+.gen-hero{
+  background:linear-gradient(135deg,#0F172A,#001F3F,#00325F);
+  border-radius:14px;padding:2rem;color:white;margin-bottom:1.5rem;
+  position:relative;overflow:hidden;
+}
+.gen-hero::before{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(232,119,34,0.2),transparent 70%);
+  border-radius:50%;
+}
+.gen-hero h3{font-size:1rem;font-weight:700;margin-bottom:0.35rem}
+.gen-hero p{font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:1.5rem}
+.gen-display{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem}
+.gen-num{font-size:2.2rem;font-weight:800;color:var(--orange);font-family:monospace;letter-spacing:0.06em}
+.gen-meta{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1.1rem}
+.gm-item{background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px}
+.gm-item label{font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;display:block;margin-bottom:0.18rem}
+.gm-item span{font-size:0.85rem;font-weight:600;color:white;font-family:monospace}
+.gen-btns{display:flex;gap:0.75rem;flex-wrap:wrap}
+
+/* ── EMAIL TEMPLATES ── */
+.tpl-card{background:#F8FAFC;border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+.tpl-card h4{font-size:0.85rem;font-weight:700;color:var(--dark);margin-bottom:0.3rem}
+.tpl-card p{font-size:0.72rem;color:var(--gray);margin-bottom:0.75rem}
+.tpl-body{font-size:0.72rem;color:#475569;line-height:1.65;background:white;border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:0.75rem;max-height:160px;overflow-y:auto;white-space:pre-wrap;font-family:monospace}
+.cp-btn{background:var(--navy);color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;margin-right:0.45rem;transition:all 0.2s}
+.cp-btn.done{background:var(--green)}
+.gm-btn{background:#EA4335;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer}
+
+/* ── MODAL ── */
+.moverlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.6);z-index:200;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+.moverlay.open{display:flex}
+.modal{background:white;border-radius:16px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;box-shadow:0 25px 50px rgba(0,0,0,0.3)}
+.modal-head{padding:1.1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1}
+.modal-head h3{font-size:0.95rem;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:0.5rem}
+.modal-close{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--gray);width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:#F1F5F9}
+.modal-body{padding:1.4rem}
+.modal-foot{padding:1rem 1.4rem;border-top:1px solid var(--border);display:flex;gap:0.65rem;justify-content:flex-end;flex-wrap:wrap;background:#F8FAFC}
+
+/* ── PROFILE HERO IN MODAL ── */
+.prof-hero{background:linear-gradient(135deg,#0F172A,#00325F);border-radius:12px;padding:1.4rem;color:white;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem}
+.prof-av{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:white;flex-shrink:0}
+.prof-info h3{font-size:1rem;font-weight:700}
+.prof-info p{font-size:0.75rem;color:rgba(255,255,255,0.65);margin-top:0.15rem}
+.prof-badges{display:flex;gap:0.35rem;margin-top:0.45rem;flex-wrap:wrap}
+.pbadge{font-size:0.62rem;font-weight:600;padding:0.18rem 0.55rem;border-radius:20px;background:rgba(255,255,255,0.12);color:white}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;margin-bottom:1.25rem}
+.ii{background:#F8FAFC;padding:0.7rem 0.85rem;border-radius:8px;border:1px solid #F1F5F9}
+.ii label{font-size:0.6rem;color:#94A3B8;text-transform:uppercase;display:block;margin-bottom:0.15rem}
+.ii strong{font-size:0.82rem;color:var(--dark);word-break:break-all}
+
+/* ── NOTIFICATIONS ── */
+.notif{display:flex;align-items:flex-start;gap:0.85rem;padding:1rem;border-radius:10px;margin-bottom:0.75rem;border:1px solid}
+.notif.r{background:#FEF2F2;border-color:#FECACA}
+.notif.g{background:#F0FDF4;border-color:#BBF7D0}
+.notif.o{background:#FFF7ED;border-color:#FED7AA}
+.notif.b{background:#EFF6FF;border-color:#BFDBFE}
+.notif-icon{font-size:1.1rem;flex-shrink:0;margin-top:0.1rem}
+.notif-content h4{font-size:0.83rem;font-weight:600;margin-bottom:0.15rem}
+.notif-content p{font-size:0.75rem;color:var(--gray)}
+.notif-time{font-size:0.65rem;color:var(--gray);margin-left:auto;white-space:nowrap}
+
+/* ── TOAST ── */
+#toast{
+  display:none;position:fixed;bottom:1.5rem;right:1.5rem;
+  padding:0.9rem 1.3rem;border-radius:10px;font-weight:600;font-size:0.83rem;
+  z-index:999;box-shadow:0 8px 24px rgba(0,0,0,0.2);max-width:320px;
+  display:flex;align-items:center;gap:0.5rem;
+  animation:slideUp 0.3s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#toast.s{background:var(--green);color:white}
+#toast.e{background:var(--red);color:white}
+#toast.i{background:var(--blue);color:white}
+#toast.w{background:var(--yellow);color:white}
+
+/* ── DIVIDER ── */
+.divider{border:none;border-top:1px solid var(--border);margin:1.1rem 0}
+
+/* ── INFO BOX ── */
+.info-box{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:0.9rem;font-size:0.8rem;color:#1E40AF;margin-bottom:1rem}
+.warn-box{background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:0.9rem;font-size:0.8rem;color:#92400E;margin-bottom:1rem}
+
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.fr,.fr3{grid-template-columns:1fr}.gen-meta{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}.cust-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<script src="customers-data.js"></script>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-top">
+      <div class="login-logo">D</div>
+      <h2>Admin Portal</h2>
+      <p>Discover Bank Global Management plc</p>
+      <div class="login-badge">🔒 Authorised Access Only</div>
+    </div>
+    <div class="err-box" id="lerr">❌ Invalid credentials. Please try again.</div>
+    <form id="lform">
+      <div class="fg">
+        <label>Admin Email</label>
+        <input type="email" id="lemail" placeholder="admin@discoverjp.org" required/>
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="lpass" placeholder="Enter password" required/>
+          <button type="button" class="pw-eye" onclick="document.getElementById('lpass').type=document.getElementById('lpass').type==='password'?'text':'password'">👁️</button>
+        </div>
+      </div>
+      <button type="submit" class="login-btn" id="lbtn">🔐 Sign In to Admin Portal</button>
+    </form>
+    <div class="login-footer">
+      🔒 256-bit SSL Encrypted · FCA Regulated · Discover Bank © 2026
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ APP ══════════════ -->
+<div id="app">
+<div class="layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">D</div>
+      <div class="sb-logo-text">
+        <h2>Admin Portal</h2>
+        <p>Discover Bank Global Mgmt</p>
+      </div>
+    </div>
+  </div>
+  <div class="sb-profile">
+    <div class="sb-av">A</div>
+    <div class="sb-av-info">
+      <h4>Administrator</h4>
+      <p>info@discoverjp.org</p>
+    </div>
+    <div class="sb-online"></div>
+  </div>
+  <div class="nav-sec">Main</div>
+  <div class="nvi active" onclick="go('overview',this)"><span class="ni">📊</span> Dashboard Overview</div>
+  <div class="nvi" onclick="go('notifications',this)"><span class="ni">🔔</span> Notifications <span class="nbadge">4</span></div>
+  <div class="nav-sec">Banking</div>
+  <div class="nvi" onclick="go('transactions',this)"><span class="ni">💸</span> Transactions</div>
+  <div class="nvi" onclick="go('accounts',this)"><span class="ni">🏦</span> Accounts</div>
+  <div class="nvi" onclick="go('transfers',this)"><span class="ni">🔄</span> Transfers <span class="nbadge orange">3</span></div>
+  <div class="nvi" onclick="go('loans',this)"><span class="ni">💰</span> Loans</div>
+  <div class="nav-sec">Customers</div>
+  <div class="nvi" onclick="go('applications',this)"><span class="ni">📝</span> Applications <span class="nbadge">5</span></div>
+  <div class="nvi" onclick="go('customers',this)"><span class="ni">👥</span> All Customers</div>
+  <div class="nvi" onclick="go('kyc',this)"><span class="ni">✅</span> KYC Verification <span class="nbadge">3</span></div>
+  <div class="nav-sec">Tools</div>
+  <div class="nvi" onclick="go('generator',this)"><span class="ni">🔢</span> Account Generator</div>
+  <div class="nvi" onclick="go('templates',this)"><span class="ni">📧</span> Email Templates</div>
+  <div class="nvi" onclick="window.open('customer-setup.html','_blank')"><span class="ni">⚙️</span> Customer Setup</div>
+  <div class="nvi" onclick="go('settings',this)"><span class="ni">🔧</span> Settings</div>
+  <div class="nvi" onclick="window.open('index.html','_blank')"><span class="ni">🌐</span> View Website</div>
+  <div class="sb-foot">
+    <div class="nvi" onclick="doLogout()" style="color:#F87171"><span class="ni">🚪</span> Logout</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1 id="ptitle">Dashboard Overview</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-date" id="tdate"></div>
+      <div class="tb-notif" onclick="go('notifications',null)">
+        🔔<div class="tb-notif-dot"></div>
+      </div>
+      <button class="tb-logout" onclick="doLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- ── OVERVIEW ── -->
+  <div class="page active" id="pg-overview">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Total Deposits</h3>
+          <div class="stat-num" id="statDep">£0</div>
+          <div class="stat-change up">↑ +12% this month</div>
+        </div>
+        <div class="stat-icon ic-orange">💷</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Active Customers</h3>
+          <div class="stat-num" id="statCust">0</div>
+          <div class="stat-change up">↑ Growing</div>
+        </div>
+        <div class="stat-icon ic-green">👥</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Pending Applications</h3>
+          <div class="stat-num">5</div>
+          <div class="stat-change dn">⚠ Review needed</div>
+        </div>
+        <div class="stat-icon ic-yellow">📝</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Pending Transfers</h3>
+          <div class="stat-num">3</div>
+          <div class="stat-change dn">⚠ Approve</div>
+        </div>
+        <div class="stat-icon ic-blue">🔄</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Loans Outstanding</h3>
+          <div class="stat-num">£450K</div>
+          <div class="stat-change up">↑ +5%</div>
+        </div>
+        <div class="stat-icon ic-purple">💰</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Net Balance</h3>
+          <div class="stat-num" id="statNet">£0</div>
+          <div class="stat-change up">↑ +8%</div>
+        </div>
+        <div class="stat-icon ic-green">📈</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>⚡ Quick Actions</h3></div>
+      <div class="card-body">
+        <div class="qa-grid">
+          <div class="qa-card" onclick="go('customers',null)"><div class="qa-icon">👥</div><h4>Customers</h4><p>Manage accounts</p></div>
+          <div class="qa-card" onclick="go('applications',null)"><div class="qa-icon">📝</div><h4>Applications</h4><p>Review & approve</p></div>
+          <div class="qa-card" onclick="go('generator',null)"><div class="qa-icon">🔢</div><h4>Generate Account</h4><p>New account number</p></div>
+          <div class="qa-card" onclick="go('templates',null)"><div class="qa-icon">📧</div><h4>Send Email</h4><p>Email templates</p></div>
+          <div class="qa-card" onclick="go('transfers',null)"><div class="qa-icon">🔄</div><h4>Transfers</h4><p>Approve pending</p></div>
+          <div class="qa-card" onclick="go('kyc',null)"><div class="qa-icon">✅</div><h4>KYC Verify</h4><p>Document review</p></div>
+          <div class="qa-card" onclick="go('loans',null)"><div class="qa-icon">💰</div><h4>Loans</h4><p>Manage loans</p></div>
+          <div class="qa-card" onclick="window.open('customer-setup.html','_blank')"><div class="qa-icon">⚙️</div><h4>Setup Tool</h4><p>Add new customer</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>👥 Customer Overview</h3>
+        <button class="btn btn-ghost btn-sm" onclick="go('customers',null)">View All →</button>
+      </div>
+      <div class="card-body">
+        <div class="tw"><table>
+          <thead><tr><th>Account No</th><th>Customer</th><th>Type</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="overviewTable"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CUSTOMERS ── -->
+  <div class="page" id="pg-customers">
+    <div class="card">
+      <div class="card-head">
+        <h3>👥 All Customers</h3>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <input type="text" placeholder="🔍 Search customers..." style="padding:0.42rem 0.85rem;border:1.5px solid var(--border);border-radius:8px;font-size:0.8rem;outline:none" onkeyup="filterC(this.value)"/>
+          <button class="btn btn-orange btn-sm" onclick="openM('mAddCust')">+ Add Customer</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cust-grid" id="custCards"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ACCOUNTS ── -->
+  <div class="page" id="pg-accounts">
+    <div class="card">
+      <div class="card-head"><h3>🏦 Account Management</h3></div>
+      <div class="card-body"><div class="tw"><table>
+        <thead><tr><th>Account No</th><th>Customer</th><th>Type</th><th>Balance</th><th>Password</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="accsTable"></tbody>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- ── TRANSACTIONS ── -->
+  <div class="page" id="pg-transactions">
+    <div class="card">
+      <div class="card-head"><h3>💸 Transaction Management</h3><button class="btn btn-orange btn-sm" onclick="openM('mAddTxn')">+ Add</button></div>
+      <div class="card-body"><div class="tw"><table>
+        <thead><tr><th>ID</th><th>Customer</th><th>Type</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td><strong>TXN-001</strong></td><td><div class="td-name"><div class="td-av" style="background:#00325F">JW</div>James Wilson</div></td><td>Deposit</td><td style="color:var(--green);font-weight:700">+£5,000</td><td>06 Jul 2026</td><td><span class="badge b-green">✓ Completed</span></td><td><button class="btn btn-blue btn-sm" onclick="showTxn('TXN-001','James Wilson','Deposit','+£5,000','Completed')">View</button></td></tr>
+          <tr><td><strong>TXN-002</strong></td><td><div class="td-name"><div class="td-av" style="background:#E87722">AO</div>Amina Okafor</div></td><td>Int'l Transfer</td><td style="color:var(--red);font-weight:700">-£2,500</td><td>06 Jul 2026</td><td><span class="badge b-yellow">⏳ Pending</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'TXN-002')">✅ Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('TXN-002')">❌</button></td></tr>
+          <tr><td><strong>TXN-003</strong></td><td><div class="td-name"><div class="td-av" style="background:#17A2B8">CW</div>Chen Wei</div></td><td>Withdrawal</td><td style="color:var(--red);font-weight:700">-£1,200</td><td>05 Jul 2026</td><td><span class="badge b-green">✓ Completed</span></td><td><button class="btn btn-blue btn-sm" onclick="showTxn('TXN-003','Chen Wei','Withdrawal','-£1,200','Completed')">View</button></td></tr>
+          <tr><td><strong>TXN-004</strong></td><td><div class="td-name"><div class="td-av" style="background:#8B5CF6">SJ</div>Sarah Johnson</div></td><td>Transfer</td><td style="color:var(--red);font-weight:700">-£8,000</td><td>05 Jul 2026</td><td><span class="badge b-yellow">⏳ Pending</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'TXN-004')">✅ Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('TXN-004')">❌</button></td></tr>
+          <tr><td><strong>TXN-005</strong></td><td><div class="td-name"><div class="td-av" style="background:#10B981">MA</div>Mohammed Al-Rashid</div></td><td>Deposit</td><td style="color:var(--green);font-weight:700">+£15,000</td><td>04 Jul 2026</td><td><span class="badge b-green">✓ Completed</span></td><td><button class="btn btn-blue btn-sm" onclick="showTxn('TXN-005','Mohammed Al-Rashid','Deposit','+£15,000','Completed')">View</button></td></tr>
+        </tbody>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- ── TRANSFERS ── -->
+  <div class="page" id="pg-transfers">
+    <div class="card">
+      <div class="card-head"><h3>🔄 Pending Transfers</h3></div>
+      <div class="card-body"><div class="tw"><table>
+        <thead><tr><th>Reference</th><th>From</th><th>To Bank</th><th>Amount</th><th>Type</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td><strong>TRF-001</strong></td><td>Amina Okafor</td><td>GTBank Nigeria</td><td><strong>£2,500</strong></td><td><span class="badge b-orange">International</span></td><td>06 Jul 2026</td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'TRF-001')">✅ Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('TRF-001')">❌ Reject</button></td></tr>
+          <tr><td><strong>TRF-002</strong></td><td>Sarah Johnson</td><td>HSBC UK</td><td><strong>£8,000</strong></td><td><span class="badge b-blue">Domestic</span></td><td>05 Jul 2026</td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'TRF-002')">✅ Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('TRF-002')">❌ Reject</button></td></tr>
+          <tr><td><strong>TRF-003</strong></td><td>David Osei</td><td>Ecobank Ghana</td><td><strong>£3,000</strong></td><td><span class="badge b-orange">International</span></td><td>04 Jul 2026</td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'TRF-003')">✅ Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('TRF-003')">❌ Reject</button></td></tr>
+        </tbody>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- ── LOANS ── -->
+  <div class="page" id="pg-loans">
+    <div class="card">
+      <div class="card-head"><h3>💰 Loan Management</h3><button class="btn btn-orange btn-sm" onclick="openM('mAddLoan')">+ Add Loan</button></div>
+      <div class="card-body"><div class="tw"><table>
+        <thead><tr><th>Loan ID</th><th>Customer</th><th>Type</th><th>Amount</th><th>Term</th><th>Rate</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td><strong>LN-001</strong></td><td>James Wilson</td><td>Personal</td><td>£10,000</td><td>24m</td><td>6.5%</td><td><span class="badge b-yellow">Pending</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'LN-001')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('LN-001')">Reject</button></td></tr>
+          <tr><td><strong>LN-002</strong></td><td>Amina Okafor</td><td>SME</td><td>£50,000</td><td>36m</td><td>8.2%</td><td><span class="badge b-blue">In Review</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'LN-002')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('LN-002')">Reject</button></td></tr>
+          <tr><td><strong>LN-003</strong></td><td>David Osei</td><td>Business</td><td>£25,000</td><td>48m</td><td>7.8%</td><td><span class="badge b-green">Approved</span></td><td><button class="btn btn-blue btn-sm" onclick="showTxn('LN-003','David Osei','Business Loan','£25,000','Approved')">View</button></td></tr>
+        </tbody>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- ── APPLICATIONS ── -->
+  <div class="page" id="pg-applications">
+    <div class="card">
+      <div class="card-head"><h3>📝 Account Applications</h3></div>
+      <div class="card-body"><div class="tw"><table>
+        <thead><tr><th>Applicant</th><th>Email</th><th>Account Type</th><th>Country</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td><strong>James Wilson</strong></td><td>james.w@email.com</td><td>Personal Savings</td><td>🇬🇧 UK</td><td>06 Jul 2026</td><td><span class="badge b-yellow">Pending</span></td><td><button class="btn btn-blue btn-sm" onclick="openM('mReview')">📋 Review</button> <button class="btn btn-green btn-sm" onclick="approveApp(this,'James Wilson')">✅</button> <button class="btn btn-red btn-sm" onclick="rejectIt('James Wilson')">❌</button></td></tr>
+          <tr><td><strong>Amina Okafor</strong></td><td>amina.o@email.com</td><td>Business Savings</td><td>🇳🇬 Nigeria</td><td>05 Jul 2026</td><td><span class="badge b-blue">In Review</span></td><td><button class="btn btn-blue btn-sm" onclick="openM('mReview')">📋 Review</button> <button class="btn btn-green btn-sm" onclick="approveApp(this,'Amina Okafor')">✅</button> <button class="btn btn-red btn-sm" onclick="rejectIt('Amina Okafor')">❌</button></td></tr>
+          <tr><td><strong>Mohammed Al-Rashid</strong></td><td>m.rashid@email.com</td><td>Personal Savings</td><td>🇦🇪 UAE</td><td>04 Jul 2026</td><td><span class="badge b-yellow">Pending</span></td><td><button class="btn btn-blue btn-sm" onclick="openM('mReview')">📋 Review</button> <button class="btn btn-green btn-sm" onclick="approveApp(this,'Mohammed Al-Rashid')">✅</button> <button class="btn btn-red btn-sm" onclick="rejectIt('Mohammed Al-Rashid')">❌</button></td></tr>
+          <tr><td><strong>David Osei</strong></td><td>david.o@email.com</td><td>Business Savings</td><td>🇬🇭 Ghana</td><td>03 Jul 2026</td><td><span class="badge b-yellow">Pending</span></td><td><button class="btn btn-blue btn-sm" onclick="openM('mReview')">📋 Review</button> <button class="btn btn-green btn-sm" onclick="approveApp(this,'David Osei')">✅</button> <button class="btn btn-red btn-sm" onclick="rejectIt('David Osei')">❌</button></td></tr>
+          <tr><td><strong>Fatima Al-Sayed</strong></td><td>f.sayed@email.com</td><td>Personal Savings</td><td>🇸🇦 Saudi Arabia</td><td>02 Jul 2026</td><td><span class="badge b-yellow">Pending</span></td><td><button class="btn btn-blue btn-sm" onclick="openM('mReview')">📋 Review</button> <button class="btn btn-green btn-sm" onclick="approveApp(this,'Fatima Al-Sayed')">✅</button> <button class="btn btn-red btn-sm" onclick="rejectIt('Fatima Al-Sayed')">❌</button></td></tr>
+        </tbody>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- ── KYC ── -->
+  <div class="page" id="pg-kyc">
+    <div class="card">
+      <div class="card-head"><h3>✅ KYC Verification</h3></div>
+      <div class="card-body"><div class="tw"><table>
+        <thead><tr><th>Customer</th><th>Document</th><th>Submitted</th><th>KYC Status</th><th>Risk Level</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td><strong>James Wilson</strong></td><td>UK Passport</td><td>06 Jul 2026</td><td><span class="badge b-yellow">Pending</span></td><td><span class="badge b-green">Low Risk</span></td><td><button class="btn btn-blue btn-sm" onclick="openM('mKYC')">Review</button> <button class="btn btn-green btn-sm" onclick="approveTxn(this,'KYC-J')">✅ Verify</button> <button class="btn btn-red btn-sm" onclick="rejectIt('KYC-J')">❌</button></td></tr>
+          <tr><td><strong>Amina Okafor</strong></td><td>Nigerian Passport</td><td>05 Jul 2026</td><td><span class="badge b-yellow">Pending</span></td><td><span class="badge b-yellow">Medium Risk</span></td><td><button class="btn btn-blue btn-sm" onclick="openM('mKYC')">Review</button> <button class="btn btn-green btn-sm" onclick="approveTxn(this,'KYC-A')">✅ Verify</button> <button class="btn btn-red btn-sm" onclick="rejectIt('KYC-A')">❌</button></td></tr>
+          <tr><td><strong>Mohammed Al-Rashid</strong></td><td>UAE National ID</td><td>04 Jul 2026</td><td><span class="badge b-yellow">Pending</span></td><td><span class="badge b-green">Low Risk</span></td><td><button class="btn btn-blue btn-sm" onclick="openM('mKYC')">Review</button> <button class="btn btn-green btn-sm" onclick="approveTxn(this,'KYC-M')">✅ Verify</button> <button class="btn btn-red btn-sm" onclick="rejectIt('KYC-M')">❌</button></td></tr>
+        </tbody>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- ── GENERATOR ── -->
+  <div class="page" id="pg-generator">
+    <div class="gen-hero">
+      <h3>🔢 Account Number Generator</h3>
+      <p>Generate unique verified account details for approved customers</p>
+      <div class="gen-display">
+        <div style="font-size:0.62rem;color:rgba(255,255,255,0.45);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.1em">Generated Account Number</div>
+        <div class="gen-num" id="genNum">DBG-00000000</div>
+        <div class="gen-meta">
+          <div class="gm-item"><label>Sort Code</label><span id="genSort">40-00-00</span></div>
+          <div class="gm-item"><label>IBAN</label><span id="genIBAN">GB00DISC00000000</span></div>
+          <div class="gm-item"><label>BIC/SWIFT</label><span>DISCGB2L</span></div>
+          <div class="gm-item"><label>Account Type</label><span id="genTypeDisp">Personal Savings</span></div>
+        </div>
+      </div>
+      <div class="gen-btns">
+        <button class="btn btn-orange" onclick="genAcc()">🔄 Generate New</button>
+        <button class="btn btn-green" onclick="copyAcc()">📋 Copy Details</button>
+        <button class="btn btn-blue" onclick="window.open('customer-setup.html','_blank')">⚙️ Setup Tool</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>⚙️ Configuration</h3></div>
+      <div class="card-body">
+        <div class="fr">
+          <div class="fg2"><label>Customer Name</label><input type="text" id="genName" placeholder="Full customer name"/></div>
+          <div class="fg2"><label>Account Type</label><select id="genType" onchange="document.getElementById('genTypeDisp').textContent=this.value"><option>Personal Savings</option><option>Business Savings</option><option>Fixed Deposit</option><option>Salary Account</option><option>Current Account</option></select></div>
+        </div>
+        <div class="fr">
+          <div class="fg2"><label>Customer Email</label><input type="email" id="genEmail" placeholder="customer@email.com"/></div>
+          <div class="fg2"><label>Initial Balance (£)</label><input type="number" id="genBal" placeholder="0.00"/></div>
+        </div>
+        <button class="btn btn-orange btn-full" onclick="genAcc()">🔢 Generate Account Number</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>📋 Generated Accounts</h3></div>
+      <div class="card-body"><div class="tw"><table>
+        <thead><tr><th>Account No</th><th>Customer</th><th>Type</th><th>Generated</th><th>Action</th></tr></thead>
+        <tbody id="genList"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--gray)">No accounts generated yet</td></tr></tbody>
+      </table></div></div>
+    </div>
+  </div>
+
+  <!-- ── EMAIL TEMPLATES ── -->
+  <div class="page" id="pg-templates">
+    <div class="card">
+      <div class="card-head"><h3>📧 Email Templates</h3></div>
+      <div class="card-body">
+        <div class="tpl-card"><h4>✅ Account Approved & Welcome</h4><p>Send when approving a new customer account</p><div class="tpl-body" id="t1">Subject: Welcome to Discover Bank — Your Account is Ready!
+
+Dear [Customer Name],
+
+Your account has been APPROVED!
+
+ACCOUNT DETAILS:
+Account Number: [DBG-XXXXXXXX]
+Account Type: [Account Type]
+Sort Code: [XX-XX-XX]
+IBAN: [GBXXDISCXXXXXXXX]
+BIC/SWIFT: DISCGB2L
+
+LOGIN DETAILS:
+Website: https://discoverjp.org/login.html
+Account Number: [DBG-XXXXXXXX]
+Password: [Password]
+
+Please change your password after first login.
+
+Phone: +44 20 9946 9200
+Email: info@discoverjp.org
+Hours: Mon-Fri 8AM-6PM | Sat 9AM-2PM
+
+Best regards,
+Discover Bank Global Management plc
+Suite 1, 7th Floor, 50 Broadway, London SW1H 0BL</div><button class="cp-btn" onclick="cpTpl('t1',this)">📋 Copy</button><button class="gm-btn" onclick="gmTpl('t1')">📤 Gmail</button></div>
+
+        <div class="tpl-card"><h4>❌ Application Rejected</h4><p>Send when rejecting an application</p><div class="tpl-body" id="t2">Subject: Update on Your Application — Discover Bank
+
+Dear [Customer Name],
+
+After careful review, we are unable to approve your application at this time.
+
+You may reapply after 30 days with updated documents.
+
+Contact: +44 20 9946 9200 | info@discoverjp.org
+
+Best regards,
+Discover Bank Global Management plc</div><button class="cp-btn" onclick="cpTpl('t2',this)">📋 Copy</button><button class="gm-btn" onclick="gmTpl('t2')">📤 Gmail</button></div>
+
+        <div class="tpl-card"><h4>📄 Request More Documents</h4><p>Send when additional documents are needed</p><div class="tpl-body" id="t3">Subject: Additional Documents Required — Discover Bank
+
+Dear [Customer Name],
+
+To complete your application we require:
+□ [Document 1]
+□ [Document 2]
+
+Send to: info@discoverjp.org
+Or call: +44 20 9946 9200
+
+Best regards,
+Discover Bank Global Management plc</div><button class="cp-btn" onclick="cpTpl('t3',this)">📋 Copy</button><button class="gm-btn" onclick="gmTpl('t3')">📤 Gmail</button></div>
+
+        <div class="tpl-card"><h4>💰 Loan Approved</h4><p>Send when a loan is approved</p><div class="tpl-body" id="t4">Subject: Loan Approved — Discover Bank
+
+Dear [Customer Name],
+
+Your loan has been APPROVED!
+
+Reference: [LN-XXXXXX]
+Amount: £[Amount]
+Rate: [X.X]% APR
+Term: [XX] months
+
+Funds in 2-3 business days.
+
+info@discoverjp.org | +44 20 9946 9200
+Discover Bank Global Management plc</div><button class="cp-btn" onclick="cpTpl('t4',this)">📋 Copy</button><button class="gm-btn" onclick="gmTpl('t4')">📤 Gmail</button></div>
+
+        <div class="tpl-card"><h4>🔄 Transfer Confirmation</h4><p>Send after processing a transfer</p><div class="tpl-body" id="t5">Subject: Transfer Confirmed — Discover Bank
+
+Dear [Customer Name],
+
+Your transfer has been processed.
+
+Reference: [TRF-XXXXXX]
+Amount: £[Amount]
+Destination: [Bank/Country]
+Status: ✅ COMPLETED
+
+Funds arrive in 1-3 business days.
+
+info@discoverjp.org | +44 20 9946 9200
+Discover Bank Global Management plc</div><button class="cp-btn" onclick="cpTpl('t5',this)">📋 Copy</button><button class="gm-btn" onclick="gmTpl('t5')">📤 Gmail</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>✏️ Compose Email</h3></div>
+      <div class="card-body">
+        <div class="fg2"><label>To (Customer Email) *</label><input type="email" id="cTo" placeholder="customer@email.com"/></div>
+        <div class="fg2"><label>Subject *</label><input type="text" id="cSubj" placeholder="Email subject..."/></div>
+        <div class="fg2"><label>Message *</label><textarea id="cBody" style="min-height:180px" placeholder="Type your message..."></textarea></div>
+        <div style="display:flex;gap:0.65rem;flex-wrap:wrap">
+          <button class="btn btn-orange" onclick="gmCompose()">📤 Send via Gmail</button>
+          <button class="btn btn-navy" onclick="cpCompose()">📋 Copy Message</button>
+          <button class="btn btn-ghost" onclick="clearCompose()">🗑️ Clear</button>
+        </div>
+        <div class="info-box" style="margin-top:1rem">💡 If Gmail popup is blocked, the message is automatically copied to your clipboard. Open Gmail and paste!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NOTIFICATIONS ── -->
+  <div class="page" id="pg-notifications">
+    <div class="card">
+      <div class="card-head"><h3>🔔 Notifications</h3><button class="btn btn-ghost btn-sm" onclick="toast('All notifications cleared!','s')">Clear All</button></div>
+      <div class="card-body">
+        <div class="notif r"><div class="notif-icon">🚨</div><div class="notif-content"><h4>Large Transfer Pending</h4><p>£8,000 from Sarah Johnson to HSBC UK needs approval</p></div><div class="notif-time">2 hrs ago</div></div>
+        <div class="notif o"><div class="notif-icon">📝</div><div class="notif-content"><h4>New Application</h4><p>Mohammed Al-Rashid from UAE submitted an account application</p></div><div class="notif-time">5 hrs ago</div></div>
+        <div class="notif g"><div class="notif-icon">✅</div><div class="notif-content"><h4>Transaction Complete</h4><p>£5,000 deposit by James Wilson — TXN-001 completed</p></div><div class="notif-time">6 hrs ago</div></div>
+        <div class="notif b"><div class="notif-icon">👤</div><div class="notif-content"><h4>New Customer Registered</h4><p>David Osei from Ghana registered and submitted KYC</p></div><div class="notif-time">Yesterday</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS ── -->
+  <div class="page" id="pg-settings">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem">
+      <div class="card"><div class="card-head"><h3>🔐 Change Password</h3></div><div class="card-body"><div class="fg2"><label>Current Password</label><input type="password" placeholder="Current password"/></div><div class="fg2"><label>New Password</label><input type="password" placeholder="New password"/></div><div class="fg2"><label>Confirm Password</label><input type="password" placeholder="Confirm password"/></div><button class="btn btn-navy btn-full" onclick="toast('Password updated successfully!','s')">Update Password</button></div></div>
+      <div class="card"><div class="card-head"><h3>🏦 Bank Settings</h3></div><div class="card-body"><div class="fg2"><label>Bank Name</label><input type="text" value="Discover Bank Global Management plc"/></div><div class="fg2"><label>Email</label><input type="email" value="info@discoverjp.org"/></div><div class="fg2"><label>Phone</label><input type="tel" value="+44 20 9946 9200"/></div><div class="fg2"><label>Address</label><textarea style="min-height:70px">Suite 1, 7th Floor, 50 Broadway, London, SW1H 0BL</textarea></div><button class="btn btn-navy btn-full" onclick="toast('Settings saved!','s')">Save Settings</button></div></div>
+      <div class="card"><div class="card-head"><h3>🌐 Quick Links</h3></div><div class="card-body" style="display:flex;flex-direction:column;gap:0.5rem"><a href="index.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.82rem;transition:all 0.2s">🌐 Main Website</a><a href="signup.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.82rem">📝 Sign Up Page</a><a href="login.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.82rem">🔐 Customer Login</a><a href="customer-setup.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.82rem">⚙️ Customer Setup Tool</a><a href="https://analytics.google.com" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.82rem">📊 Google Analytics</a><a href="https://github.com" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.82rem">💻 GitHub Repository</a></div></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+</div><!-- /app -->
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- Edit Customer -->
+<div class="moverlay" id="mEdit">
+  <div class="modal">
+    <div class="modal-head"><h3>✏️ Edit Customer Profile</h3><button class="modal-close" onclick="closeM('mEdit')">✕</button></div>
+    <div class="modal-body">
+      <div style="background:#F8FAFC;padding:0.75rem;border-radius:8px;margin-bottom:1.1rem;border:1px solid var(--border)"><div style="font-size:0.62rem;color:var(--gray);margin-bottom:0.15rem">Editing Account</div><strong id="eAccNum" style="font-family:monospace;color:var(--navy)">—</strong></div>
+      <div class="fr"><div class="fg2"><label>First Name</label><input type="text" id="eFN"/></div><div class="fg2"><label>Last Name</label><input type="text" id="eLN"/></div></div>
+      <div class="fg2"><label>Email</label><input type="email" id="eEmail"/></div>
+      <div class="fr"><div class="fg2"><label>Phone</label><input type="tel" id="ePhone"/></div><div class="fg2"><label>Address</label><input type="text" id="eAddr"/></div></div>
+      <div class="fr"><div class="fg2"><label>Account Type</label><select id="eType"><option>Personal Savings</option><option>Business Savings</option><option>Fixed Deposit</option><option>Salary Account</option><option>Current Account</option></select></div><div class="fg2"><label>Status</label><select id="eStatus"><option>Active</option><option>Frozen</option><option>Suspended</option><option>Closed</option></select></div></div>
+      <div class="fr"><div class="fg2"><label>Login Password</label><input type="text" id="ePW"/></div><div class="fg2"><label>Balance (read-only)</label><input type="text" id="eBal" readonly style="background:var(--cream)"/></div></div>
+      <div class="fg2"><label>Admin Notes</label><textarea id="eNotes" placeholder="Add notes..."></textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeM('mEdit')">Cancel</button><button class="btn btn-green" onclick="saveEdit()">💾 Save Changes</button></div>
+  </div>
+</div>
+
+<!-- Adjust Balance -->
+<div class="moverlay" id="mAdj">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-head"><h3>💰 Adjust Account Balance</h3><button class="modal-close" onclick="closeM('mAdj')">✕</button></div>
+    <div class="modal-body">
+      <div style="background:#F8FAFC;padding:0.9rem;border-radius:8px;margin-bottom:1rem;border:1px solid var(--border)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">
+          <div><div style="font-size:0.62rem;color:var(--gray)">Customer</div><strong id="adjName">—</strong></div>
+          <div><div style="font-size:0.62rem;color:var(--gray)">Account</div><strong id="adjAcc" style="font-family:monospace">—</strong></div>
+          <div><div style="font-size:0.62rem;color:var(--gray)">Current Balance</div><strong id="adjCurr" style="color:var(--green)">—</strong></div>
+          <div><div style="font-size:0.62rem;color:var(--gray)">New Balance</div><strong id="adjNew" style="color:var(--blue)">—</strong></div>
+        </div>
+      </div>
+      <div class="fg2"><label>Action</label><select id="adjAct" onchange="calcBal()"><option value="add">➕ Add Funds (Credit)</option><option value="remove">➖ Remove Funds (Debit)</option><option value="set">🔄 Set Balance to Amount</option></select></div>
+      <div class="fg2"><label>Amount (£)</label><input type="number" id="adjAmt" placeholder="Enter amount" oninput="calcBal()"/></div>
+      <div class="fg2"><label>Reference / Reason</label><input type="text" id="adjRef" placeholder="e.g. Deposit received, Manual correction"/></div>
+      <div class="warn-box">⚠️ After adjusting balance here, also update the balance in <strong>customers-data.js</strong> on GitHub so the customer sees the correct amount.</div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeM('mAdj')">Cancel</button><button class="btn btn-green" onclick="applyAdj()">✅ Apply Balance</button></div>
+  </div>
+</div>
+
+<!-- View Full Profile -->
+<div class="moverlay" id="mViewFull">
+  <div class="modal">
+    <div class="modal-head"><h3>👤 Full Customer Profile</h3><button class="modal-close" onclick="closeM('mViewFull')">✕</button></div>
+    <div class="modal-body">
+      <div class="prof-hero">
+        <div class="prof-av" id="vAv">—</div>
+        <div class="prof-info">
+          <h3 id="vName">—</h3>
+          <p id="vContact">—</p>
+          <div class="prof-badges"><span class="pbadge" id="vStat">Active</span><span class="pbadge" id="vTyp">—</span></div>
+        </div>
+      </div>
+      <div class="info-grid">
+        <div class="ii"><label>Account Number</label><strong id="vAccNum">—</strong></div>
+        <div class="ii"><label>Balance</label><strong id="vBal" style="color:var(--green)">—</strong></div>
+        <div class="ii"><label>Sort Code</label><strong id="vSort">—</strong></div>
+        <div class="ii"><label>IBAN</label><strong id="vIBAN">—</strong></div>
+        <div class="ii"><label>BIC/SWIFT</label><strong>DISCGB2L</strong></div>
+        <div class="ii"><label>Login Password</label><strong id="vPW">—</strong></div>
+        <div class="ii"><label>Date Joined</label><strong id="vJoined">—</strong></div>
+        <div class="ii"><label>Address</label><strong id="vAddr">—</strong></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">
+        <button class="btn btn-yellow" id="vEditBtn">✏️ Edit Profile</button>
+        <button class="btn btn-blue" id="vAdjBtn">💰 Adjust Balance</button>
+        <button class="btn btn-orange" id="vEmailBtn">📧 Send Email</button>
+        <button class="btn btn-green" onclick="toast('Password reset notification sent!','s')">🔑 Reset Password</button>
+        <button class="btn btn-red" onclick="if(confirm('Freeze this account?'))toast('Account frozen!','i')">🔒 Freeze Account</button>
+        <button class="btn btn-ghost" onclick="closeM('mViewFull')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Review Application -->
+<div class="moverlay" id="mReview">
+  <div class="modal">
+    <div class="modal-head"><h3>📝 Review Application</h3><button class="modal-close" onclick="closeM('mReview')">✕</button></div>
+    <div class="modal-body">
+      <div class="info-grid">
+        <div class="ii"><label>Full Name</label><strong>Applicant Name</strong></div>
+        <div class="ii"><label>Email</label><strong>email@example.com</strong></div>
+        <div class="ii"><label>Phone</label><strong>+XX XXXX XXXXXX</strong></div>
+        <div class="ii"><label>Account Type</label><strong>Personal Savings</strong></div>
+        <div class="ii"><label>Country</label><strong>United Kingdom</strong></div>
+        <div class="ii"><label>Initial Deposit</label><strong>£500</strong></div>
+      </div>
+      <p style="font-size:0.68rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin:0.9rem 0 0.6rem">✅ Verification Checklist</p>
+      <div style="display:flex;flex-direction:column;gap:0.45rem;margin-bottom:0.9rem">
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> ID Document Verified</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> Proof of Address Verified</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> AML Check Passed</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> Sanctions Check Passed</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> PEP Check Passed</label>
+      </div>
+      <div class="fg2"><label>Admin Notes</label><textarea placeholder="Add review notes..."></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-red" onclick="toast('Application rejected!','e');closeM('mReview')">❌ Reject</button>
+      <button class="btn btn-yellow" onclick="toast('More info requested!','w');closeM('mReview')">⚠️ Request Info</button>
+      <button class="btn btn-green" onclick="toast('Approved! Go to Account Generator next.','s');closeM('mReview')">✅ Approve</button>
+    </div>
+  </div>
+</div>
+
+<!-- KYC Modal -->
+<div class="moverlay" id="mKYC">
+  <div class="modal">
+    <div class="modal-head"><h3>✅ KYC Document Review</h3><button class="modal-close" onclick="closeM('mKYC')">✕</button></div>
+    <div class="modal-body">
+      <div style="display:grid;gap:0.9rem;margin-bottom:1rem">
+        <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem"><div><div style="font-weight:600;font-size:0.85rem">🪪 Passport / National ID</div><div style="font-size:0.72rem;color:var(--gray)">Document submitted for review</div></div><div style="display:flex;gap:0.45rem"><button class="btn btn-green btn-sm" onclick="toast('ID verified!','s')">✅ Verify</button><button class="btn btn-red btn-sm" onclick="toast('ID rejected!','e')">❌ Reject</button></div></div>
+        <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem"><div><div style="font-weight:600;font-size:0.85rem">🏠 Proof of Address</div><div style="font-size:0.72rem;color:var(--gray)">Document submitted for review</div></div><div style="display:flex;gap:0.45rem"><button class="btn btn-green btn-sm" onclick="toast('Address verified!','s')">✅ Verify</button><button class="btn btn-red btn-sm" onclick="toast('Address rejected!','e')">❌ Reject</button></div></div>
+      </div>
+      <p style="font-size:0.68rem;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:0.6rem">Compliance Checks</p>
+      <div style="display:flex;flex-direction:column;gap:0.45rem;margin-bottom:0.9rem">
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> AML Check</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> Sanctions Check</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> PEP Check</label>
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer"><input type="checkbox"/> Fraud Database Check</label>
+      </div>
+      <div class="fg2"><label>Risk Level</label><select><option>Low Risk</option><option>Medium Risk</option><option>High Risk</option></select></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-red" onclick="toast('KYC failed!','e');closeM('mKYC')">❌ Fail KYC</button><button class="btn btn-green" onclick="toast('KYC passed! ✅','s');closeM('mKYC')">✅ Pass KYC</button></div>
+  </div>
+</div>
+
+<!-- View Transaction -->
+<div class="moverlay" id="mViewTxn">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head"><h3>💸 Transaction Details</h3><button class="modal-close" onclick="closeM('mViewTxn')">✕</button></div>
+    <div class="modal-body">
+      <div class="info-grid">
+        <div class="ii"><label>Transaction ID</label><strong id="tId">—</strong></div>
+        <div class="ii"><label>Customer</label><strong id="tCust">—</strong></div>
+        <div class="ii"><label>Type</label><strong id="tType">—</strong></div>
+        <div class="ii"><label>Amount</label><strong id="tAmt">—</strong></div>
+        <div class="ii"><label>Status</label><strong id="tStat">—</strong></div>
+        <div class="ii"><label>Date</label><strong id="tDate">—</strong></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeM('mViewTxn')">Close</button><button class="btn btn-yellow" onclick="toast('Flagged for review!','w');closeM('mViewTxn')">⚠️ Flag</button></div>
+  </div>
+</div>
+
+<!-- Add Transaction -->
+<div class="moverlay" id="mAddTxn">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-head"><h3>➕ Add Transaction</h3><button class="modal-close" onclick="closeM('mAddTxn')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg2"><label>Customer</label><select id="txnCust"></select></div>
+      <div class="fr"><div class="fg2"><label>Type</label><select><option>Deposit</option><option>Withdrawal</option><option>Transfer</option><option>Int'l Transfer</option></select></div><div class="fg2"><label>Amount (£)</label><input type="number" placeholder="0.00"/></div></div>
+      <div class="fg2"><label>Description</label><input type="text" placeholder="Description"/></div>
+      <div class="fg2"><label>Status</label><select><option>Completed</option><option>Pending</option></select></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeM('mAddTxn')">Cancel</button><button class="btn btn-navy" onclick="toast('Transaction added!','s');closeM('mAddTxn')">Add</button></div>
+  </div>
+</div>
+
+<!-- Add Customer -->
+<div class="moverlay" id="mAddCust">
+  <div class="modal">
+    <div class="modal-head"><h3>➕ Add New Customer</h3><button class="modal-close" onclick="closeM('mAddCust')">✕</button></div>
+    <div class="modal-body">
+      <div class="fr"><div class="fg2"><label>First Name</label><input type="text" placeholder="First name"/></div><div class="fg2"><label>Last Name</label><input type="text" placeholder="Last name"/></div></div>
+      <div class="fg2"><label>Email</label><input type="email" placeholder="Email address"/></div>
+      <div class="fr"><div class="fg2"><label>Phone</label><input type="tel" placeholder="+44 7700 000000"/></div><div class="fg2"><label>Country</label><select><option>United Kingdom</option><option>Nigeria</option><option>Ghana</option><option>UAE</option><option>China</option><option>Other</option></select></div></div>
+      <div class="fr"><div class="fg2"><label>Account Type</label><select><option>Personal Savings</option><option>Business Savings</option><option>Fixed Deposit</option><option>Salary Account</option></select></div><div class="fg2"><label>Initial Balance (£)</label><input type="number" placeholder="0.00"/></div></div>
+      <div class="fg2"><label>Login Password</label><input type="text" placeholder="e.g. Name2026!"/></div>
+      <div class="warn-box">⚠️ After adding here, go to <strong>Customer Setup Tool</strong> to generate the code for customers-data.js</div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeM('mAddCust')">Cancel</button><button class="btn btn-navy" onclick="toast('Customer added! Go to Customer Setup Tool.','s');closeM('mAddCust')">Add Customer</button></div>
+  </div>
+</div>
+
+<!-- Add Loan -->
+<div class="moverlay" id="mAddLoan">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-head"><h3>➕ Add Loan</h3><button class="modal-close" onclick="closeM('mAddLoan')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg2"><label>Customer</label><select id="loanCust"></select></div>
+      <div class="fg2"><label>Loan Type</label><select><option>Personal Loan</option><option>SME Loan</option><option>Business Loan</option></select></div>
+      <div class="fr"><div class="fg2"><label>Amount (£)</label><input type="number" placeholder="0.00"/></div><div class="fg2"><label>Rate (%)</label><input type="number" placeholder="6.5" step="0.1"/></div></div>
+      <div class="fg2"><label>Term</label><select><option>12 months</option><option>24 months</option><option>36 months</option><option>48 months</option><option>60 months</option></select></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeM('mAddLoan')">Cancel</button><button class="btn btn-navy" onclick="toast('Loan created!','s');closeM('mAddLoan')">Create</button></div>
+  </div>
+</div>
+
+<div id="toast" style="display:none"></div>
+
+<script>
+// ── CUSTOMER DATA ──
+const CUSTOMERS = typeof BANK_CUSTOMERS !== 'undefined' ? BANK_CUSTOMERS : {
+  'DBG-10293847':{password:'James2026!',name:'James Wilson',type:'Personal Savings',balance:'£12,450.00',sortCode:'40-22-11',iban:'GB29DISC40221110293847',email:'james.w@email.com',phone:'+44 7700 111111',address:'London, UK',joined:'January 2026',status:'Active',color:'#00325F'},
+  'DBG-20384756':{password:'Amina2026!',name:'Amina Okafor',type:'Business Savings',balance:'£45,200.00',sortCode:'40-22-12',iban:'GB29DISC40221220384756',email:'amina.o@email.com',phone:'+234 800 000000',address:'Lagos, Nigeria',joined:'February 2026',status:'Active',color:'#E87722'},
+  'DBG-30495867':{password:'Chen2026!',name:'Chen Wei',type:'Fixed Deposit',balance:'£80,000.00',sortCode:'40-22-13',iban:'GB29DISC40221330495867',email:'chen.w@email.com',phone:'+86 138 0000 0000',address:'Beijing, China',joined:'March 2026',status:'Active',color:'#17A2B8'}
+};
+
+// ── DATE ──
+document.getElementById('tdate').textContent = new Date().toLocaleDateString('en-GB',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+
+// ── LOGIN ──
+document.getElementById('lform').addEventListener('submit',function(e){
+  e.preventDefault();
+  const em=document.getElementById('lemail').value.trim();
+  const pw=document.getElementById('lpass').value;
+  const btn=document.getElementById('lbtn');
+  btn.disabled=true;btn.textContent='Verifying...';
+  setTimeout(()=>{
+    if((em==='officesupport.mlaj@gmail.com'||em==='info@discoverjp.org'||em==='admin@discoverjp.org')&&pw==='admin2026'){
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('app').style.display='block';
+      initApp();
+    } else {
+      document.getElementById('lerr').style.display='flex';
+      btn.disabled=false;btn.textContent='🔐 Sign In to Admin Portal';
+    }
+  },800);
+});
+
+// ── INIT ──
+function initApp(){
+  renderStats();
+  renderOverviewTable();
+  renderCustomerCards();
+  renderAccsTable();
+  populateDropdowns();
+  genAcc();
+}
+
+// ── STATS ──
+function renderStats(){
+  const keys=Object.keys(CUSTOMERS);
+  let total=0;
+  keys.forEach(acc=>{const b=parseFloat(CUSTOMERS[acc].balance.replace(/[£,]/g,''))||0;total+=b;});
+  document.getElementById('statDep').textContent='£'+total.toLocaleString('en-GB',{minimumFractionDigits:0});
+  document.getElementById('statCust').textContent=keys.length;
+  document.getElementById('statNet').textContent='£'+(total*0.65).toLocaleString('en-GB',{minimumFractionDigits:0});
+}
+
+// ── OVERVIEW TABLE ──
+function renderOverviewTable(){
+  const keys=Object.keys(CUSTOMERS);
+  let html='';
+  keys.forEach(acc=>{
+    const c=CUSTOMERS[acc];
+    const init=c.name.split(' ').map(n=>n[0]).join('').toUpperCase();
+    const sb=c.status==='Active'?'b-green':'b-red';
+    html+=`<tr>
+      <td><strong style="font-family:monospace">${acc}</strong></td>
+      <td><div class="td-name"><div class="td-av" style="background:${c.color}">${init}</div>${c.name}</div></td>
+      <td>${c.type}</td>
+      <td style="color:var(--green);font-weight:700">${c.balance}</td>
+      <td><span class="badge ${sb}">${c.status}</span></td>
+      <td><button class="btn btn-blue btn-sm" onclick="openFullProfile('${acc}')">👁️ View</button> <button class="btn btn-yellow btn-sm" onclick="openEditFromAcc('${acc}')">✏️ Edit</button></td>
+    </tr>`;
+  });
+  document.getElementById('overviewTable').innerHTML=html||'<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--gray)">No customers yet</td></tr>';
+}
+
+// ── CUSTOMER CARDS ──
+function renderCustomerCards(){
+  const keys=Object.keys(CUSTOMERS);
+  let html='';
+  keys.forEach(acc=>{
+    const c=CUSTOMERS[acc];
+    const init=c.name.split(' ').map(n=>n[0]).join('').toUpperCase();
+    const sb=c.status==='Active'?'b-green':'b-red';
+    html+=`
+    <div class="cust-card" data-name="${c.name.toLowerCase()}">
+      <div class="cust-card-hero">
+        <div class="cust-av-lg" style="background:${c.color}">${init}</div>
+        <div class="cust-hero-info">
+          <h3>${c.name}</h3>
+          <p>${c.email}</p>
+          <div style="display:flex;gap:0.3rem;margin-top:0.35rem;flex-wrap:wrap">
+            <span class="badge ${sb}">${c.status}</span>
+            <span class="badge b-blue">${c.type}</span>
+          </div>
+        </div>
+        <div>
+          <div class="cust-bal">${c.balance}</div>
+          <div class="cust-acc">${acc}</div>
+        </div>
+      </div>
+      <div class="cust-details">
+        <div class="cd-item"><label>Account Number</label><strong>${acc}</strong></div>
+        <div class="cd-item"><label>Sort Code</label><strong>${c.sortCode}</strong></div>
+        <div class="cd-item"><label>IBAN</label><strong>${c.iban}</strong></div>
+        <div class="cd-item"><label>BIC/SWIFT</label><strong>DISCGB2L</strong></div>
+        <div class="cd-item"><label>Login Password</label><strong>${c.password}</strong></div>
+        <div class="cd-item"><label>Balance</label><strong style="color:var(--green)">${c.balance}</strong></div>
+        <div class="cd-item"><label>Date Joined</label><strong>${c.joined}</strong></div>
+        <div class="cd-item"><label>Address</label><strong>${c.address}</strong></div>
+      </div>
+      <div class="cust-actions">
+        <button class="btn btn-yellow btn-sm" onclick="openEditFromAcc('${acc}')">✏️ Edit</button>
+        <button class="btn btn-blue btn-sm" onclick="openAdjFromAcc('${acc}')">💰 Balance</button>
+        <button class="btn btn-orange btn-sm" onclick="emailCust('${c.name}','${c.email}')">📧 Email</button>
+        <button class="btn btn-green btn-sm" onclick="toast('Password reset sent to ${c.name}!','s')">🔑 Reset PW</button>
+        <button class="btn btn-red btn-sm" onclick="if(confirm('Freeze ${c.name}?'))toast('Account frozen!','i')">🔒 Freeze</button>
+        <button class="btn btn-ghost btn-sm" onclick="openFullProfile('${acc}')">👁️ Profile</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('custCards').innerHTML=html||'<div style="text-align:center;padding:3rem;color:var(--gray)">No customers found</div>';
+}
+
+// ── ACCOUNTS TABLE ──
+function renderAccsTable(){
+  const keys=Object.keys(CUSTOMERS);
+  let html='';
+  keys.forEach(acc=>{
+    const c=CUSTOMERS[acc];
+    const sb=c.status==='Active'?'b-green':'b-red';
+    html+=`<tr>
+      <td><strong style="font-family:monospace">${acc}</strong></td>
+      <td>${c.name}</td>
+      <td>${c.type}</td>
+      <td style="color:var(--green);font-weight:700">${c.balance}</td>
+      <td><code style="background:#F1F5F9;padding:0.18rem 0.5rem;border-radius:4px;font-size:0.78rem">${c.password}</code></td>
+      <td><span class="badge ${sb}">${c.status}</span></td>
+      <td><button class="btn btn-yellow btn-sm" onclick="openEditFromAcc('${acc}')">✏️ Edit</button> <button class="btn btn-blue btn-sm" onclick="openAdjFromAcc('${acc}')">💰</button> <button class="btn btn-red btn-sm" onclick="if(confirm('Freeze?'))toast('Frozen!','i')">🔒</button></td>
+    </tr>`;
+  });
+  document.getElementById('accsTable').innerHTML=html||'<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--gray)">No accounts</td></tr>';
+}
+
+// ── DROPDOWNS ──
+function populateDropdowns(){
+  const keys=Object.keys(CUSTOMERS);
+  ['txnCust','loanCust'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.innerHTML=keys.map(acc=>`<option value="${acc}">${CUSTOMERS[acc].name}</option>`).join('');
+  });
+}
+
+// ── NAVIGATION ──
+const ptitles={overview:'Dashboard Overview',notifications:'Notifications',transactions:'Transaction Management',accounts:'Account Management',transfers:'Transfer Controls',loans:'Loan Management',applications:'Account Applications',customers:'All Customers',kyc:'KYC Verification',generator:'Account Generator',templates:'Email Templates',settings:'Settings'};
+function go(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nvi').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('pg-'+id);
+  if(pg)pg.classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('ptitle').textContent=ptitles[id]||'Dashboard';
+  window.scrollTo(0,0);
+}
+
+// ── LOGOUT ──
+function doLogout(){
+  if(confirm('Are you sure you want to logout?')){
+    document.getElementById('app').style.display='none';
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('lemail').value='';
+    document.getElementById('lpass').value='';
+    document.getElementById('lerr').style.display='none';
+    document.getElementById('lbtn').textContent='🔐 Sign In to Admin Portal';
+  }
+}
+
+// ── MODALS ──
+function openM(id){document.getElementById(id).classList.add('open')}
+function closeM(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.moverlay').forEach(o=>{o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')})});
+
+// ── TOAST ──
+function toast(msg,type='s'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=type;t.style.display='flex';
+  setTimeout(()=>t.style.display='none',4000);
+}
+
+// ── OPEN FULL PROFILE ──
+let _vAcc='';
+function openFullProfile(acc){
+  _vAcc=acc;
+  const c=CUSTOMERS[acc];if(!c)return;
+  const init=c.name.split(' ').map(n=>n[0]).join('').toUpperCase();
+  document.getElementById('vAv').textContent=init;
+  document.getElementById('vAv').style.background=c.color;
+  document.getElementById('vName').textContent=c.name;
+  document.getElementById('vContact').textContent=c.email+' · '+c.phone;
+  document.getElementById('vStat').textContent=c.status;
+  document.getElementById('vTyp').textContent=c.type;
+  document.getElementById('vAccNum').textContent=acc;
+  document.getElementById('vBal').textContent=c.balance;
+  document.getElementById('vSort').textContent=c.sortCode;
+  document.getElementById('vIBAN').textContent=c.iban;
+  document.getElementById('vPW').textContent=c.password;
+  document.getElementById('vJoined').textContent=c.joined;
+  document.getElementById('vAddr').textContent=c.address;
+  document.getElementById('vEditBtn').onclick=function(){closeM('mViewFull');openEditFromAcc(acc)};
+  document.getElementById('vAdjBtn').onclick=function(){closeM('mViewFull');openAdjFromAcc(acc)};
+  document.getElementById('vEmailBtn').onclick=function(){closeM('mViewFull');emailCust(c.name,c.email)};
+  openM('mViewFull');
+}
+
+// ── EDIT ──
+function openEditFromAcc(acc){
+  const c=CUSTOMERS[acc];if(!c)return;
+  const parts=c.name.split(' ');
+  document.getElementById('eAccNum').textContent=acc;
+  document.getElementById('eFN').value=parts[0]||'';
+  document.getElementById('eLN').value=parts.slice(1).join(' ')||'';
+  document.getElementById('eEmail').value=c.email;
+  document.getElementById('ePhone').value=c.phone;
+  document.getElementById('eAddr').value=c.address;
+  document.getElementById('eType').value=c.type;
+  document.getElementById('eStatus').value=c.status;
+  document.getElementById('ePW').value=c.password;
+  document.getElementById('eBal').value=c.balance;
+  document.getElementById('eNotes').value='';
+  openM('mEdit');
+}
+function saveEdit(){
+  const fn=document.getElementById('eFN').value.trim();
+  const ln=document.getElementById('eLN').value.trim();
+  if(!fn||!ln){toast('Please enter first and last name!','e');return;}
+  toast(`✅ ${fn} ${ln} updated! Remember to update customers-data.js on GitHub if you changed the password.`,'s');
+  closeM('mEdit');
+}
+
+// ── ADJUST BALANCE ──
+let _adjCurrNum=0;
+function openAdjFromAcc(acc){
+  const c=CUSTOMERS[acc];if(!c)return;
+  document.getElementById('adjName').textContent=c.name;
+  document.getElementById('adjAcc').textContent=acc;
+  document.getElementById('adjCurr').textContent=c.balance;
+  document.getElementById('adjNew').textContent='—';
+  document.getElementById('adjAmt').value='';
+  document.getElementById('adjRef').value='';
+  _adjCurrNum=parseFloat(c.balance.replace(/[£,]/g,''))||0;
+  openM('mAdj');
+}
+function calcBal(){
+  const act=document.getElementById('adjAct').value;
+  const amt=parseFloat(document.getElementById('adjAmt').value)||0;
+  let nw=_adjCurrNum;
+  if(act==='add')nw=_adjCurrNum+amt;
+  else if(act==='remove')nw=_adjCurrNum-amt;
+  else if(act==='set')nw=amt;
+  document.getElementById('adjNew').textContent='£'+nw.toLocaleString('en-GB',{minimumFractionDigits:2});
+}
+function applyAdj(){
+  const nw=document.getElementById('adjNew').textContent;
+  const nm=document.getElementById('adjName').textContent;
+  if(!nw||nw==='—'){toast('Please enter an amount first!','e');return;}
+  toast(`${nm} balance updated to ${nw} ✅ Remember to update customers-data.js!`,'s');
+  closeM('mAdj');
+}
+
+// ── FILTER ──
+function filterC(val){
+  document.querySelectorAll('.cust-card').forEach(c=>{
+    c.style.display=c.dataset.name.includes(val.toLowerCase())?'block':'none';
+  });
+}
+
+// ── EMAIL ──
+function emailCust(name,email){
+  go('templates',null);
+  setTimeout(()=>{
+    document.getElementById('cTo').value=email;
+    document.getElementById('cSubj').value='Discover Bank — Account Update';
+    document.getElementById('cBody').value=`Dear ${name},\n\n[Your message here]\n\nBest regards,\nDiscover Bank Global Management plc\n+44 20 9946 9200 | info@discoverjp.org`;
+    document.getElementById('cTo').scrollIntoView({behavior:'smooth'});
+    toast('Compose ready for '+name,'i');
+  },300);
+}
+
+// ── ACCOUNT GENERATOR ──
+let _acc={num:'DBG-00000000',sort:'40-00-00',iban:'GB00DISC00000000'};
+function genAcc(){
+  const n='DBG-'+Math.floor(10000000+Math.random()*90000000);
+  const s=[Math.floor(10+Math.random()*90),Math.floor(10+Math.random()*90),Math.floor(10+Math.random()*90)];
+  const sort=s.join('-');
+  const iban='GB'+Math.floor(10+Math.random()*90)+'DISC'+s.join('')+Math.floor(10000000+Math.random()*90000000);
+  _acc={num:n,sort,iban};
+  document.getElementById('genNum').textContent=n;
+  document.getElementById('genSort').textContent=sort;
+  document.getElementById('genIBAN').textContent=iban;
+  const nm=document.getElementById('genName')?.value||'—';
+  const tp=document.getElementById('genType')?.value||'Personal Savings';
+  const tb=document.getElementById('genList');
+  if(tb.querySelector('td[colspan]'))tb.innerHTML='';
+  const row=document.createElement('tr');
+  row.innerHTML=`<td><strong style="font-family:monospace">${n}</strong></td><td>${nm}</td><td>${tp}</td><td>${new Date().toLocaleDateString('en-GB')}</td><td><button class="btn btn-orange btn-sm" onclick="window.open('customer-setup.html','_blank')">Setup ⚙️</button></td>`;
+  tb.prepend(row);
+  toast('✅ Account number generated!','s');
+}
+function copyAcc(){
+  const txt=`Account Number: ${_acc.num}\nSort Code: ${_acc.sort}\nIBAN: ${_acc.iban}\nBIC/SWIFT: DISCGB2L`;
+  navigator.clipboard.writeText(txt).then(()=>toast('Account details copied!','s')).catch(()=>toast('Please copy manually','w'));
+}
+
+// ── EMAIL TEMPLATES ──
+function cpTpl(id,btn){
+  const txt=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    btn.textContent='✅ Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('done')},2500);
+    toast('Template copied! Paste in your email.','s');
+  }).catch(()=>{
+    const el=document.getElementById(id);
+    const r=document.createRange();r.selectNodeContents(el);
+    window.getSelection().removeAllRanges();window.getSelection().addRange(r);
+    toast('Text selected — press Ctrl+C to copy','i');
+  });
+}
+function gmTpl(id){
+  const txt=document.getElementById(id).textContent;
+  const lines=txt.split('\n');
+  const subj=lines[0].replace('Subject: ','');
+  const body=lines.slice(2).join('\n');
+  const to=document.getElementById('cTo')?.value||'';
+  const url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(to)+'&su='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+  navigator.clipboard.writeText(txt).catch(()=>{});
+  const win=window.open(url,'_blank');
+  if(!win)toast('Popup blocked! Template copied. Open Gmail and paste.','w');
+  else toast('Gmail opened!','s');
+}
+function gmCompose(){
+  const to=document.getElementById('cTo').value;
+  const subj=document.getElementById('cSubj').value;
+  const body=document.getElementById('cBody').value;
+  if(!to){toast('Please enter customer email!','e');return;}
+  const url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(to)+'&su='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+  const msg=`To: ${to}\nSubject: ${subj}\n\n${body}`;
+  navigator.clipboard.writeText(msg).catch(()=>{});
+  const win=window.open(url,'_blank');
+  if(!win)toast('Popup blocked! Message copied. Open Gmail and paste.','w');
+  else toast('Gmail opened!','s');
+}
+function cpCompose(){
+  const to=document.getElementById('cTo').value;
+  const subj=document.getElementById('cSubj').value;
+  const body=document.getElementById('cBody').value;
+  navigator.clipboard.writeText(`To: ${to}\nSubject: ${subj}\n\n${body}`).then(()=>toast('Message copied!','s'));
+}
+function clearCompose(){
+  document.getElementById('cTo').value='';
+  document.getElementById('cSubj').value='';
+  document.getElementById('cBody').value='';
+}
+
+// ── APPROVE / REJECT ──
+function approveTxn(btn,id){
+  const badge=btn.closest('tr')?.querySelector('.badge');
+  if(badge){badge.className='badge b-green';badge.textContent='✓ Approved';}
+  btn.textContent='✓ Done';btn.disabled=true;btn.style.opacity='0.5';
+  toast(id+' approved! ✅','s');
+}
+function approveApp(btn,name){
+  const badge=btn.closest('tr')?.querySelector('.badge');
+  if(badge){badge.className='badge b-green';badge.textContent='✓ Approved';}
+  btn.textContent='✓';btn.disabled=true;btn.style.opacity='0.5';
+  toast(name+' approved! Go to Account Generator to create account number.','s');
+}
+function rejectIt(id){
+  if(confirm('Reject '+id+'?'))toast(id+' rejected!','e');
+}
+function showTxn(id,cust,type,amt,stat){
+  document.getElementById('tId').textContent=id;
+  document.getElementById('tCust').textContent=cust;
+  document.getElementById('tType').textContent=type;
+  document.getElementById('tAmt').textContent=amt;
+  document.getElementById('tStat').textContent=stat;
+  document.getElementById('tDate').textContent=new Date().toLocaleDateString('en-GB');
+  openM('mViewTxn');
+}
+</script>
+</body>
+</html>
