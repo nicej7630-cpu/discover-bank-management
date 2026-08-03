@@ -341,4 +341,141 @@ tr:hover td{background:#FAFBFF}
         </tbody>
       </table></div></div>
     </div>
-          </div>
+          </div><!-- GENERATOR PAGE -->
+  <div class="page" id="pg-generator">
+    <div style="background:linear-gradient(135deg,#0F172A,#00325F);border-radius:14px;padding:2rem;color:white;margin-bottom:1.5rem">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:0.35rem">🔢 Account Number Generator</h3>
+      <p style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:1.5rem">Generate unique account details for approved customers</p>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem">
+        <div style="font-size:0.62rem;color:rgba(255,255,255,0.45);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.1em">Generated Account Number</div>
+        <div id="genNum" style="font-size:2.2rem;font-weight:800;color:#E87722;font-family:monospace;letter-spacing:0.06em">DBG-00000000</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1.1rem">
+          <div style="background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;display:block;margin-bottom:0.18rem">Sort Code</div><span id="genSort" style="font-size:0.85rem;font-weight:600;color:white;font-family:monospace">40-00-00</span></div>
+          <div style="background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;display:block;margin-bottom:0.18rem">IBAN</div><span id="genIBAN" style="font-size:0.85rem;font-weight:600;color:white;font-family:monospace">GB00DISC00000000</span></div>
+          <div style="background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;display:block;margin-bottom:0.18rem">BIC/SWIFT</div><span style="font-size:0.85rem;font-weight:600;color:white;font-family:monospace">DISCGB2L</span></div>
+          <div style="background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;display:block;margin-bottom:0.18rem">Type</div><span id="genTypeD" style="font-size:0.85rem;font-weight:600;color:white">Personal Savings</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <button class="btn btn-orange" onclick="genAcc()">🔄 Generate New</button>
+        <button class="btn btn-green" onclick="copyAcc()">📋 Copy Details</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><h3>⚙️ Configuration</h3></div>
+      <div class="cb">
+        <div class="fr">
+          <div class="fg2"><label>Customer Name</label><input type="text" id="genName" placeholder="Full name"/></div>
+          <div class="fg2"><label>Account Type</label><select id="genType" onchange="document.getElementById('genTypeD').textContent=this.value"><option>Personal Savings</option><option>Business Savings</option><option>Fixed Deposit</option><option>Salary Account</option><option>Current Account</option></select></div>
+        </div>
+        <button class="btn btn-orange btn-full" onclick="genAcc()">🔢 Generate Account Number</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL TEMPLATES PAGE -->
+  <div class="page" id="pg-templates">
+    <div class="card">
+      <div class="ch"><h3>📧 Email Templates</h3></div>
+      <div class="cb">
+        <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+          <h4 style="font-size:0.85rem;font-weight:700;color:#001F3F;margin-bottom:0.3rem">✅ Account Approved & Welcome</h4>
+          <div id="t1" style="font-size:0.72rem;color:#475569;line-height:1.65;background:white;border:1px solid #E2E8F0;border-radius:8px;padding:1rem;margin:0.75rem 0;max-height:160px;overflow-y:auto;white-space:pre-wrap;font-family:monospace">Subject: Welcome to Discover Bank — Your Account is Ready!
+
+Dear [Customer Name],
+
+Your account has been APPROVED!
+
+Account Number: [DBG-XXXXXXXX]
+Sort Code: [XX-XX-XX]
+IBAN: [GBXXDISCXXXXXXXX]
+BIC/SWIFT: DISCGB2L
+
+LOGIN: https://discoverjp.org/login.html
+Account: [DBG-XXXXXXXX]
+Password: [Password]
+
+Phone: +44 20 9946 9200
+Email: info@discoverjp.org
+
+Best regards,
+Discover Bank Global Management plc</div>
+          <button style="background:#00325F;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;margin-right:0.45rem" onclick="cpTpl('t1',this)">📋 Copy</button>
+          <button style="background:#EA4335;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer" onclick="gmTpl('t1')">📤 Gmail</button>
+        </div>
+        <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+          <h4 style="font-size:0.85rem;font-weight:700;color:#001F3F;margin-bottom:0.3rem">❌ Application Rejected</h4>
+          <div id="t2" style="font-size:0.72rem;color:#475569;line-height:1.65;background:white;border:1px solid #E2E8F0;border-radius:8px;padding:1rem;margin:0.75rem 0;max-height:120px;overflow-y:auto;white-space:pre-wrap;font-family:monospace">Subject: Update on Your Application — Discover Bank
+
+Dear [Customer Name],
+
+After careful review, we are unable to approve your application at this time.
+You may reapply after 30 days.
+
+Contact: +44 20 9946 9200 | info@discoverjp.org
+
+Best regards,
+Discover Bank Global Management plc</div>
+          <button style="background:#00325F;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;margin-right:0.45rem" onclick="cpTpl('t2',this)">📋 Copy</button>
+          <button style="background:#EA4335;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer" onclick="gmTpl('t2')">📤 Gmail</button>
+        </div>
+        <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+          <h4 style="font-size:0.85rem;font-weight:700;color:#001F3F;margin-bottom:0.3rem">🔄 Transfer Confirmation</h4>
+          <div id="t3" style="font-size:0.72rem;color:#475569;line-height:1.65;background:white;border:1px solid #E2E8F0;border-radius:8px;padding:1rem;margin:0.75rem 0;max-height:120px;overflow-y:auto;white-space:pre-wrap;font-family:monospace">Subject: Transfer Confirmed — Discover Bank
+
+Dear [Customer Name],
+
+Your transfer has been processed successfully.
+
+Reference: [TRF-XXXXXX]
+Amount: £[Amount]
+Destination: [Bank/Country]
+Status: ✅ COMPLETED
+
+info@discoverjp.org | +44 20 9946 9200
+Discover Bank Global Management plc</div>
+          <button style="background:#00325F;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;margin-right:0.45rem" onclick="cpTpl('t3',this)">📋 Copy</button>
+          <button style="background:#EA4335;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer" onclick="gmTpl('t3')">📤 Gmail</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><h3>✏️ Compose Email</h3></div>
+      <div class="cb">
+        <div class="fg2"><label>To *</label><input type="email" id="cTo" placeholder="customer@email.com"/></div>
+        <div class="fg2"><label>Subject *</label><input type="text" id="cSubj" placeholder="Subject..."/></div>
+        <div class="fg2"><label>Message *</label><textarea id="cBody" style="min-height:150px" placeholder="Type your message..."></textarea></div>
+        <div style="display:flex;gap:0.65rem;flex-wrap:wrap">
+          <button class="btn btn-orange" onclick="gmCompose()">📤 Send via Gmail</button>
+          <button class="btn btn-navy" onclick="cpCompose()">📋 Copy</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('cTo').value='';document.getElementById('cSubj').value='';document.getElementById('cBody').value=''">🗑️ Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS PAGE -->
+  <div class="page" id="pg-notifications">
+    <div class="card">
+      <div class="ch"><h3>🔔 Notifications</h3><button class="btn btn-ghost btn-sm" onclick="toast('Cleared!','s')">Clear All</button></div>
+      <div class="cb">
+        <div style="display:flex;align-items:flex-start;gap:0.85rem;padding:1rem;border-radius:10px;margin-bottom:0.75rem;border:1px solid #FECACA;background:#FEF2F2"><div style="font-size:1.1rem">🚨</div><div><h4 style="font-size:0.83rem;font-weight:600;margin-bottom:0.15rem">Large Transfer Pending</h4><p style="font-size:0.75rem;color:#6C757D">£8,000 from Sarah Johnson to HSBC UK needs approval</p></div><div style="font-size:0.65rem;color:#6C757D;margin-left:auto;white-space:nowrap">2 hrs ago</div></div>
+        <div style="display:flex;align-items:flex-start;gap:0.85rem;padding:1rem;border-radius:10px;margin-bottom:0.75rem;border:1px solid #FED7AA;background:#FFF7ED"><div style="font-size:1.1rem">📝</div><div><h4 style="font-size:0.83rem;font-weight:600;margin-bottom:0.15rem">New Application</h4><p style="font-size:0.75rem;color:#6C757D">Mohammed Al-Rashid from UAE submitted an application</p></div><div style="font-size:0.65rem;color:#6C757D;margin-left:auto;white-space:nowrap">5 hrs ago</div></div>
+        <div style="display:flex;align-items:flex-start;gap:0.85rem;padding:1rem;border-radius:10px;margin-bottom:0.75rem;border:1px solid #BBF7D0;background:#F0FDF4"><div style="font-size:1.1rem">✅</div><div><h4 style="font-size:0.83rem;font-weight:600;margin-bottom:0.15rem">Transaction Complete</h4><p style="font-size:0.75rem;color:#6C757D">£5,000 deposit by James Wilson completed</p></div><div style="font-size:0.65rem;color:#6C757D;margin-left:auto;white-space:nowrap">6 hrs ago</div></div>
+        <div style="display:flex;align-items:flex-start;gap:0.85rem;padding:1rem;border-radius:10px;margin-bottom:0.75rem;border:1px solid #BFDBFE;background:#EFF6FF"><div style="font-size:1.1rem">👤</div><div><h4 style="font-size:0.83rem;font-weight:600;margin-bottom:0.15rem">New Customer Registered</h4><p style="font-size:0.75rem;color:#6C757D">David Osei from Ghana registered and submitted KYC</p></div><div style="font-size:0.65rem;color:#6C757D;margin-left:auto;white-space:nowrap">Yesterday</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PAGE -->
+  <div class="page" id="pg-settings">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem">
+      <div class="card"><div class="ch"><h3>🔐 Change Password</h3></div><div class="cb"><div class="fg2"><label>Current Password</label><input type="password" placeholder="Current password"/></div><div class="fg2"><label>New Password</label><input type="password" placeholder="New password"/></div><div class="fg2"><label>Confirm Password</label><input type="password" placeholder="Confirm password"/></div><button class="btn btn-navy btn-full" onclick="toast('Password updated!','s')">Update Password</button></div></div>
+      <div class="card"><div class="ch"><h3>🏦 Bank Settings</h3></div><div class="cb"><div class="fg2"><label>Bank Name</label><input type="text" value="Discover Bank Global Management plc"/></div><div class="fg2"><label>Email</label><input type="email" value="info@discoverjp.org"/></div><div class="fg2"><label>Phone</label><input type="tel" value="+44 20 9946 9200"/></div><button class="btn btn-navy btn-full" onclick="toast('Settings saved!','s')">Save Settings</button></div></div>
+      <div class="card"><div class="ch"><h3>🌐 Quick Links</h3></div><div class="cb" style="display:flex;flex-direction:column;gap:0.5rem"><a href="index.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid #E2E8F0;border-radius:8px;text-decoration:none;color:#1A202C;font-size:0.82rem">🌐 Main Website</a><a href="login.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid #E2E8F0;border-radius:8px;text-decoration:none;color:#1A202C;font-size:0.82rem">🔐 Customer Login</a><a href="signup.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid #E2E8F0;border-radius:8px;text-decoration:none;color:#1A202C;font-size:0.82rem">📝 Sign Up Page</a><a href="https://github.com" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid #E2E8F0;border-radius:8px;text-decoration:none;color:#1A202C;font-size:0.82rem">💻 GitHub</a></div></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+</div><!-- /app -->
