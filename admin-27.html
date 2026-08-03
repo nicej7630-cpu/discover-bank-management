@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin — Discover Bank Global Management plc</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F1F5F9;color:#1A202C}
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0F172A,#001F3F,#00325F);padding:1rem}
+.lcard{background:white;border-radius:20px;padding:2.5rem;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,0.3)}
+.llogo{width:68px;height:68px;background:linear-gradient(135deg,#E87722,#F59A4F);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;color:white;margin:0 auto 1rem}
+.ltop{text-align:center;margin-bottom:2rem}
+.ltop h2{font-size:1.5rem;font-weight:800;color:#001F3F}
+.ltop p{font-size:0.82rem;color:#6C757D;margin-top:0.25rem}
+.lerr{display:none;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:0.75rem;font-size:0.82rem;color:#EF4444;margin-bottom:1rem;text-align:center}
+.fg{margin-bottom:1rem}
+.fg label{display:block;font-size:0.72rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.38rem}
+.fg input{width:100%;padding:0.82rem 1rem;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;background:#F8FAFC}
+.fg input:focus{border-color:#00325F;background:white}
+.lbtn{width:100%;padding:1rem;background:linear-gradient(135deg,#00325F,#001F3F);color:white;border:none;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.lbtn:disabled{opacity:0.65;cursor:not-allowed}
+#app{display:none}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:240px;background:#0F172A;min-height:100vh;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;display:flex;flex-direction:column;z-index:50}
+.sb-head{padding:1.25rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:0.75rem}
+.sb-icon{width:38px;height:38px;background:linear-gradient(135deg,#E87722,#F59A4F);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;font-size:1.1rem;flex-shrink:0}
+.navsec{padding:0.65rem 1.25rem 0.2rem;font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.12em}
+.nvi{display:flex;align-items:center;gap:0.7rem;padding:0.65rem 1.25rem;cursor:pointer;font-size:0.82rem;color:rgba(255,255,255,0.55);border-left:3px solid transparent;user-select:none}
+.nvi:hover{color:white;background:#1E293B}
+.nvi.active{color:white;border-left-color:#E87722;background:linear-gradient(90deg,rgba(232,119,34,0.15),transparent)}
+.ni{font-size:0.95rem;width:20px;text-align:center;flex-shrink:0}
+.nbadge{margin-left:auto;background:#EF4444;color:white;font-size:0.58rem;font-weight:700;padding:0.1rem 0.42rem;border-radius:10px}
+.nbadge.o{background:#E87722}
+.sb-foot{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,0.07)}
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column}
+.topbar{background:white;border-bottom:1px solid #E2E8F0;padding:0 1.75rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.topbar h1{font-size:1.05rem;font-weight:700;color:#001F3F}
+.tb-right{display:flex;align-items:center;gap:0.85rem}
+.tb-date{font-size:0.75rem;color:#6C757D;background:#F8FAFC;border:1px solid #E2E8F0;padding:0.35rem 0.85rem;border-radius:8px}
+.tb-logout{padding:0.4rem 1rem;background:#EF4444;color:white;border:none;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.page{display:none;padding:1.75rem}
+.page.active{display:block;animation:fi 0.2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.25rem;margin-bottom:1.75rem}
+.sc{background:white;border-radius:14px;padding:1.4rem;border:1px solid #E2E8F0;display:flex;align-items:flex-start;justify-content:space-between}
+.sc-info h3{font-size:0.72rem;font-weight:600;color:#6C757D;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem}
+.sc-num{font-size:1.8rem;font-weight:800;color:#001F3F;line-height:1}
+.sc-change{font-size:0.72rem;margin-top:0.4rem;font-weight:500}
+.up{color:#10B981}.dn{color:#EF4444}
+.sc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.io{background:#FEF3E8}.ig{background:#ECFDF5}.ir{background:#FEF2F2}.ib{background:#EFF6FF}
+.card{background:white;border-radius:14px;border:1px solid #E2E8F0;margin-bottom:1.5rem;overflow:hidden}
+.ch{padding:1rem 1.4rem;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
+.ch h3{font-size:0.92rem;font-weight:700;color:#001F3F}
+.cb{padding:1.4rem}
+.btn{padding:0.52rem 1.1rem;border:none;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:0.35rem}
+.btn-navy{background:#00325F;color:white}
+.btn-green{background:#10B981;color:white}
+.btn-red{background:#EF4444;color:white}
+.btn-orange{background:#E87722;color:white}
+.btn-blue{background:#3B82F6;color:white}
+.btn-ghost{background:#F1F5F9;color:#475569;border:1px solid #E2E8F0}
+.btn-sm{padding:0.3rem 0.65rem;font-size:0.72rem;border-radius:6px}
+.btn-full{width:100%;justify-content:center;padding:0.85rem}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:500px}
+thead{background:#F8FAFC}
+th{padding:0.75rem 1rem;text-align:left;font-size:0.68rem;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:1px solid #E2E8F0;white-space:nowrap}
+td{padding:0.85rem 1rem;font-size:0.82rem;border-bottom:1px solid #F1F5F9;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-flex;align-items:center;padding:0.22rem 0.65rem;border-radius:20px;font-size:0.65rem;font-weight:700}
+.bg{background:#DCFCE7;color:#166534}.br{background:#FEE2E2;color:#991B1B}.by{background:#FEF3C7;color:#92400E}.bb{background:#DBEAFE;color:#1E40AF}.bo{background:#FED7AA;color:#9A3412}
+.fg2{margin-bottom:1rem}
+.fg2 label{display:block;font-size:0.72rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.38rem}
+.fg2 input,.fg2 select,.fg2 textarea{width:100%;padding:0.72rem 0.95rem;border:1.5px solid #E2E8F0;border-radius:8px;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;background:#F8FAFC}
+.fg2 input:focus,.fg2 select:focus,.fg2 textarea:focus{border-color:#00325F;background:white}
+.fg2 textarea{resize:vertical;min-height:90px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.ccard{background:white;border:1px solid #E2E8F0;border-radius:14px;overflow:hidden;margin-bottom:1.25rem}
+.ccard-top{padding:1.25rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid #F1F5F9}
+.cav{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:white;flex-shrink:0}
+.ccard-info h3{font-size:0.95rem;font-weight:700;color:#001F3F}
+.ccard-info p{font-size:0.75rem;color:#6C757D;margin-top:0.1rem}
+.cbal{font-size:1.25rem;font-weight:800;color:#10B981;margin-left:auto;text-align:right}
+.cacc{font-size:0.65rem;color:#6C757D;text-align:right;font-family:monospace}
+.cgrid{padding:1rem 1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.6rem}
+.ci{background:#F8FAFC;padding:0.6rem 0.75rem;border-radius:8px;border:1px solid #F1F5F9}
+.ci label{font-size:0.6rem;color:#94A3B8;text-transform:uppercase;display:block;margin-bottom:0.12rem}
+.ci strong{font-size:0.8rem;color:#1A202C;word-break:break-all}
+.cactions{padding:1rem 1.25rem;display:flex;gap:0.45rem;flex-wrap:wrap;border-top:1px solid #F1F5F9;background:#FAFBFF}
+.info-box{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:0.9rem;font-size:0.8rem;color:#1E40AF;margin-bottom:1rem}
+.moverlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.65);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.moverlay.open{display:flex}
+.modal{background:white;border-radius:16px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 25px 50px rgba(0,0,0,0.3)}
+.mh{padding:1.1rem 1.4rem;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white}
+.mh h3{font-size:0.95rem;font-weight:700;color:#001F3F}
+.mcls{background:none;border:none;font-size:1.1rem;cursor:pointer;color:#6C757D}
+.mb{padding:1.4rem}
+.mf{padding:1rem 1.4rem;border-top:1px solid #E2E8F0;display:flex;gap:0.65rem;justify-content:flex-end;background:#F8FAFC}
+#toast{display:none;position:fixed;bottom:1.5rem;right:1.5rem;padding:0.9rem 1.3rem;border-radius:10px;font-weight:600;font-size:0.83rem;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,0.2);max-width:320px}
+#toast.s{background:#10B981;color:white}#toast.e{background:#EF4444;color:white}#toast.i{background:#3B82F6;color:white}#toast.w{background:#F59E0B;color:white}
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.fr{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="lcard">
+    <div class="ltop">
+      <div class="llogo">D</div>
+      <h2>Admin Portal</h2>
+      <p>Discover Bank Global Management plc</p>
+    </div>
+    <div class="lerr" id="lerr">Invalid credentials. Please try again.</div>
+    <form id="lform">
+      <div class="fg"><label>Email</label><input type="email" id="lemail" placeholder="info@discoverjp.org" required/></div>
+      <div class="fg"><label>Password</label><input type="password" id="lpass" placeholder="Password" required/></div>
+      <button type="submit" class="lbtn" id="lbtn">Sign In to Admin Portal</button>
+    </form>
+  </div>
+</div>
+
+<div id="app">
+<div class="layout">
+<div class="sidebar">
+  <div class="sb-head">
+    <div class="sb-icon">D</div>
+    <div><div style="font-size:0.85rem;font-weight:700;color:white">Admin Portal</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.4)">Discover Bank</div></div>
+  </div>
+  <div style="padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:0.65rem">
+    <div style="width:34px;height:34px;background:#E87722;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;color:white;flex-shrink:0">A</div>
+    <div><div style="font-size:0.78rem;font-weight:600;color:white">Administrator</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.4)">info@discoverjp.org</div></div>
+    <div style="margin-left:auto;width:8px;height:8px;background:#10B981;border-radius:50%"></div>
+  </div>
+  <div class="navsec">Main</div>
+  <div class="nvi active" onclick="go('overview',this)"><span class="ni">📊</span> Dashboard</div>
+  <div class="nvi" onclick="go('notifications',this)"><span class="ni">🔔</span> Notifications <span class="nbadge">4</span></div>
+  <div class="navsec">Customers</div>
+  <div class="nvi" onclick="go('addcustomer',this)"><span class="ni">➕</span> Add New Customer</div>
+  <div class="nvi" onclick="go('customers',this)"><span class="ni">👥</span> All Customers</div>
+  <div class="nvi" onclick="go('applications',this)"><span class="ni">📝</span> Applications <span class="nbadge">5</span></div>
+  <div class="nvi" onclick="go('kyc',this)"><span class="ni">✅</span> KYC <span class="nbadge">3</span></div>
+  <div class="navsec">Banking</div>
+  <div class="nvi" onclick="go('transactions',this)"><span class="ni">💸</span> Transactions</div>
+  <div class="nvi" onclick="go('transfers',this)"><span class="ni">🔄</span> Transfers <span class="nbadge o">3</span></div>
+  <div class="nvi" onclick="go('loans',this)"><span class="ni">💰</span> Loans</div>
+  <div class="navsec">Tools</div>
+  <div class="nvi" onclick="go('generator',this)"><span class="ni">🔢</span> Account Generator</div>
+  <div class="nvi" onclick="go('templates',this)"><span class="ni">📧</span> Email Templates</div>
+  <div class="nvi" onclick="go('settings',this)"><span class="ni">🔧</span> Settings</div>
+  <div class="nvi" onclick="window.open('index.html','_blank')"><span class="ni">🌐</span> View Website</div>
+  <div class="sb-foot">
+    <div class="nvi" onclick="doLogout()" style="color:#F87171"><span class="ni">🚪</span> Logout</div>
+  </div>
+</div>
+
+<div class="main">
+<div class="topbar">
+  <h1 id="ptitle">Dashboard</h1>
+  <div class="tb-right">
+    <div class="tb-date" id="tdate"></div>
+    <button class="tb-logout" onclick="doLogout()">Logout</button>
+  </div>
+</div>
+
+<div class="page active" id="pg-overview">
+  <div class="stats">
+    <div class="sc"><div class="sc-info"><h3>Total Deposits</h3><div class="sc-num" id="sDep">£0</div><div class="sc-change up">+12% this month</div></div><div class="sc-icon io">💷</div></div>
+    <div class="sc"><div class="sc-info"><h3>Customers</h3><div class="sc-num" id="sCust">0</div><div class="sc-change up">Growing</div></div><div class="sc-icon ig">👥</div></div>
+    <div class="sc"><div class="sc-info"><h3>Applications</h3><div class="sc-num">5</div><div class="sc-change dn">Review needed</div></div><div class="sc-icon ir">📝</div></div>
+    <div class="sc"><div class="sc-info"><h3>Pending Transfers</h3><div class="sc-num">3</div><div class="sc-change dn">Approve needed</div></div><div class="sc-icon ib">🔄</div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>Quick Actions</h3></div>
+    <div class="cb" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem">
+      <div onclick="go('addcustomer',null)" style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer"><div style="font-size:1.8rem;margin-bottom:0.5rem">➕</div><div style="font-size:0.78rem;font-weight:600">Add Customer</div></div>
+      <div onclick="go('customers',null)" style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer"><div style="font-size:1.8rem;margin-bottom:0.5rem">👥</div><div style="font-size:0.78rem;font-weight:600">All Customers</div></div>
+      <div onclick="go('generator',null)" style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer"><div style="font-size:1.8rem;margin-bottom:0.5rem">🔢</div><div style="font-size:0.78rem;font-weight:600">Generate Account</div></div>
+      <div onclick="go('templates',null)" style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer"><div style="font-size:1.8rem;margin-bottom:0.5rem">📧</div><div style="font-size:0.78rem;font-weight:600">Send Email</div></div>
+      <div onclick="go('applications',null)" style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer"><div style="font-size:1.8rem;margin-bottom:0.5rem">📝</div><div style="font-size:0.78rem;font-weight:600">Applications</div></div>
+      <div onclick="go('transfers',null)" style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer"><div style="font-size:1.8rem;margin-bottom:0.5rem">🔄</div><div style="font-size:0.78rem;font-weight:600">Transfers</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>Customer Summary</h3><button class="btn btn-ghost btn-sm" onclick="go('customers',null)">View All</button></div>
+    <div class="cb"><div class="tw"><table>
+      <thead><tr><th>Account No</th><th>Name</th><th>Type</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="ovTable"></tbody>
+    </table></div></div>
+  </div>
+</div>
+
+<div class="page" id="pg-addcustomer">
+  <div class="card">
+    <div class="ch"><h3>➕ Add New Customer — No GitHub Needed!</h3></div>
+    <div class="cb">
+      <div class="info-box">Fill the form and click Add Customer Now — customer appears immediately and can login right away!</div>
+      <div class="fr">
+        <div class="fg2"><label>First Name *</label><input type="text" id="nFN" placeholder="First name"/></div>
+        <div class="fg2"><label>Last Name *</label><input type="text" id="nLN" placeholder="Last name"/></div>
+      </div>
+      <div class="fg2"><label>Email *</label><input type="email" id="nEmail" placeholder="customer@email.com"/></div>
+      <div class="fr">
+        <div class="fg2"><label>Phone</label><input type="tel" id="nPhone" placeholder="+44 7700 000000"/></div>
+        <div class="fg2"><label>Country</label><select id="nCountry"><option>United Kingdom</option><option>Nigeria</option><option>Ghana</option><option>UAE</option><option>USA</option><option>China</option><option>South Africa</option><option>Kenya</option><option>Canada</option><option>Australia</option><option>Saudi Arabia</option><option>India</option><option>Other</option></select></div>
+      </div>
+      <div class="fg2"><label>Address</label><input type="text" id="nAddr" placeholder="Home address"/></div>
+      <div class="fr">
+        <div class="fg2"><label>Account Type</label><select id="nType"><option>Personal Savings</option><option>Business Savings</option><option>Fixed Deposit</option><option>Salary Account</option><option>Current Account</option></select></div>
+        <div class="fg2"><label>Initial Balance (£)</label><input type="number" id="nBal" placeholder="0.00" min="0" step="0.01"/></div>
+      </div>
+      <div class="fr">
+        <div class="fg2"><label>Login Password *</label><input type="text" id="nPW" placeholder="e.g. Name2026!"/></div>
+        <div class="fg2"><label>Status</label><select id="nStatus"><option>Active</option><option>Pending</option><option>Frozen</option></select></div>
+      </div>
+      <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:1rem;margin-bottom:1.25rem;font-size:0.82rem;color:#166534">Account number is generated automatically. Customer can login immediately after you click Add!</div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <button class="btn btn-orange" style="padding:0.85rem 2rem;font-size:0.95rem" onclick="addCustomer()">➕ Add Customer Now</button>
+        <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
+      </div>
+    </div>
+  </div>
+  <div class="card" id="resultCard" style="display:none">
+    <div class="ch"><h3>✅ Customer Added Successfully!</h3></div>
+    <div class="cb" id="resultBody"></div>
+  </div>
+</div>
+
+<div class="page" id="pg-customers">
+  <div class="card">
+    <div class="ch">
+      <h3>👥 All Customers</h3>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        <input type="text" placeholder="Search..." style="padding:0.42rem 0.85rem;border:1.5px solid #E2E8F0;border-radius:8px;font-size:0.8rem;outline:none" onkeyup="filterC(this.value)"/>
+        <button class="btn btn-orange btn-sm" onclick="go('addcustomer',null)">+ Add</button>
+      </div>
+    </div>
+    <div class="cb" id="custCards"><div style="text-align:center;padding:3rem;color:#6C757D">Loading...</div></div>
+  </div>
+</div>
+
+<div class="page" id="pg-transactions">
+  <div class="card">
+    <div class="ch"><h3>💸 Transactions</h3></div>
+    <div class="cb"><div class="tw"><table>
+      <thead><tr><th>ID</th><th>Customer</th><th>Type</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr><td><strong>TXN-001</strong></td><td>James Wilson</td><td>Deposit</td><td style="color:#10B981;font-weight:700">+£5,000</td><td>06 Jul 2026</td><td><span class="badge bg">Completed</span></td><td><button class="btn btn-blue btn-sm" onclick="showTxn('TXN-001','James Wilson','Deposit','+£5,000','Completed')">View</button></td></tr>
+        <tr><td><strong>TXN-002</strong></td><td>Amina Okafor</td><td>Transfer</td><td style="color:#EF4444;font-weight:700">-£2,500</td><td>06 Jul 2026</td><td><span class="badge by">Pending</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'TXN-002')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('TXN-002')">Reject</button></td></tr>
+        <tr><td><strong>TXN-003</strong></td><td>Chen Wei</td><td>Withdrawal</td><td style="color:#EF4444;font-weight:700">-£1,200</td><td>05 Jul 2026</td><td><span class="badge bg">Completed</span></td><td><button class="btn btn-blue btn-sm" onclick="showTxn('TXN-003','Chen Wei','Withdrawal','-£1,200','Completed')">View</button></td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+</div>
+
+<div class="page" id="pg-transfers">
+  <div class="card">
+    <div class="ch"><h3>🔄 Pending Transfers</h3></div>
+    <div class="cb"><div class="tw"><table>
+      <thead><tr><th>Ref</th><th>From</th><th>To Bank</th><th>Amount</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr><td><strong>TRF-001</strong></td><td>Amina Okafor</td><td>GTBank Nigeria</td><td><strong>£2,500</strong></td><td>06 Jul 2026</td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'TRF-001')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('TRF-001')">Reject</button></td></tr>
+        <tr><td><strong>TRF-002</strong></td><td>David Osei</td><td>Ecobank Ghana</td><td><strong>£3,000</strong></td><td>04 Jul 2026</td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'TRF-002')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('TRF-002')">Reject</button></td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+</div>
+
+<div class="page" id="pg-loans">
+  <div class="card">
+    <div class="ch"><h3>💰 Loans</h3></div>
+    <div class="cb"><div class="tw"><table>
+      <thead><tr><th>Loan ID</th><th>Customer</th><th>Amount</th><th>Rate</th><th>Term</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr><td><strong>LN-001</strong></td><td>James Wilson</td><td>£10,000</td><td>6.5%</td><td>24m</td><td><span class="badge by">Pending</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'LN-001')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('LN-001')">Reject</button></td></tr>
+        <tr><td><strong>LN-002</strong></td><td>Amina Okafor</td><td>£50,000</td><td>8.2%</td><td>36m</td><td><span class="badge bb">In Review</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'LN-002')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('LN-002')">Reject</button></td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+</div>
+
+<div class="page" id="pg-applications">
+  <div class="card">
+    <div class="ch"><h3>📝 Applications</h3></div>
+    <div class="cb"><div class="tw"><table>
+      <thead><tr><th>Name</th><th>Email</th><th>Type</th><th>Country</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mohammed Al-Rashid</strong></td><td>m.rashid@email.com</td><td>Personal</td><td>UAE</td><td>04 Jul 2026</td><td><span class="badge by">Pending</span></td><td><button class="btn btn-green btn-sm" onclick="approveApp(this,'Mohammed')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('Mohammed')">Reject</button></td></tr>
+        <tr><td><strong>David Osei</strong></td><td>david.o@email.com</td><td>Business</td><td>Ghana</td><td>03 Jul 2026</td><td><span class="badge by">Pending</span></td><td><button class="btn btn-green btn-sm" onclick="approveApp(this,'David')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('David')">Reject</button></td></tr>
+        <tr><td><strong>Fatima Al-Sayed</strong></td><td>f.sayed@email.com</td><td>Personal</td><td>Saudi Arabia</td><td>02 Jul 2026</td><td><span class="badge by">Pending</span></td><td><button class="btn btn-green btn-sm" onclick="approveApp(this,'Fatima')">Approve</button> <button class="btn btn-red btn-sm" onclick="rejectIt('Fatima')">Reject</button></td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+</div>
+
+<div class="page" id="pg-kyc">
+  <div class="card">
+    <div class="ch"><h3>✅ KYC Verification</h3></div>
+    <div class="cb"><div class="tw"><table>
+      <thead><tr><th>Customer</th><th>Document</th><th>Date</th><th>KYC</th><th>Risk</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr><td><strong>James Wilson</strong></td><td>UK Passport</td><td>06 Jul 2026</td><td><span class="badge by">Pending</span></td><td><span class="badge bg">Low</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'KYC-J')">Verify</button> <button class="btn btn-red btn-sm" onclick="rejectIt('KYC-J')">Reject</button></td></tr>
+        <tr><td><strong>Amina Okafor</strong></td><td>Nigerian Passport</td><td>05 Jul 2026</td><td><span class="badge by">Pending</span></td><td><span class="badge by">Medium</span></td><td><button class="btn btn-green btn-sm" onclick="approveTxn(this,'KYC-A')">Verify</button> <button class="btn btn-red btn-sm" onclick="rejectIt('KYC-A')">Reject</button></td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+</div>
+
+<div class="page" id="pg-generator">
+  <div style="background:linear-gradient(135deg,#0F172A,#00325F);border-radius:14px;padding:2rem;color:white;margin-bottom:1.5rem">
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:0.35rem">🔢 Account Number Generator</h3>
+    <p style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:1.5rem">Generate unique account details for new customers</p>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem">
+      <div style="font-size:0.62rem;color:rgba(255,255,255,0.45);margin-bottom:0.4rem;text-transform:uppercase">Account Number</div>
+      <div id="genNum" style="font-size:2rem;font-weight:800;color:#E87722;font-family:monospace">DBG-00000000</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1.1rem">
+        <div style="background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:0.18rem">Sort Code</div><span id="genSort" style="font-size:0.85rem;font-weight:600;color:white;font-family:monospace">40-00-00</span></div>
+        <div style="background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:0.18rem">IBAN</div><span id="genIBAN" style="font-size:0.85rem;font-weight:600;color:white;font-family:monospace">GB00DISC00000000</span></div>
+        <div style="background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:0.18rem">BIC/SWIFT</div><span style="font-size:0.85rem;font-weight:600;color:white;font-family:monospace">DISCGB2L</span></div>
+        <div style="background:rgba(255,255,255,0.06);padding:0.65rem 0.85rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:0.18rem">Type</div><span id="genTypeD" style="font-size:0.85rem;font-weight:600;color:white">Personal Savings</span></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+      <button class="btn btn-orange" onclick="genAcc()">Generate New</button>
+      <button class="btn btn-green" onclick="copyAcc()">Copy Details</button>
+    </div>
+  </div>
+  <div class="card"><div class="ch"><h3>Options</h3></div><div class="cb">
+    <div class="fr">
+      <div class="fg2"><label>Customer Name</label><input type="text" id="genName" placeholder="Full name"/></div>
+      <div class="fg2"><label>Account Type</label><select id="genType" onchange="document.getElementById('genTypeD').textContent=this.value"><option>Personal Savings</option><option>Business Savings</option><option>Fixed Deposit</option><option>Salary Account</option></select></div>
+    </div>
+    <button class="btn btn-orange btn-full" onclick="genAcc()">Generate Account Number</button>
+  </div></div>
+</div>
+
+<div class="page" id="pg-templates">
+  <div class="card"><div class="ch"><h3>📧 Email Templates</h3></div><div class="cb">
+    <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+      <h4 style="font-size:0.85rem;font-weight:700;color:#001F3F;margin-bottom:0.75rem">✅ Account Approved</h4>
+      <div id="t1" style="font-size:0.72rem;color:#475569;line-height:1.65;background:white;border:1px solid #E2E8F0;border-radius:8px;padding:1rem;margin-bottom:0.75rem;max-height:160px;overflow-y:auto;white-space:pre-wrap;font-family:monospace">Subject: Welcome to Discover Bank!
+
+Dear [Customer Name],
+
+Your account is APPROVED!
+
+Account Number: [DBG-XXXXXXXX]
+Sort Code: [XX-XX-XX]
+IBAN: [GBXXDISCXXXXXXXX]
+BIC/SWIFT: DISCGB2L
+Password: [Password]
+
+Login at: https://discoverjp.org/login.html
+
+Phone: +44 20 9946 9200
+Email: info@discoverjp.org
+
+Best regards,
+Discover Bank Global Management plc</div>
+      <button style="background:#00325F;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;margin-right:0.45rem" onclick="cpTpl('t1',this)">Copy</button>
+      <button style="background:#EA4335;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer" onclick="gmTpl('t1')">Open Gmail</button>
+    </div>
+    <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+      <h4 style="font-size:0.85rem;font-weight:700;color:#001F3F;margin-bottom:0.75rem">❌ Application Rejected</h4>
+      <div id="t2" style="font-size:0.72rem;color:#475569;line-height:1.65;background:white;border:1px solid #E2E8F0;border-radius:8px;padding:1rem;margin-bottom:0.75rem;max-height:120px;overflow-y:auto;white-space:pre-wrap;font-family:monospace">Subject: Update on Your Application
+
+Dear [Customer Name],
+
+We are unable to approve your application at this time.
+You may reapply after 30 days.
+
+Contact: +44 20 9946 9200
+Email: info@discoverjp.org
+
+Best regards,
+Discover Bank Global Management plc</div>
+      <button style="background:#00325F;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;margin-right:0.45rem" onclick="cpTpl('t2',this)">Copy</button>
+      <button style="background:#EA4335;color:white;border:none;padding:0.38rem 0.85rem;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer" onclick="gmTpl('t2')">Open Gmail</button>
+    </div>
+  </div></div>
+  <div class="card"><div class="ch"><h3>✏️ Compose Email</h3></div><div class="cb">
+    <div class="fg2"><label>To</label><input type="email" id="cTo" placeholder="customer@email.com"/></div>
+    <div class="fg2"><label>Subject</label><input type="text" id="cSubj" placeholder="Subject..."/></div>
+    <div class="fg2"><label>Message</label><textarea id="cBody" style="min-height:150px" placeholder="Type your message..."></textarea></div>
+    <div style="display:flex;gap:0.65rem;flex-wrap:wrap">
+      <button class="btn btn-orange" onclick="gmCompose()">Open Gmail</button>
+      <button class="btn btn-navy" onclick="cpCompose()">Copy Message</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('cTo').value='';document.getElementById('cSubj').value='';document.getElementById('cBody').value=''">Clear</button>
+    </div>
+  </div></div>
+</div>
+
+<div class="page" id="pg-notifications">
+  <div class="card"><div class="ch"><h3>🔔 Notifications</h3></div><div class="cb">
+    <div style="display:flex;align-items:flex-start;gap:0.85rem;padding:1rem;border-radius:10px;margin-bottom:0.75rem;border:1px solid #FECACA;background:#FEF2F2"><div style="font-size:1.1rem">🚨</div><div><h4 style="font-size:0.83rem;font-weight:600;margin-bottom:0.15rem">Large Transfer Pending</h4><p style="font-size:0.75rem;color:#6C757D">£8,000 from Sarah Johnson needs approval</p></div><div style="font-size:0.65rem;color:#6C757D;margin-left:auto">2 hrs ago</div></div>
+    <div style="display:flex;align-items:flex-start;gap:0.85rem;padding:1rem;border-radius:10px;margin-bottom:0.75rem;border:1px solid #FED7AA;background:#FFF7ED"><div style="font-size:1.1rem">📝</div><div><h4 style="font-size:0.83rem;font-weight:600;margin-bottom:0.15rem">New Application</h4><p style="font-size:0.75rem;color:#6C757D">Mohammed Al-Rashid from UAE applied</p></div><div style="font-size:0.65rem;color:#6C757D;margin-left:auto">5 hrs ago</div></div>
+    <div style="display:flex;align-items:flex-start;gap:0.85rem;padding:1rem;border-radius:10px;margin-bottom:0.75rem;border:1px solid #BBF7D0;background:#F0FDF4"><div style="font-size:1.1rem">✅</div><div><h4 style="font-size:0.83rem;font-weight:600;margin-bottom:0.15rem">Transaction Complete</h4><p style="font-size:0.75rem;color:#6C757D">£5,000 deposit by James Wilson done</p></div><div style="font-size:0.65rem;color:#6C757D;margin-left:auto">6 hrs ago</div></div>
+  </div></div>
+</div>
+
+<div class="page" id="pg-settings">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem">
+    <div class="card"><div class="ch"><h3>🔐 Change Password</h3></div><div class="cb"><div class="fg2"><label>Current Password</label><input type="password" placeholder="Current password"/></div><div class="fg2"><label>New Password</label><input type="password" placeholder="New password"/></div><div class="fg2"><label>Confirm</label><input type="password" placeholder="Confirm"/></div><button class="btn btn-navy btn-full" onclick="toast('Password updated!','s')">Update</button></div></div>
+    <div class="card"><div class="ch"><h3>🏦 Bank Info</h3></div><div class="cb"><div class="fg2"><label>Bank Name</label><input type="text" value="Discover Bank Global Management plc"/></div><div class="fg2"><label>Email</label><input type="email" value="info@discoverjp.org"/></div><div class="fg2"><label>Phone</label><input type="tel" value="+44 20 9946 9200"/></div><button class="btn btn-navy btn-full" onclick="toast('Saved!','s')">Save</button></div></div>
+    <div class="card"><div class="ch"><h3>🌐 Quick Links</h3></div><div class="cb" style="display:flex;flex-direction:column;gap:0.5rem"><a href="index.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid #E2E8F0;border-radius:8px;text-decoration:none;color:#1A202C;font-size:0.82rem">🌐 Main Website</a><a href="login.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid #E2E8F0;border-radius:8px;text-decoration:none;color:#1A202C;font-size:0.82rem">🔐 Customer Login</a><a href="signup.html" target="_blank" style="display:flex;align-items:center;gap:0.65rem;padding:0.7rem;border:1px solid #E2E8F0;border-radius:8px;text-decoration:none;color:#1A202C;font-size:0.82rem">📝 Sign Up</a></div></div>
+  </div>
+</div>
+
+</div></div></div></div>
+
+<div class="moverlay" id="mViewTxn">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h3>💸 Transaction Details</h3><button class="mcls" onclick="closeM('mViewTxn')">✕</button></div>
+    <div class="mb">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem">
+        <div style="background:#F8FAFC;padding:0.7rem;border-radius:8px"><div style="font-size:0.6rem;color:#94A3B8;text-transform:uppercase">ID</div><strong id="tId">—</strong></div>
+        <div style="background:#F8FAFC;padding:0.7rem;border-radius:8px"><div style="font-size:0.6rem;color:#94A3B8;text-transform:uppercase">Customer</div><strong id="tCust">—</strong></div>
+        <div style="background:#F8FAFC;padding:0.7rem;border-radius:8px"><div style="font-size:0.6rem;color:#94A3B8;text-transform:uppercase">Type</div><strong id="tType">—</strong></div>
+        <div style="background:#F8FAFC;padding:0.7rem;border-radius:8px"><div style="font-size:0.6rem;color:#94A3B8;text-transform:uppercase">Amount</div><strong id="tAmt">—</strong></div>
+        <div style="background:#F8FAFC;padding:0.7rem;border-radius:8px"><div style="font-size:0.6rem;color:#94A3B8;text-transform:uppercase">Status</div><strong id="tStat">—</strong></div>
+        <div style="background:#F8FAFC;padding:0.7rem;border-radius:8px"><div style="font-size:0.6rem;color:#94A3B8;text-transform:uppercase">Date</div><strong id="tDate">—</strong></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeM('mViewTxn')">Close</button></div>
+  </div>
+</div>
+
+<div id="toast" style="display:none"></div>
+
+<script src="customers-data.js"></script>
+<script>
+const BASE={'DBG-10293847':{password:'James2026!',name:'James Wilson',type:'Personal Savings',balance:'£12,450.00',sortCode:'40-22-11',iban:'GB29DISC40221110293847',email:'james.w@email.com',phone:'+44 7700 111111',address:'London, UK',joined:'January 2026',status:'Active',color:'#00325F'},'DBG-20384756':{password:'Amina2026!',name:'Amina Okafor',type:'Business Savings',balance:'£45,200.00',sortCode:'40-22-12',iban:'GB29DISC40221220384756',email:'amina.o@email.com',phone:'+234 800 000000',address:'Lagos, Nigeria',joined:'February 2026',status:'Active',color:'#E87722'},'DBG-30495867':{password:'Chen2026!',name:'Chen Wei',type:'Fixed Deposit',balance:'£80,000.00',sortCode:'40-22-13',iban:'GB29DISC40221330495867',email:'chen.w@email.com',phone:'+86 138 0000 0000',address:'Beijing, China',joined:'March 2026',status:'Active',color:'#17A2B8'}};
+function getAll(){let ex={};try{ex=JSON.parse(localStorage.getItem('dbg_customers')||'{}');}catch(e){}const ext=typeof BANK_CUSTOMERS!=='undefined'?BANK_CUSTOMERS:{};return Object.assign({},BASE,ext,ex);}
+document.getElementById('lform').addEventListener('submit',function(e){
+  e.preventDefault();
+  const em=document.getElementById('lemail').value.trim().toLowerCase();
+  const pw=document.getElementById('lpass').value;
+  const btn=document.getElementById('lbtn');
+  btn.disabled=true;btn.textContent='Verifying...';
+  setTimeout(()=>{
+    if((em==='info@discoverjp.org'||em==='officesupport.mlaj@gmail.com'||em==='admin@discoverjp.org')&&pw==='admin2026'){
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('app').style.display='block';
+      initApp();
+    }else{
+      document.getElementById('lerr').style.display='block';
+      btn.disabled=false;btn.textContent='Sign In to Admin Portal';
+    }
+  },800);
+});
+function initApp(){document.getElementById('tdate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',year:'numeric',month:'short',day:'numeric'});renderStats();renderOverview();renderCustomers();genAcc();}
+function renderStats(){const C=getAll();const keys=Object.keys(C);let t=0;keys.forEach(a=>{t+=parseFloat(C[a].balance.replace(/[£,]/g,''))||0;});document.getElementById('sDep').textContent='£'+t.toLocaleString('en-GB',{minimumFractionDigits:0});document.getElementById('sCust').textContent=keys.length;}
+function renderOverview(){const C=getAll();let h='';Object.keys(C).forEach(acc=>{const c=C[acc];const init=c.name.split(' ').map(n=>n[0]).join('').toUpperCase();h+=`<tr><td><strong style="font-family:monospace">${acc}</strong></td><td><div style="display:flex;align-items:center;gap:0.65rem"><div style="width:32px;height:32px;border-radius:50%;background:${c.color||'#00325F'};display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:white">${init}</div>${c.name}</div></td><td>${c.type}</td><td style="color:#10B981;font-weight:700">${c.balance}</td><td><span class="badge ${c.status==='Active'?'bg':'br'}">${c.status}</span></td><td><button class="btn btn-orange btn-sm" onclick="emailCust('${c.name}','${c.email}')">Email</button> <button class="btn btn-red btn-sm" onclick="delCust('${acc}')">Delete</button></td></tr>`;});document.getElementById('ovTable').innerHTML=h||'<tr><td colspan="6" style="text-align:center;padding:2rem;color:#6C757D">No customers yet</td></tr>';}
+function renderCustomers(){const C=getAll();const cols=['#00325F','#E87722','#17A2B8','#10B981','#8B5CF6','#F59E0B','#EF4444','#3B82F6'];let h='';let i=0;Object.keys(C).forEach(acc=>{const c=C[acc];const init=c.name.split(' ').map(n=>n[0]).join('').toUpperCase();const col=c.color||cols[i%cols.length];i++;h+=`<div class="ccard" data-name="${c.name.toLowerCase()}"><div class="ccard-top"><div class="cav" style="background:${col}">${init}</div><div class="ccard-info"><h3>${c.name}</h3><p>${c.email}</p><div style="display:flex;gap:0.3rem;margin-top:0.35rem"><span class="badge ${c.status==='Active'?'bg':'br'}">${c.status}</span><span class="badge bb">${c.type}</span></div></div><div><div class="cbal">${c.balance}</div><div class="cacc">${acc}</div></div></div><div class="cgrid"><div class="ci"><label>Account No</label><strong>${acc}</strong></div><div class="ci"><label>Sort Code</label><strong>${c.sortCode}</strong></div><div class="ci"><label>Password</label><strong>${c.password}</strong></div><div class="ci"><label>Balance</label><strong style="color:#10B981">${c.balance}</strong></div><div class="ci"><label>Phone</label><strong>${c.phone}</strong></div><div class="ci"><label>Address</label><strong>${c.address}</strong></div><div class="ci"><label>IBAN</label><strong>${c.iban}</strong></div><div class="ci"><label>Joined</label><strong>${c.joined}</strong></div></div><div class="cactions"><button class="btn btn-orange btn-sm" onclick="emailCust('${c.name}','${c.email}')">Email</button><button class="btn btn-green btn-sm" onclick="toast('Reset sent!','s')">Reset PW</button><button class="btn btn-red btn-sm" onclick="delCust('${acc}')">Delete</button></div></div>`;});document.getElementById('custCards').innerHTML=h||'<div style="text-align:center;padding:3rem;color:#6C757D">No customers yet. Click Add New Customer!</div>';}
+function addCustomer(){const fn=document.getElementById('nFN').value.trim();const ln=document.getElementById('nLN').value.trim();const email=document.getElementById('nEmail').value.trim();const phone=document.getElementById('nPhone').value.trim();const addr=document.getElementById('nAddr').value.trim();const type=document.getElementById('nType').value;const bal=parseFloat(document.getElementById('nBal').value)||0;const pw=document.getElementById('nPW').value.trim();const status=document.getElementById('nStatus').value;if(!fn||!ln||!email||!pw){toast('Please fill all required fields!','e');return;}const num='DBG-'+Math.floor(10000000+Math.random()*90000000);const s=[Math.floor(10+Math.random()*90),Math.floor(10+Math.random()*90),Math.floor(10+Math.random()*90)];const sort=s.join('-');const iban='GB'+Math.floor(10+Math.random()*90)+'DISC'+s.join('')+Math.floor(10000000+Math.random()*90000000);const cols=['#00325F','#E87722','#17A2B8','#10B981','#8B5CF6','#F59E0B'];const color=cols[Math.floor(Math.random()*cols.length)];const month=new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});const newC={password:pw,name:fn+' '+ln,type,balance:'£'+bal.toLocaleString('en-GB',{minimumFractionDigits:2}),sortCode:sort,iban,email,phone:phone||'—',address:addr||'—',joined:month,status,color};let ex={};try{ex=JSON.parse(localStorage.getItem('dbg_customers')||'{}');}catch(e){}ex[num]=newC;localStorage.setItem('dbg_customers',JSON.stringify(ex));document.getElementById('resultCard').style.display='block';document.getElementById('resultBody').innerHTML=`<div style="background:linear-gradient(135deg,#0F172A,#00325F);border-radius:12px;padding:1.5rem;color:white;margin-bottom:1rem"><div style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-bottom:0.5rem">Customer Added!</div><div style="font-size:1.4rem;font-weight:800;margin-bottom:1rem">${fn} ${ln}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem"><div style="background:rgba(255,255,255,0.08);padding:0.75rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-bottom:0.2rem">ACCOUNT NUMBER</div><div style="font-weight:700;font-family:monospace">${num}</div></div><div style="background:rgba(255,255,255,0.08);padding:0.75rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-bottom:0.2rem">PASSWORD</div><div style="font-weight:700">${pw}</div></div><div style="background:rgba(255,255,255,0.08);padding:0.75rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-bottom:0.2rem">SORT CODE</div><div style="font-weight:700;font-family:monospace">${sort}</div></div><div style="background:rgba(255,255,255,0.08);padding:0.75rem;border-radius:8px"><div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-bottom:0.2rem">BALANCE</div><div style="font-weight:700;color:#10B981">£${bal.toLocaleString('en-GB',{minimumFractionDigits:2})}</div></div><div style="background:rgba(255,255,255,0.08);padding:0.75rem;border-radius:8px;grid-column:span 2"><div style="font-size:0.6rem;color:rgba(255,255,255,0.5);margin-bottom:0.2rem">IBAN</div><div style="font-weight:700;font-family:monospace;font-size:0.82rem">${iban}</div></div></div></div><div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:1rem;font-size:0.82rem;color:#166534;margin-bottom:1rem"><strong>${fn} ${ln}</strong> can now login at <strong>discoverjp.org/login.html</strong></div><button class="btn btn-orange" onclick="copyLogin('${num}','${fn} ${ln}','${pw}','${sort}','${iban}')">Copy Login Details to Send</button>`;clearForm();renderStats();renderOverview();renderCustomers();toast(''+fn+' '+ln+' added! They can login now!','s');}
+function copyLogin(acc,name,pw,sort,iban){const txt='DISCOVER BANK GLOBAL MANAGEMENT PLC\nWelcome '+name+'!\n\nYour account is ready!\n\nAccount Number: '+acc+'\nPassword: '+pw+'\nSort Code: '+sort+'\nIBAN: '+iban+'\nBIC/SWIFT: DISCGB2L\n\nLogin at: https://discoverjp.org/login.html\n\nPhone: +44 20 9946 9200\nEmail: info@discoverjp.org';navigator.clipboard.writeText(txt).then(()=>toast('Login details copied! Send to customer','s')).catch(()=>toast('Please copy manually','w'));}
+function clearForm(){['nFN','nLN','nEmail','nPhone','nAddr','nBal','nPW'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});}
+function delCust(acc){if(!confirm('Delete this customer?'))return;let ex={};try{ex=JSON.parse(localStorage.getItem('dbg_customers')||'{}');}catch(e){}delete ex[acc];localStorage.setItem('dbg_customers',JSON.stringify(ex));renderStats();renderOverview();renderCustomers();toast('Customer deleted!','i');}
+function filterC(v){document.querySelectorAll('.ccard').forEach(c=>{c.style.display=c.dataset.name.includes(v.toLowerCase())?'':'none'});}
+const titles={overview:'Dashboard',notifications:'Notifications',transactions:'Transactions',transfers:'Transfers',loans:'Loans',customers:'All Customers',addcustomer:'Add New Customer',applications:'Applications',kyc:'KYC Verification',generator:'Account Generator',templates:'Email Templates',settings:'Settings'};
+function go(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nvi').forEach(n=>n.classList.remove('active'));const pg=document.getElementById('pg-'+id);if(pg)pg.classList.add('active');if(el)el.classList.add('active');document.getElementById('ptitle').textContent=titles[id]||'Dashboard';window.scrollTo(0,0);}
+function doLogout(){if(confirm('Logout?')){document.getElementById('app').style.display='none';document.getElementById('loginScreen').style.display='flex';document.getElementById('lemail').value='';document.getElementById('lpass').value='';document.getElementById('lerr').style.display='none';document.getElementById('lbtn').textContent='Sign In to Admin Portal';}}
+function openM(id){document.getElementById(id).classList.add('open')}
+function closeM(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.moverlay').forEach(o=>{o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')})});
+function toast(msg,type='s'){const t=document.getElementById('toast');t.textContent=msg;t.className=type;t.style.display='block';setTimeout(()=>t.style.display='none',4000);}
+function approveTxn(btn,id){const b=btn.closest('tr')?.querySelector('.badge');if(b){b.className='badge bg';b.textContent='Approved';}btn.textContent='Done';btn.disabled=true;btn.style.opacity='0.5';toast(id+' approved!','s');}
+function approveApp(btn,name){approveTxn(btn,name);toast(name+' approved!','s');}
+function rejectIt(id){if(confirm('Reject '+id+'?'))toast(id+' rejected!','e');}
+function showTxn(id,c,t,a,s){document.getElementById('tId').textContent=id;document.getElementById('tCust').textContent=c;document.getElementById('tType').textContent=t;document.getElementById('tAmt').textContent=a;document.getElementById('tStat').textContent=s;document.getElementById('tDate').textContent=new Date().toLocaleDateString('en-GB');openM('mViewTxn');}
+function emailCust(name,email){go('templates',null);setTimeout(()=>{document.getElementById('cTo').value=email;document.getElementById('cSubj').value='Discover Bank — Account Update';document.getElementById('cBody').value='Dear '+name+',\n\n[Your message here]\n\nBest regards,\nDiscover Bank Global Management plc\n+44 20 9946 9200 | info@discoverjp.org';toast('Compose ready for '+name,'i');},300);}
+function genAcc(){const n='DBG-'+Math.floor(10000000+Math.random()*90000000);const s=[Math.floor(10+Math.random()*90),Math.floor(10+Math.random()*90),Math.floor(10+Math.random()*90)];const sort=s.join('-');const iban='GB'+Math.floor(10+Math.random()*90)+'DISC'+s.join('')+Math.floor(10000000+Math.random()*90000000);document.getElementById('genNum').textContent=n;document.getElementById('genSort').textContent=sort;document.getElementById('genIBAN').textContent=iban;toast('Account generated!','s');}
+function copyAcc(){const txt='Account: '+document.getElementById('genNum').textContent+'\nSort Code: '+document.getElementById('genSort').textContent+'\nIBAN: '+document.getElementById('genIBAN').textContent+'\nBIC/SWIFT: DISCGB2L';navigator.clipboard.writeText(txt).then(()=>toast('Copied!','s')).catch(()=>toast('Copy manually','w'));}
+function cpTpl(id,btn){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2500);toast('Copied!','s')}).catch(()=>toast('Select text manually','w'));}
+function gmTpl(id){const txt=document.getElementById(id).textContent;const lines=txt.split('\n');const subj=lines[0].replace('Subject: ','');const body=lines.slice(2).join('\n');navigator.clipboard.writeText(txt).catch(()=>{});const url='https://mail.google.com/mail/?view=cm&su='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);const w=window.open(url,'_blank');if(!w)toast('Popup blocked! Template copied. Open Gmail and paste.','w');else toast('Gmail opened!','s');}
+function gmCompose(){const to=document.getElementById('cTo').value;const subj=document.getElementById('cSubj').value;const body=document.getElementById('cBody').value;if(!to){toast('Enter customer email!','e');return;}const url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(to)+'&su='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);navigator.clipboard.writeText('To: '+to+'\nSubject: '+subj+'\n\n'+body).catch(()=>{});const w=window.open(url,'_blank');if(!w)toast('Popup blocked! Message copied. Open Gmail and paste.','w');else toast('Gmail opened!','s');}
+function cpCompose(){navigator.clipboard.writeText('To: '+document.getElementById('cTo').value+'\nSubject: '+document.getElementById('cSubj').value+'\n\n'+document.getElementById('cBody').value).then(()=>toast('Copied!','s'));}
+</script>
+</body>
+</html>
