@@ -60,4 +60,17 @@ const BANK_CUSTOMERS = {
   // ── ADD NEW CUSTOMERS BELOW THIS LINE ──
   // Copy and paste the code from admin → Add Customer → GitHub Code button
 
-};
+};// ── GINOBLE GIANLUCA ──
+  'DBG-87575445': {
+    password: 'Names2026!',
+    name: 'Ginoble Gianluca',
+    type: 'Personal Savings',
+    balance: '£0.00',
+    sortCode: '80-31-22',
+    iban: 'GB30DISC80312274044789',
+    email: '',
+    phone: '—',
+    address: '—',
+    joined: 'August 2026',
+    status: 'Active'
+  },
