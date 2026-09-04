@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Account — Discover Bank Global Management plc</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#FFD700;--gold2:#FFA500;--dark:#1C1C2E;--dark2:#16213E;--dark3:#0F172A;--green:#10B981;--red:#EF4444;--blue:#3B82F6;--orange:#E87722;--border:rgba(255,215,0,0.12);--text:rgba(255,255,255,0.85)}
+body{font-family:'Inter',sans-serif;background:var(--dark3);color:var(--text);min-height:100vh}
+
+/* TOPBAR */
+.topbar{background:var(--dark);border-bottom:1px solid var(--border);padding:0 1.25rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.4)}
+.tb-left{display:flex;align-items:center;gap:0.75rem}
+.tb-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--dark);font-size:1rem}
+.tb-brand h2{font-size:0.82rem;font-weight:800;color:white}
+.tb-brand p{font-size:0.58rem;color:rgba(255,215,0,0.5)}
+.tb-right{display:flex;align-items:center;gap:0.65rem}
+.tb-notif{width:34px;height:34px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;position:relative}
+.tb-notif-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--dark)}
+.tb-av{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:800;color:var(--dark);cursor:pointer;overflow:hidden}
+.tb-logout{padding:0.35rem 0.85rem;background:rgba(239,68,68,0.15);color:#FCA5A5;border:1px solid rgba(239,68,68,0.25);border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.tb-logout:hover{background:var(--red);color:white}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 60px)}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--dark);border-right:1px solid var(--border);position:fixed;top:60px;left:0;bottom:0;overflow-y:auto;z-index:50;padding-bottom:5rem}
+.sb-profile{padding:1rem;border-bottom:1px solid var(--border)}
+.sb-av-wrap{display:flex;align-items:center;gap:0.65rem;margin-bottom:0.75rem}
+.sb-av{width:42px;height:42px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:var(--dark);flex-shrink:0;overflow:hidden}
+.sb-name{font-size:0.82rem;font-weight:700;color:white}
+.sb-type{font-size:0.62rem;color:rgba(255,215,0,0.5)}
+.sb-bal-box{background:rgba(255,215,0,0.06);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem}
+.sb-bal-label{font-size:0.58rem;color:rgba(255,215,0,0.45);text-transform:uppercase}
+.sb-bal-val{font-size:1rem;font-weight:800;color:var(--gold)}
+.navsec{padding:0.65rem 1rem 0.2rem;font-size:0.55rem;font-weight:700;color:rgba(255,215,0,0.3);text-transform:uppercase;letter-spacing:0.12em}
+.nvi{display:flex;align-items:center;gap:0.65rem;padding:0.62rem 1rem;cursor:pointer;font-size:0.8rem;color:rgba(255,255,255,0.45);transition:all 0.18s;border-left:3px solid transparent;user-select:none}
+.nvi:hover{color:white;background:rgba(255,215,0,0.05)}
+.nvi.active{color:var(--gold);border-left-color:var(--gold);background:rgba(255,215,0,0.07)}
+.ni{font-size:0.9rem;width:18px;text-align:center;flex-shrink:0}
+
+/* MAIN */
+.main{margin-left:220px;flex:1;padding:1.5rem;padding-bottom:5rem}
+.page{display:none;animation:fi 0.2s ease}
+.page.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0A0A1A,#1C1C2E,#16213E,#00325F);border-radius:18px;padding:1.6rem;margin-bottom:1.5rem;position:relative;overflow:hidden;border:1px solid var(--border)}
+.hero::before{content:'';position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(255,215,0,0.07) 0%,transparent 70%);border-radius:50%;top:-100px;right:-80px;pointer-events:none}
+.hero-bank{display:flex;align-items:center;gap:0.65rem;margin-bottom:1.25rem;position:relative}
+.hero-bank-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--dark);font-size:0.9rem}
+.hero-bank-name{font-size:0.78rem;font-weight:700;color:white}
+.hero-bank-reg{font-size:0.58rem;color:rgba(255,215,0,0.5)}
+.hero-active{margin-left:auto;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:0.25rem 0.75rem;font-size:0.62rem;font-weight:700;color:#34D399}
+.hero-bal-label{font-size:0.65rem;color:rgba(255,215,0,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.35rem;position:relative}
+.hero-bal{font-size:2.8rem;font-weight:900;color:var(--gold);line-height:1;margin-bottom:0.35rem;position:relative}
+.hero-acc{font-size:0.75rem;color:rgba(255,255,255,0.35);font-family:monospace;margin-bottom:1.25rem;position:relative}
+.hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;position:relative}
+.hero-stat{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:0.75rem}
+.hero-stat-label{font-size:0.55rem;color:rgba(255,215,0,0.4);text-transform:uppercase;margin-bottom:0.2rem}
+.hero-stat-val{font-size:0.85rem;font-weight:700;color:white}
+
+/* QUICK ACTIONS */
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.85rem;margin-bottom:1.5rem}
+.qa{background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:1rem;text-align:center;cursor:pointer;transition:all 0.2s}
+.qa:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(255,215,0,0.1)}
+.qa-icon{font-size:1.6rem;margin-bottom:0.35rem}
+.qa h4{font-size:0.7rem;font-weight:700;color:white}
+
+/* CARDS */
+.card{background:var(--dark2);border:1px solid var(--border);border-radius:14px;margin-bottom:1.25rem;overflow:hidden}
+.ch{padding:0.95rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
+.ch h3{font-size:0.88rem;font-weight:700;color:var(--gold)}
+.cb{padding:1.25rem}
+
+/* TXN */
+.txn{display:flex;align-items:center;gap:0.85rem;padding:0.85rem 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.txn:last-child{border-bottom:none}
+.txn-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.txn-info{flex:1}
+.txn-title{font-size:0.82rem;font-weight:600;color:white}
+.txn-sub{font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:0.1rem}
+.txn-amt{font-size:0.9rem;font-weight:800}
+.txn-st{font-size:0.6rem;font-weight:600;margin-top:0.1rem;text-align:right}
+
+/* BUTTONS */
+.btn{padding:0.55rem 1.1rem;border:none;border-radius:8px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.18s;display:inline-flex;align-items:center;gap:0.35rem}
+.btn:hover{transform:translateY(-1px);opacity:0.9}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--dark)}
+.btn-green{background:var(--green);color:white}
+.btn-red{background:var(--red);color:white}
+.btn-blue{background:var(--blue);color:white}
+.btn-orange{background:var(--orange);color:white}
+.btn-navy{background:#00325F;color:white}
+.btn-ghost{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);border:1px solid var(--border)}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);color:white}
+.btn-sm{padding:0.3rem 0.65rem;font-size:0.72rem;border-radius:6px}
+.btn-full{width:100%;justify-content:center;padding:0.85rem}
+
+/* FORM */
+.fg{margin-bottom:1rem}
+.fg label{display:block;font-size:0.68rem;font-weight:700;color:rgba(255,215,0,0.6);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.35rem}
+.fg input,.fg select,.fg textarea{width:100%;padding:0.75rem 0.95rem;border:1px solid var(--border);border-radius:8px;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:all 0.2s;background:rgba(255,255,255,0.05);color:white}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,0.25)}
+.fg select option{background:var(--dark2);color:white}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);background:rgba(255,215,0,0.04);box-shadow:0 0 0 3px rgba(255,215,0,0.06)}
+.fg textarea{resize:vertical;min-height:90px}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* VIRTUAL CARD */
+.vcard{background:linear-gradient(135deg,#0A0A1A,#1C1C2E,#16213E);border-radius:18px;padding:1.75rem;color:white;max-width:360px;position:relative;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.5);border:1px solid rgba(255,215,0,0.15);margin-bottom:1.25rem;transition:transform 0.3s}
+.vcard:hover{transform:perspective(1000px) rotateY(-5deg) rotateX(3deg)}
+.vcard::before{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border:30px solid rgba(255,215,0,0.05);border-radius:50%}
+.vcard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.8rem}
+.vcard-chip{width:38px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-weight:800;color:var(--dark)}
+.vcard-num{font-family:monospace;font-size:1.2rem;letter-spacing:0.22em;margin-bottom:1.8rem;color:rgba(255,255,255,0.9)}
+.vcard-bot{display:flex;justify-content:space-between;align-items:flex-end}
+.vcard-field label{font-size:0.55rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:0.18rem}
+.vcard-field strong{font-size:0.85rem;font-weight:700}
+.vcard-visa{font-size:1.5rem;font-weight:900;color:white;font-style:italic}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:0.22rem 0.65rem;border-radius:20px;font-size:0.65rem;font-weight:700}
+.bg{background:rgba(16,185,129,0.15);color:#34D399;border:1px solid rgba(16,185,129,0.2)}
+.br{background:rgba(239,68,68,0.15);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2)}
+.by{background:rgba(245,158,11,0.15);color:#FCD34D;border:1px solid rgba(245,158,11,0.2)}
+
+/* BOXES */
+.info-box{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:0.85rem;font-size:0.78rem;color:#93C5FD;margin-bottom:1rem}
+.success-box{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:0.85rem;font-size:0.78rem;color:#34D399;margin-bottom:1rem}
+.warn-box{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:0.85rem;font-size:0.78rem;color:#FCD34D;margin-bottom:1rem}
+
+/* DETAIL BOX */
+.dbox{background:rgba(255,215,0,0.04);padding:0.85rem;border-radius:10px;border:1px solid var(--border)}
+.dbox-label{font-size:0.58rem;color:rgba(255,215,0,0.5);text-transform:uppercase;margin-bottom:0.25rem;letter-spacing:0.06em}
+.dbox-val{font-size:0.88rem;font-weight:700;color:white;word-break:break-all}
+
+/* PROGRESS */
+.prog-bar{background:rgba(255,255,255,0.08);border-radius:20px;height:8px;overflow:hidden;margin-top:0.35rem}
+.prog-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+
+/* MODAL */
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(8px)}
+.moverlay.open{display:flex}
+.modal{background:var(--dark2);border:1px solid var(--border);border-radius:16px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,0.6)}
+.mh{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--dark2);z-index:1}
+.mh h3{font-size:0.92rem;font-weight:700;color:var(--gold)}
+.mcls{background:rgba(255,255,255,0.08);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.5);font-size:0.85rem}
+.mcls:hover{background:rgba(255,255,255,0.15);color:white}
+.mb{padding:1.25rem}
+.mf{padding:0.85rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:0.65rem;justify-content:flex-end;flex-wrap:wrap}
+
+/* TOAST */
+#toast{display:none;position:fixed;bottom:5rem;right:1rem;padding:0.85rem 1.1rem;border-radius:10px;font-weight:700;font-size:0.82rem;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-width:300px;border:1px solid;animation:fi 0.3s ease}
+#toast.s{background:rgba(16,185,129,0.15);color:#34D399;border-color:rgba(16,185,129,0.3)}
+#toast.e{background:rgba(239,68,68,0.15);color:#FCA5A5;border-color:rgba(239,68,68,0.3)}
+#toast.i{background:rgba(59,130,246,0.15);color:#93C5FD;border-color:rgba(59,130,246,0.3)}
+#toast.w{background:rgba(245,158,11,0.15);color:#FCD34D;border-color:rgba(245,158,11,0.3)}
+
+/* MOBILE NAV */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--dark);border-top:1px solid var(--border);z-index:100;padding:0.5rem 0 0.75rem}
+.mn-items{display:flex;justify-content:space-around}
+.mni{display:flex;flex-direction:column;align-items:center;gap:0.18rem;cursor:pointer;padding:0.3rem 0.5rem}
+.mni span:first-child{font-size:1.3rem}
+.mni span:last-child{font-size:0.52rem;color:rgba(255,255,255,0.4);font-weight:600}
+.mni.active span:last-child{color:var(--gold)}
+
+/* PHOTO UPLOAD */
+.photo-wrap{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;color:var(--dark);border:3px solid var(--gold);overflow:hidden;cursor:pointer;position:relative;flex-shrink:0}
+.photo-wrap img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
+.photo-btn{position:absolute;bottom:0;right:0;width:26px;height:26px;border-radius:50%;background:var(--gold);border:2px solid var(--dark);display:flex;align-items:center;justify-content:center;font-size:0.7rem;cursor:pointer}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:1rem;padding-bottom:80px}
+  .mobile-nav{display:block}
+  .qa-grid{grid-template-columns:repeat(3,1fr);gap:0.65rem}
+  .hero-bal{font-size:2.2rem}
+  .fr2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-left">
+    <div class="tb-logo">D</div>
+    <div class="tb-brand"><h2>Discover Bank</h2><p>Global Management plc</p></div>
+  </div>
+  <div class="tb-right">
+    <div class="tb-notif" onclick="go('notifications')">🔔<div class="tb-notif-dot"></div></div>
+    <div class="tb-av" id="topAv" onclick="go('profile')">?</div>
+    <button class="tb-logout" onclick="doLogout()">🚪 Logout</button>
+  </div>
+</div>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-profile">
+    <div class="sb-av-wrap">
+      <div class="sb-av" id="sbAv">?</div>
+      <div><div class="sb-name" id="sbName">Loading...</div><div class="sb-type" id="sbType">—</div></div>
+    </div>
+    <div class="sb-bal-box">
+      <div class="sb-bal-label">Available Balance</div>
+      <div class="sb-bal-val" id="sbBal">£0.00</div>
+    </div>
+  </div>
+  <div class="navsec">Main</div>
+  <div class="nvi active" onclick="go('home',this)"><span class="ni">🏠</span> Dashboard</div>
+  <div class="nvi" onclick="go('notifications',this)"><span class="ni">🔔</span> Notifications</div>
+  <div class="navsec">Banking</div>
+  <div class="nvi" onclick="go('transfer',this)"><span class="ni">🔄</span> Transfer Money</div>
+  <div class="nvi" onclick="go('transactions',this)"><span class="ni">💸</span> Transactions</div>
+  <div class="nvi" onclick="go('statements',this)"><span class="ni">📥</span> Statements</div>
+  <div class="navsec">Services</div>
+  <div class="nvi" onclick="go('cards',this)"><span class="ni">💳</span> My Card</div>
+  <div class="nvi" onclick="go('loans',this)"><span class="ni">💰</span> Loans</div>
+  <div class="nvi" onclick="go('analytics',this)"><span class="ni">📊</span> Analytics</div>
+  <div class="navsec">Account</div>
+  <div class="nvi" onclick="go('profile',this)"><span class="ni">👤</span> My Profile</div>
+  <div class="nvi" onclick="go('support',this)"><span class="ni">🎧</span> Support</div>
+  <div class="nvi" onclick="go('security',this)"><span class="ni">🔒</span> Security</div>
+  <div style="padding:1rem;margin-top:auto">
+    <button class="btn btn-ghost btn-full" onclick="doLogout()" style="color:#FCA5A5">🚪 Logout</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- ══ HOME ══ -->
+<div class="page active" id="pg-home">
+  <div class="hero">
+    <div class="hero-bank">
+      <div class="hero-bank-icon">D</div>
+      <div><div class="hero-bank-name">Discover Bank Global Management plc</div><div class="hero-bank-reg">FCA Regulated · Est. 2022</div></div>
+      <div class="hero-active">🟢 Active</div>
+    </div>
+    <div class="hero-bal-label">Available Balance</div>
+    <div class="hero-bal" id="heroBal">£0.00</div>
+    <div class="hero-acc" id="heroAcc">Account: —</div>
+    <div class="hero-grid">
+      <div class="hero-stat"><div class="hero-stat-label">Account Type</div><div class="hero-stat-val" id="heroType">—</div></div>
+      <div class="hero-stat"><div class="hero-stat-label">Sort Code</div><div class="hero-stat-val" id="heroSort">—</div></div>
+      <div class="hero-stat"><div class="hero-stat-label">Member Since</div><div class="hero-stat-val" id="heroJoined">—</div></div>
+    </div>
+  </div>
+  <div class="qa-grid">
+    <div class="qa" onclick="go('transfer')"><div class="qa-icon">🔄</div><h4>Transfer</h4></div>
+    <div class="qa" onclick="go('statements')"><div class="qa-icon">📥</div><h4>Statement</h4></div>
+    <div class="qa" onclick="go('cards')"><div class="qa-icon">💳</div><h4>My Card</h4></div>
+    <div class="qa" onclick="go('loans')"><div class="qa-icon">💰</div><h4>Apply Loan</h4></div>
+    <div class="qa" onclick="go('transactions')"><div class="qa-icon">💸</div><h4>History</h4></div>
+    <div class="qa" onclick="go('analytics')"><div class="qa-icon">📊</div><h4>Analytics</h4></div>
+    <div class="qa" onclick="go('support')"><div class="qa-icon">🎧</div><h4>Support</h4></div>
+    <div class="qa" onclick="go('profile')"><div class="qa-icon">👤</div><h4>Profile</h4></div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>💸 Recent Transactions</h3><button class="btn btn-ghost btn-sm" onclick="go('transactions')">View All →</button></div>
+    <div class="cb" id="recentTxns"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+    <div class="card">
+      <div class="ch"><h3>🏦 Account Info</h3></div>
+      <div class="cb" style="display:flex;flex-direction:column;gap:0.65rem">
+        <div class="dbox"><div class="dbox-label">Account Number</div><div class="dbox-val" id="infoAcc" style="color:var(--gold);font-family:monospace">—</div></div>
+        <div class="dbox"><div class="dbox-label">Sort Code</div><div class="dbox-val" id="infoSort" style="font-family:monospace">—</div></div>
+        <div class="dbox"><div class="dbox-label">IBAN</div><div class="dbox-val" id="infoIBAN" style="font-family:monospace;font-size:0.75rem">—</div></div>
+        <div class="dbox"><div class="dbox-label">BIC/SWIFT</div><div class="dbox-val" style="font-family:monospace">DISCGB2L</div></div>
+        <button class="btn btn-gold btn-full" onclick="copyAccDetails()">📋 Copy Account Details</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><h3>⚡ Quick Links</h3></div>
+      <div class="cb" style="display:flex;flex-direction:column;gap:0.5rem">
+        <div onclick="go('transfer')" style="display:flex;align-items:center;gap:0.65rem;padding:0.75rem;background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:8px;cursor:pointer"><span>🔄</span><span style="font-size:0.8rem;font-weight:600;color:white">Send Money</span></div>
+        <div onclick="go('statements')" style="display:flex;align-items:center;gap:0.65rem;padding:0.75rem;background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:8px;cursor:pointer"><span>📥</span><span style="font-size:0.8rem;font-weight:600;color:white">Download Statement</span></div>
+        <div onclick="go('loans')" style="display:flex;align-items:center;gap:0.65rem;padding:0.75rem;background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:8px;cursor:pointer"><span>💰</span><span style="font-size:0.8rem;font-weight:600;color:white">Apply for Loan</span></div>
+        <div onclick="go('support')" style="display:flex;align-items:center;gap:0.65rem;padding:0.75rem;background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:8px;cursor:pointer"><span>🎧</span><span style="font-size:0.8rem;font-weight:600;color:white">Contact Support</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRANSFER ══ -->
+<div class="page" id="pg-transfer">
+  <div class="hero" style="padding:1.25rem;margin-bottom:1.25rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+      <div><div style="font-size:0.65rem;color:rgba(255,215,0,0.5);text-transform:uppercase;margin-bottom:0.3rem">Available Balance</div><div style="font-size:2rem;font-weight:900;color:var(--gold)" id="trfBal">£0.00</div></div>
+      <div style="text-align:right"><div style="font-size:0.65rem;color:rgba(255,215,0,0.5);text-transform:uppercase;margin-bottom:0.3rem">Account</div><div style="font-size:0.82rem;font-weight:600;font-family:monospace;color:white" id="trfAcc">—</div></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+    <div class="card">
+      <div class="ch"><h3>🇬🇧 Domestic Transfer</h3></div>
+      <div class="cb">
+        <div class="fg"><label>Recipient Full Name *</label><input type="text" id="domName" placeholder="Full name of recipient"/></div>
+        <div class="fg"><label>Sort Code *</label><input type="text" id="domSort" placeholder="XX-XX-XX" maxlength="8"/></div>
+        <div class="fg"><label>Account Number *</label><input type="text" id="domAccNum" placeholder="8-digit account number"/></div>
+        <div class="fg"><label>Amount (£) *</label><input type="number" id="domAmt" placeholder="0.00" min="1" step="0.01"/></div>
+        <div class="fg"><label>Reference</label><input type="text" id="domRef" placeholder="e.g. Rent payment"/></div>
+        <button class="btn btn-gold btn-full" onclick="doTransfer('domestic')">🔄 Send Now</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><h3>🌍 International Transfer</h3></div>
+      <div class="cb">
+        <div class="fg"><label>Recipient Name *</label><input type="text" id="intName" placeholder="Full name"/></div>
+        <div class="fg"><label>Bank Name *</label><input type="text" id="intBank" placeholder="Recipient bank name"/></div>
+        <div class="fg"><label>IBAN / Account *</label><input type="text" id="intIban" placeholder="Recipient IBAN"/></div>
+        <div class="fg"><label>Country *</label>
+          <select id="intCountry">
+            <option>Nigeria</option><option>Ghana</option><option>UAE</option><option>USA</option>
+            <option>China</option><option>South Africa</option><option>Kenya</option><option>India</option>
+            <option>Saudi Arabia</option><option>Canada</option><option>Australia</option><option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Amount (£) *</label><input type="number" id="intAmt" placeholder="0.00" min="1" step="0.01"/></div>
+        <div class="fg"><label>Reference</label><input type="text" id="intRef" placeholder="e.g. Family support"/></div>
+        <button class="btn btn-orange btn-full" onclick="doTransfer('international')">🌍 Send International</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>📋 Transfer History</h3></div>
+    <div class="cb" id="trfHistory"><div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.3)">No transfers yet</div></div>
+  </div>
+</div>
+
+<!-- ══ TRANSACTIONS ══ -->
+<div class="page" id="pg-transactions">
+  <div class="card">
+    <div class="ch"><h3>💸 All Transactions</h3><button class="btn btn-gold btn-sm" onclick="go('statements')">📥 Download</button></div>
+    <div class="cb" id="allTxns"></div>
+  </div>
+</div>
+
+<!-- ══ STATEMENTS ══ -->
+<div class="page" id="pg-statements">
+  <div class="card">
+    <div class="ch"><h3>📥 Bank Statement</h3></div>
+    <div class="cb">
+      <div style="background:rgba(255,215,0,0.06);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.25rem">
+        <div style="font-size:0.68rem;color:rgba(255,215,0,0.5);margin-bottom:0.3rem;text-transform:uppercase">Official Statement For</div>
+        <div style="font-size:1.1rem;font-weight:700;color:white" id="stName">—</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.15rem" id="stAcc">Account: —</div>
+      </div>
+      <div class="fr2" style="margin-bottom:1rem">
+        <div class="fg"><label>From Date</label><input type="date" id="stFrom"/></div>
+        <div class="fg"><label>To Date</label><input type="date" id="stTo"/></div>
+      </div>
+      <button class="btn btn-gold btn-full" style="margin-bottom:0.75rem" onclick="downloadStatement()">📥 Download PDF Statement</button>
+      <div class="info-box">💡 Statement includes bank letterhead, all transactions and your full account details!</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>📋 Quick Download</h3></div>
+    <div class="cb" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem">
+      <div style="background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:0.4rem">📄</div>
+        <h4 style="font-size:0.82rem;color:white;margin-bottom:0.65rem">July 2026</h4>
+        <button class="btn btn-ghost btn-sm" style="width:100%" onclick="downloadQuick('July 2026')">📥 Download</button>
+      </div>
+      <div style="background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:0.4rem">📄</div>
+        <h4 style="font-size:0.82rem;color:white;margin-bottom:0.65rem">June 2026</h4>
+        <button class="btn btn-ghost btn-sm" style="width:100%" onclick="downloadQuick('June 2026')">📥 Download</button>
+      </div>
+      <div style="background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:0.4rem">📄</div>
+        <h4 style="font-size:0.82rem;color:white;margin-bottom:0.65rem">May 2026</h4>
+        <button class="btn btn-ghost btn-sm" style="width:100%" onclick="downloadQuick('May 2026')">📥 Download</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CARD ══ -->
+<div class="page" id="pg-cards">
+  <div class="card">
+    <div class="ch"><h3>💳 My Virtual Card</h3></div>
+    <div class="cb">
+      <div class="vcard">
+        <div class="vcard-top">
+          <div style="font-size:0.7rem;font-weight:700;color:rgba(255,215,0,0.7);letter-spacing:0.08em">DISCOVER BANK GLOBAL</div>
+          <div class="vcard-chip">CHIP</div>
+        </div>
+        <div class="vcard-num">•••• •••• •••• 4521</div>
+        <div class="vcard-bot">
+          <div class="vcard-field"><label>Card Holder</label><strong id="vcName">YOUR NAME</strong></div>
+          <div class="vcard-field"><label>Expires</label><strong>12/29</strong></div>
+          <div class="vcard-visa">VISA</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem">
+        <div class="dbox"><div class="dbox-label">Card Status</div><div style="font-size:0.88rem;font-weight:700;color:#34D399;margin-top:0.2rem">🟢 Active</div></div>
+        <div class="dbox"><div class="dbox-label">Card Type</div><div class="dbox-val">VISA Debit</div></div>
+        <div class="dbox"><div class="dbox-label">Daily Limit</div><div class="dbox-val">£5,000</div></div>
+        <div class="dbox"><div class="dbox-label">Online Payments</div><div style="font-size:0.88rem;font-weight:700;color:#34D399;margin-top:0.2rem">✅ Enabled</div></div>
+      </div>
+      <div style="display:flex;gap:0.65rem;flex-wrap:wrap">
+        <button class="btn btn-navy" onclick="toast('Card frozen temporarily! Call +44 20 9946 9200 to unfreeze.','i')">🔒 Freeze Card</button>
+        <button class="btn btn-orange" onclick="openM('mPin')">🔑 Change PIN</button>
+        <button class="btn btn-red" onclick="toast('Card reported lost! Call us: +44 20 9946 9200','s')">❗ Report Lost</button>
+        <button class="btn btn-gold" onclick="copyCardDetails()">📋 Copy Details</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOANS ══ -->
+<div class="page" id="pg-loans">
+  <div class="card">
+    <div class="ch"><h3>💰 Loan Services</h3></div>
+    <div class="cb">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem">
+        <div style="background:linear-gradient(135deg,#001F3F,#00325F);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,215,0,0.15);cursor:pointer" onclick="openLoan('Personal Loan','6.5','50,000')">
+          <div style="font-size:1.4rem;margin-bottom:0.4rem">👤</div>
+          <h4 style="font-size:0.88rem;font-weight:700;color:white;margin-bottom:0.3rem">Personal Loan</h4>
+          <div style="font-size:1rem;font-weight:800;color:var(--gold);margin-bottom:0.3rem">From 6.5% APR</div>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-bottom:0.75rem">Up to £50,000</p>
+          <div style="background:rgba(255,215,0,0.1);border-radius:8px;padding:0.45rem;text-align:center;font-size:0.75rem;font-weight:700;color:var(--gold)">Apply Now →</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,215,0,0.15);cursor:pointer" onclick="openLoan('Business Loan','7.8','500,000')">
+          <div style="font-size:1.4rem;margin-bottom:0.4rem">🏢</div>
+          <h4 style="font-size:0.88rem;font-weight:700;color:white;margin-bottom:0.3rem">Business Loan</h4>
+          <div style="font-size:1rem;font-weight:800;color:var(--gold);margin-bottom:0.3rem">From 7.8% APR</div>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-bottom:0.75rem">Up to £500,000</p>
+          <div style="background:rgba(255,215,0,0.1);border-radius:8px;padding:0.45rem;text-align:center;font-size:0.75rem;font-weight:700;color:var(--gold)">Apply Now →</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#2d1b00,#4a2f00);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,215,0,0.15);cursor:pointer" onclick="openLoan('Emergency Loan','9.9','10,000')">
+          <div style="font-size:1.4rem;margin-bottom:0.4rem">⚡</div>
+          <h4 style="font-size:0.88rem;font-weight:700;color:white;margin-bottom:0.3rem">Emergency Loan</h4>
+          <div style="font-size:1rem;font-weight:800;color:var(--gold);margin-bottom:0.3rem">From 9.9% APR</div>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-bottom:0.75rem">Up to £10,000</p>
+          <div style="background:rgba(255,215,0,0.1);border-radius:8px;padding:0.45rem;text-align:center;font-size:0.75rem;font-weight:700;color:var(--gold)">Apply Now →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>🧮 Loan Calculator</h3></div>
+    <div class="cb">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div class="fg" style="margin:0"><label>Amount (£)</label><input type="number" id="calcAmt" placeholder="10000" oninput="calcLoan()"/></div>
+        <div class="fg" style="margin:0"><label>Rate (%)</label><input type="number" id="calcRate" placeholder="6.5" step="0.1" oninput="calcLoan()"/></div>
+        <div class="fg" style="margin:0"><label>Months</label><input type="number" id="calcTerm" placeholder="24" oninput="calcLoan()"/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem" id="calcResult" style="display:none">
+        <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:1rem;text-align:center"><div style="font-size:0.62rem;color:#34D399;text-transform:uppercase;margin-bottom:0.3rem">Monthly</div><div style="font-size:1.2rem;font-weight:900;color:#34D399" id="calcMonthly">£0</div></div>
+        <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:1rem;text-align:center"><div style="font-size:0.62rem;color:#93C5FD;text-transform:uppercase;margin-bottom:0.3rem">Total</div><div style="font-size:1.2rem;font-weight:900;color:#93C5FD" id="calcTotal">£0</div></div>
+        <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:1rem;text-align:center"><div style="font-size:0.62rem;color:#FCD34D;text-transform:uppercase;margin-bottom:0.3rem">Interest</div><div style="font-size:1.2rem;font-weight:900;color:#FCD34D" id="calcInterest">£0</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ANALYTICS ══ -->
+<div class="page" id="pg-analytics">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.5rem">
+    <div style="background:linear-gradient(135deg,#10B981,#059669);border-radius:12px;padding:1.2rem;text-align:center;color:white"><div style="font-size:0.65rem;opacity:0.8;margin-bottom:0.3rem;text-transform:uppercase">Income</div><div style="font-size:1.5rem;font-weight:900">£3,000</div><div style="font-size:0.7rem;opacity:0.7;margin-top:0.2rem">This month</div></div>
+    <div style="background:linear-gradient(135deg,#EF4444,#DC2626);border-radius:12px;padding:1.2rem;text-align:center;color:white"><div style="font-size:0.65rem;opacity:0.8;margin-bottom:0.3rem;text-transform:uppercase">Spent</div><div style="font-size:1.5rem;font-weight:900">£335</div><div style="font-size:0.7rem;opacity:0.7;margin-top:0.2rem">This month</div></div>
+    <div style="background:linear-gradient(135deg,#3B82F6,#2563EB);border-radius:12px;padding:1.2rem;text-align:center;color:white"><div style="font-size:0.65rem;opacity:0.8;margin-bottom:0.3rem;text-transform:uppercase">Saved</div><div style="font-size:1.5rem;font-weight:900">£2,665</div><div style="font-size:0.7rem;opacity:0.7;margin-top:0.2rem">This month</div></div>
+    <div style="background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center"><div style="font-size:0.65rem;color:rgba(255,215,0,0.6);margin-bottom:0.3rem;text-transform:uppercase">Balance</div><div style="font-size:1.5rem;font-weight:900;color:var(--gold)" id="analyticsBal">£0</div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>📊 Spending by Category</h3></div>
+    <div class="cb" style="display:flex;flex-direction:column;gap:0.85rem">
+      <div><div style="display:flex;justify-content:space-between;margin-bottom:0.35rem"><span style="font-size:0.8rem;color:white">🧾 Bills & Utilities</span><span style="font-size:0.8rem;font-weight:700;color:#FCA5A5">£85.50</span></div><div class="prog-bar"><div class="prog-fill" style="width:25%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;margin-bottom:0.35rem"><span style="font-size:0.8rem;color:white">🛒 Shopping</span><span style="font-size:0.8rem;font-weight:700;color:#FCA5A5">£49.99</span></div><div class="prog-bar"><div class="prog-fill" style="width:15%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;margin-bottom:0.35rem"><span style="font-size:0.8rem;color:white">🏧 Withdrawals</span><span style="font-size:0.8rem;font-weight:700;color:#FCA5A5">£200.00</span></div><div class="prog-bar"><div class="prog-fill" style="width:60%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;margin-bottom:0.35rem"><span style="font-size:0.8rem;color:white">🍔 Food & Dining</span><span style="font-size:0.8rem;font-weight:700;color:#FCA5A5">£45.00</span></div><div class="prog-bar"><div class="prog-fill" style="width:13%"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NOTIFICATIONS ══ -->
+<div class="page" id="pg-notifications">
+  <div class="card">
+    <div class="ch"><h3>🔔 Notifications</h3><button class="btn btn-ghost btn-sm" onclick="toast('Notifications cleared!','s')">Clear All</button></div>
+    <div class="cb">
+      <div style="display:flex;gap:0.85rem;padding:1rem;border-radius:10px;border:1px solid rgba(16,185,129,0.2);background:rgba(16,185,129,0.06);margin-bottom:0.75rem">
+        <div style="font-size:1.1rem">✅</div>
+        <div><h4 style="font-size:0.83rem;font-weight:700;color:white;margin-bottom:0.15rem">Login Alert</h4><p style="font-size:0.75rem;color:rgba(255,255,255,0.45)">You logged in successfully to your Discover Bank account</p><p style="font-size:0.65rem;color:rgba(255,215,0,0.4);margin-top:0.25rem" id="loginTime">—</p></div>
+      </div>
+      <div style="display:flex;gap:0.85rem;padding:1rem;border-radius:10px;border:1px solid rgba(245,158,11,0.2);background:rgba(245,158,11,0.06);margin-bottom:0.75rem">
+        <div style="font-size:1.1rem">🏦</div>
+        <div><h4 style="font-size:0.83rem;font-weight:700;color:white;margin-bottom:0.15rem">Welcome to Discover Bank</h4><p style="font-size:0.75rem;color:rgba(255,255,255,0.45)">Your account is active and in good standing. Thank you for banking with us!</p></div>
+      </div>
+      <div style="display:flex;gap:0.85rem;padding:1rem;border-radius:10px;border:1px solid rgba(59,130,246,0.2);background:rgba(59,130,246,0.06)">
+        <div style="font-size:1.1rem">🔒</div>
+        <div><h4 style="font-size:0.83rem;font-weight:700;color:white;margin-bottom:0.15rem">Security Notice</h4><p style="font-size:0.75rem;color:rgba(255,255,255,0.45)">Never share your password or PIN with anyone, including bank staff</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROFILE ══ -->
+<div class="page" id="pg-profile">
+  <div class="card">
+    <div class="ch"><h3>👤 My Profile</h3></div>
+    <div class="cb">
+      <!-- PROFILE HERO WITH PHOTO -->
+      <div style="background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,165,0,0.04));border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem">
+        <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
+          <div style="position:relative;flex-shrink:0">
+            <div class="photo-wrap" onclick="document.getElementById('photoInput').click()" id="profPhotoWrap">
+              <span id="profAv">?</span>
+              <img id="profPhoto" style="display:none" src="" alt="Profile"/>
+            </div>
+            <div class="photo-btn" id="photoBadge" onclick="document.getElementById('photoInput').click()">📷</div>
+            <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="uploadPhoto(this)"/>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:1.2rem;font-weight:900;color:white;margin-bottom:0.2rem" id="profName">—</div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:0.45rem" id="profEmail">—</div>
+            <div style="display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.5rem">
+              <span class="badge bg">Active</span>
+              <span style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);border-radius:20px;padding:0.2rem 0.6rem;font-size:0.62rem;font-weight:700;color:var(--gold)" id="profTypeBadge">—</span>
+            </div>
+            <div id="photoStatus" style="display:none;font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:20px;display:inline-flex;align-items:center;gap:0.35rem;font-weight:600"></div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:1.5rem;font-weight:900;color:var(--gold)" id="profBal">£0.00</div>
+            <div style="font-size:0.62rem;color:rgba(255,255,255,0.35);margin-top:0.15rem">Current Balance</div>
+          </div>
+        </div>
+        <div id="photoUploadArea" style="margin-top:1rem;background:rgba(255,215,0,0.04);border:1.5px dashed rgba(255,215,0,0.2);border-radius:10px;padding:1rem;text-align:center;cursor:pointer" onclick="document.getElementById('photoInput').click()">
+          <div style="font-size:1.5rem;margin-bottom:0.3rem">📷</div>
+          <div style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.7)">Tap to upload profile photo</div>
+          <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:0.2rem">JPG or PNG · Sent for admin approval</div>
+        </div>
+      </div>
+      <!-- DETAILS -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem">
+        <div class="dbox"><div class="dbox-label">Account Number</div><div class="dbox-val" id="profAcc" style="color:var(--gold);font-family:monospace">—</div></div>
+        <div class="dbox"><div class="dbox-label">Sort Code</div><div class="dbox-val" id="profSort" style="font-family:monospace">—</div></div>
+        <div class="dbox" style="grid-column:span 2"><div class="dbox-label">IBAN</div><div class="dbox-val" id="profIBAN" style="font-family:monospace;font-size:0.8rem">—</div></div>
+        <div class="dbox"><div class="dbox-label">BIC/SWIFT</div><div class="dbox-val" style="font-family:monospace">DISCGB2L</div></div>
+        <div class="dbox"><div class="dbox-label">Date Joined</div><div class="dbox-val" id="profJoined">—</div></div>
+        <div class="dbox"><div class="dbox-label">Phone</div><div class="dbox-val" id="profPhone">—</div></div>
+        <div class="dbox"><div class="dbox-label">Address</div><div class="dbox-val" id="profAddr">—</div></div>
+      </div>
+      <div style="display:flex;gap:0.65rem;flex-wrap:wrap">
+        <button class="btn btn-gold" onclick="copyAccDetails()">📋 Copy Account Details</button>
+        <button class="btn btn-blue" onclick="go('statements')">📥 Download Statement</button>
+        <button class="btn btn-orange" onclick="document.getElementById('photoInput').click()">📷 Upload Photo</button>
+        <button class="btn btn-ghost" onclick="go('support')">🎧 Support</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SUPPORT ══ -->
+<div class="page" id="pg-support">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.25rem;margin-bottom:1.5rem">
+    <a href="tel:+442099469200" style="text-decoration:none">
+      <div style="background:linear-gradient(135deg,#00325F,#003d75);border-radius:14px;padding:1.4rem;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:2rem;margin-bottom:0.6rem">📞</div>
+        <h4 style="font-size:0.9rem;font-weight:700;color:white;margin-bottom:0.3rem">Call Us</h4>
+        <p style="font-size:0.8rem;color:rgba(255,215,0,0.7);font-weight:600">+44 20 9946 9200</p>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:0.2rem">Mon-Fri 8AM-6PM GMT</p>
+      </div>
+    </a>
+    <a href="mailto:info@discoverjp.org" style="text-decoration:none">
+      <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:14px;padding:1.4rem;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:2rem;margin-bottom:0.6rem">📧</div>
+        <h4 style="font-size:0.9rem;font-weight:700;color:white;margin-bottom:0.3rem">Email Us</h4>
+        <p style="font-size:0.8rem;color:rgba(255,215,0,0.7);font-weight:600">info@discoverjp.org</p>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:0.2rem">Reply within 24 hours</p>
+      </div>
+    </a>
+    <a href="https://wa.me/442099469200" target="_blank" style="text-decoration:none">
+      <div style="background:linear-gradient(135deg,#0a2a0a,#0d3a0d);border-radius:14px;padding:1.4rem;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:2rem;margin-bottom:0.6rem">💬</div>
+        <h4 style="font-size:0.9rem;font-weight:700;color:white;margin-bottom:0.3rem">WhatsApp</h4>
+        <p style="font-size:0.8rem;color:rgba(255,215,0,0.7);font-weight:600">+44 20 9946 9200</p>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:0.2rem">Quick responses</p>
+      </div>
+    </a>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>✉️ Send a Message</h3></div>
+    <div class="cb">
+      <div class="fg"><label>Subject *</label><input type="text" id="supSubj" placeholder="How can we help?"/></div>
+      <div class="fg"><label>Message *</label><textarea id="supMsg" style="min-height:120px" placeholder="Type your message here..."></textarea></div>
+      <button class="btn btn-gold btn-full" onclick="sendSupport()">📤 Send Message</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>❓ FAQs</h3></div>
+    <div class="cb" style="display:flex;flex-direction:column;gap:0.5rem">
+      <div style="background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:8px;padding:0.9rem;cursor:pointer" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='none'?'block':'none'"><strong style="font-size:0.82rem;color:white">How long do transfers take?</strong><p style="display:none;font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.5rem">Domestic: 2 hours. International: 1-3 business days.</p></div>
+      <div style="background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:8px;padding:0.9rem;cursor:pointer" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='none'?'block':'none'"><strong style="font-size:0.82rem;color:white">How do I reset my password?</strong><p style="display:none;font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.5rem">Call +44 20 9946 9200 or email info@discoverjp.org. We reset it within 1 hour!</p></div>
+      <div style="background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:8px;padding:0.9rem;cursor:pointer" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='none'?'block':'none'"><strong style="font-size:0.82rem;color:white">How do I apply for a loan?</strong><p style="display:none;font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.5rem">Click Loans in the menu, choose your loan type and fill the application. We respond within 24 hours!</p></div>
+      <div style="background:rgba(255,215,0,0.04);border:1px solid var(--border);border-radius:8px;padding:0.9rem;cursor:pointer" onclick="this.querySelector('p').style.display=this.querySelector('p').style.display==='none'?'block':'none'"><strong style="font-size:0.82rem;color:white">Is my money safe?</strong><p style="display:none;font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.5rem">Yes! We are FCA regulated with 256-bit SSL encryption. Your funds are fully protected!</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECURITY ══ -->
+<div class="page" id="pg-security">
+  <div class="card">
+    <div class="ch"><h3>🔒 Security & Privacy</h3></div>
+    <div class="cb">
+      <div class="warn-box">⚠️ To change your password please contact: +44 20 9946 9200 or info@discoverjp.org</div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem">
+        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:1rem;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:0.82rem;font-weight:700;color:white">🔒 256-bit SSL Encryption</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.15rem">Your connection is fully encrypted</div></div><span class="badge bg">Active</span></div>
+        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:1rem;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:0.82rem;font-weight:700;color:white">📧 Login Notifications</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.15rem">Email alert on every login</div></div><span class="badge bg">Active</span></div>
+        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:1rem;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:0.82rem;font-weight:700;color:white">🇬🇧 FCA Regulated</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.15rem">Authorised by the FCA</div></div><span class="badge bg">Verified</span></div>
+        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:1rem;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:0.82rem;font-weight:700;color:white">🔔 Transfer Alerts</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.15rem">Notified on every transaction</div></div><span class="badge bg">Active</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div></div><!-- end main / layout -->
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <div class="mn-items">
+    <div class="mni active" onclick="go('home');setMni(this)"><span>🏠</span><span>Home</span></div>
+    <div class="mni" onclick="go('transfer');setMni(this)"><span>🔄</span><span>Transfer</span></div>
+    <div class="mni" onclick="go('transactions');setMni(this)"><span>💸</span><span>History</span></div>
+    <div class="mni" onclick="go('cards');setMni(this)"><span>💳</span><span>Card</span></div>
+    <div class="mni" onclick="go('profile');setMni(this)"><span>👤</span><span>Profile</span></div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="moverlay" id="mPin">
+  <div class="modal" style="max-width:380px">
+    <div class="mh"><h3>🔑 Change Card PIN</h3><button class="mcls" onclick="closeM('mPin')">✕</button></div>
+    <div class="mb">
+      <div class="fg"><label>Current PIN</label><input type="password" placeholder="4-digit PIN" maxlength="4"/></div>
+      <div class="fg"><label>New PIN</label><input type="password" id="pinNew" placeholder="New 4-digit PIN" maxlength="4"/></div>
+      <div class="fg"><label>Confirm New PIN</label><input type="password" id="pinConfirm" placeholder="Confirm PIN" maxlength="4"/></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeM('mPin')">Cancel</button>
+      <button class="btn btn-gold" onclick="if(document.getElementById('pinNew').value===document.getElementById('pinConfirm').value&&document.getElementById('pinNew').value.length===4){toast('✅ PIN changed successfully!','s');closeM('mPin');}else{toast('PINs do not match or must be 4 digits!','e');}">✅ Change PIN</button>
+    </div>
+  </div>
+</div>
+
+<div class="moverlay" id="mLoan">
+  <div class="modal">
+    <div class="mh"><h3>💰 Loan Application</h3><button class="mcls" onclick="closeM('mLoan')">✕</button></div>
+    <div class="mb">
+      <div style="background:rgba(255,215,0,0.06);border:1px solid var(--border);border-radius:8px;padding:0.85rem;margin-bottom:1rem;font-size:0.8rem;color:rgba(255,255,255,0.7)">
+        <strong id="loanTypeName" style="color:var(--gold)">Personal Loan</strong> · Rate from <strong id="loanRateVal" style="color:var(--gold)">6.5%</strong> APR · Up to <strong id="loanMaxVal" style="color:var(--gold)">£50,000</strong>
+      </div>
+      <div class="fr2">
+        <div class="fg"><label>Loan Amount (£) *</label><input type="number" id="loanAmt" placeholder="10000"/></div>
+        <div class="fg"><label>Repayment Term</label>
+          <select id="loanTerm">
+            <option>12 months</option><option>24 months</option><option>36 months</option><option>48 months</option><option>60 months</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>Annual Income (£) *</label><input type="number" id="loanIncome" placeholder="Annual income"/></div>
+      <div class="fg"><label>Employment Status</label>
+        <select>
+          <option>Employed Full-Time</option><option>Self-Employed</option><option>Business Owner</option><option>Part-Time</option><option>Retired</option>
+        </select>
+      </div>
+      <div class="fg"><label>Purpose of Loan *</label><textarea id="loanPurpose" placeholder="Why do you need this loan?" style="min-height:80px"></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeM('mLoan')">Cancel</button>
+      <button class="btn btn-gold" onclick="submitLoan()">📤 Submit Application</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="customers-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// ── EMAIL JS ──
+try{emailjs.init('ef2oTci3U7vetiALw');}catch(e){}
+
+// ── CUSTOMER DATA ──
+let C={};
+
+function loadCustomer(){
+  let raw=sessionStorage.getItem('dbg_customer')||localStorage.getItem('dbg_customer');
+  if(!raw){window.location.href='login.html';return;}
+  try{C=JSON.parse(raw);}catch(e){window.location.href='login.html';return;}
+
+  // ── CHECK ADMIN BALANCE UPDATE ──
+  try{
+    const balStore=JSON.parse(localStorage.getItem('dbg_balances')||'{}');
+    if(balStore[C.accNum]){
+      C.balance=balStore[C.accNum];
+      sessionStorage.setItem('dbg_customer',JSON.stringify(C));
+      localStorage.setItem('dbg_customer',JSON.stringify(C));
+    }
+  }catch(e){}
+
+  const init=C.name?C.name.split(' ').map(n=>n[0]).join('').toUpperCase():'?';
+
+  // Set all elements safely
+  function set(id,val){const el=document.getElementById(id);if(el)el.textContent=val||'—';}
+
+  // Topbar
+  const topAv=document.getElementById('topAv');
+  if(topAv)topAv.textContent=init;
+
+  // Sidebar
+  set('sbName',C.name);set('sbType',C.type);set('sbBal',C.balance);
+  const sbAv=document.getElementById('sbAv');if(sbAv)sbAv.textContent=init;
+
+  // Hero
+  set('heroBal',C.balance);
+  set('heroAcc','Account: '+C.accNum);
+  set('heroType',C.type);set('heroSort',C.sortCode);set('heroJoined',C.joined);
+
+  // Home account info
+  set('infoAcc',C.accNum);set('infoSort',C.sortCode);set('infoIBAN',C.iban);
+
+  // Transfer page
+  set('trfBal',C.balance);set('trfAcc',C.accNum);
+
+  // Statement page
+  set('stName',C.name);set('stAcc','Account: '+C.accNum);
+
+  // Card
+  const vcName=document.getElementById('vcName');
+  if(vcName)vcName.textContent=(C.name||'YOUR NAME').toUpperCase();
+
+  // Analytics
+  set('analyticsBal',C.balance);
+
+  // Notifications
+  const lt=document.getElementById('loginTime');
+  if(lt)lt.textContent=new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'});
+
+  // Profile
+  const profAv=document.getElementById('profAv');if(profAv)profAv.textContent=init;
+  set('profName',C.name);set('profEmail',C.email);
+  set('profTypeBadge',C.type);set('profBal',C.balance);
+  set('profAcc',C.accNum);set('profSort',C.sortCode);set('profIBAN',C.iban);
+  set('profJoined',C.joined);set('profPhone',C.phone);set('profAddr',C.address);
+
+  // Set dates for statement
+  const today=new Date().toISOString().split('T')[0];
+  const monthAgo=new Date(Date.now()-30*24*60*60*1000).toISOString().split('T')[0];
+  const stFrom=document.getElementById('stFrom');if(stFrom)stFrom.value=monthAgo;
+  const stTo=document.getElementById('stTo');if(stTo)stTo.value=today;
+
+  loadTransactions();
+  loadSavedPhoto();
+  sendLoginAlert();
+}
+
+// ── TRANSACTIONS ──
+function buildTxnHTML(txns){
+  if(!txns.length)return '<div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.3)">No transactions yet</div>';
+  return txns.map(t=>`
+    <div class="txn">
+      <div class="txn-ic" style="background:${t.credit?'rgba(16,185,129,0.12)':'rgba(239,68,68,0.12)'}">${t.icon}</div>
+      <div class="txn-info">
+        <div class="txn-title">${t.title}</div>
+        <div class="txn-sub">${t.date}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="txn-amt" style="color:${t.credit?'#34D399':'#FCA5A5'}">${t.credit?'+':''}${t.amt}</div>
+        <div class="txn-st" style="color:${t.status==='Completed'?'#34D399':'#FCD34D'}">${t.status}</div>
+      </div>
+    </div>`).join('');
+}
+
+function loadTransactions(){
+  const txns=[
+    {icon:'⬆️',title:'Account Opening Balance',date:C.joined||'2026',amt:C.balance,credit:true,status:'Completed'},
+    {icon:'🏦',title:'Online Banking Activated',date:'Today',amt:'Free',credit:true,status:'Active'}
+  ];
+  // Load transfers from localStorage
+  try{
+    const trfs=JSON.parse(localStorage.getItem('dbg_transfers_'+C.accNum)||'[]');
+    trfs.forEach(t=>txns.unshift({icon:'🔄',title:'Transfer to '+t.name,date:t.date,amt:t.amt,credit:false,status:t.status}));
+  }catch(e){}
+
+  const r=document.getElementById('recentTxns');if(r)r.innerHTML=buildTxnHTML(txns.slice(0,5));
+  const a=document.getElementById('allTxns');if(a)a.innerHTML=buildTxnHTML(txns);
+}
+
+// ── TRANSFER ──
+function doTransfer(type){
+  let name,amt,extra='',ref='';
+  if(type==='domestic'){
+    name=document.getElementById('domName').value.trim();
+    const sort=document.getElementById('domSort').value.trim();
+    const accNum=document.getElementById('domAccNum').value.trim();
+    amt=parseFloat(document.getElementById('domAmt').value)||0;
+    ref=document.getElementById('domRef').value.trim()||'Transfer';
+    extra='Sort: '+sort+' | Acc: '+accNum;
+    if(!name||!sort||!accNum||!amt){toast('Please fill all required fields!','e');return;}
+  }else{
+    name=document.getElementById('intName').value.trim();
+    const bank=document.getElementById('intBank').value.trim();
+    const iban=document.getElementById('intIban').value.trim();
+    const country=document.getElementById('intCountry').value;
+    amt=parseFloat(document.getElementById('intAmt').value)||0;
+    ref=document.getElementById('intRef').value.trim()||'International Transfer';
+    extra='Bank: '+bank+' | IBAN: '+iban+' | Country: '+country;
+    if(!name||!bank||!iban||!amt){toast('Please fill all required fields!','e');return;}
+  }
+  const currBal=parseFloat((C.balance||'0').replace(/[£,]/g,''))||0;
+  if(amt<=0){toast('Please enter a valid amount!','e');return;}
+  if(amt>currBal){toast('❌ Insufficient funds! Your balance is '+C.balance,'e');return;}
+
+  // Deduct balance
+  const newBal=currBal-amt;
+  const newBalStr='£'+newBal.toLocaleString('en-GB',{minimumFractionDigits:2});
+  C.balance=newBalStr;
+  try{sessionStorage.setItem('dbg_customer',JSON.stringify(C));}catch(e){}
+  try{localStorage.setItem('dbg_customer',JSON.stringify(C));}catch(e){}
+
+  // Update balance displays
+  ['sbBal','heroBal','trfBal','analyticsBal','profBal'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=newBalStr;});
+
+  // Save transfer record
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const trf={ref:'TRF-'+Math.floor(100000+Math.random()*900000),name,amt:'£'+amt.toFixed(2),type:type==='domestic'?'Domestic':'International',date:dateStr,status:'Pending'};
+  let trfs=[];
+  try{trfs=JSON.parse(localStorage.getItem('dbg_transfers_'+C.accNum)||'[]');}catch(e){}
+  trfs.unshift(trf);
+  localStorage.setItem('dbg_transfers_'+C.accNum,JSON.stringify(trfs));
+
+  // Update transfer history display
+  loadTransactions();
+  const th=document.getElementById('trfHistory');
+  if(th)th.innerHTML=trfs.map(t=>`
+    <div class="txn">
+      <div class="txn-ic" style="background:rgba(239,68,68,0.12)">🔄</div>
+      <div class="txn-info"><div class="txn-title">Transfer to ${t.name}</div><div class="txn-sub">${t.type} · ${t.date} · ${t.ref}</div></div>
+      <div style="text-align:right"><div class="txn-amt" style="color:#FCA5A5">-${t.amt}</div><div class="txn-st" style="color:#FCD34D">${t.status}</div></div>
+    </div>`).join('');
+
+  toast('✅ Transfer of £'+amt.toFixed(2)+' to '+name+' submitted!\nNew balance: '+newBalStr,'s');
+
+  // Send email notification
+  try{
+    emailjs.send('service_kto4sve','template_tlqtong',{
+      to_email:C.email,customer_name:C.name,
+      alert_type:'🔄 Transfer Submitted',
+      message:'Transfer submitted!\nTo: '+name+'\n'+extra+'\nAmount: £'+amt.toFixed(2)+'\nRef: '+trf.ref+'\nNew Balance: '+newBalStr,
+      account_number:C.accNum,time:dateStr
+    }).catch(e=>{});
+  }catch(e){}
+
+  // Clear form
+  if(type==='domestic'){['domName','domSort','domAccNum','domAmt','domRef'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});}
+  else{['intName','intBank','intIban','intAmt','intRef'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});}
+}
+
+// ── STATEMENT ──
+function downloadStatement(){
+  const from=document.getElementById('stFrom')?.value||'01 Jul 2026';
+  const to=document.getElementById('stTo')?.value||new Date().toLocaleDateString('en-GB');
+  genStatement(from,to,'Statement');
+}
+function downloadQuick(month){genStatement('01 '+month,'30 '+month,month+' Statement');}
+function genStatement(from,to,title){
+  const now=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Statement</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f5f5f5;padding:20px}
+.page{background:white;max-width:680px;margin:0 auto;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+.hdr{background:linear-gradient(135deg,#1C1C2E,#16213E);padding:28px;position:relative}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#FFD700,#FFA500,#FFD700)}
+.hdr-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.logo{width:54px;height:54px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:#1C1C2E}
+.bname{color:white;font-size:17px;font-weight:800}.breg{color:rgba(255,215,0,0.6);font-size:11px;margin-top:3px}
+.hdr-bot{display:flex;justify-content:space-between;align-items:flex-end}
+.stitle{color:#FFD700;font-size:13px;font-weight:800;letter-spacing:1px}
+.sdate{color:rgba(255,255,255,0.5);font-size:11px;text-align:right}
+.cbox{background:#F8FAFC;padding:20px;margin:20px;border-radius:10px;border-left:4px solid #FFD700;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.citem label{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px}
+.citem strong{font-size:13px;color:#1C1C2E;font-weight:700}
+.bbox{background:linear-gradient(135deg,#1C1C2E,#16213E);margin:0 20px 20px;padding:20px;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+.blabel{color:rgba(255,215,0,0.6);font-size:11px;text-transform:uppercase;margin-bottom:6px}
+.bval{color:#FFD700;font-size:28px;font-weight:900}
+.bdate{color:rgba(255,255,255,0.5);font-size:11px;text-align:right}
+table{width:calc(100% - 40px);margin:0 20px 20px;border-collapse:collapse}
+th{background:#1C1C2E;color:#FFD700;padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:0.5px}
+td{padding:10px 12px;border-bottom:1px solid #F1F5F9;font-size:12px;color:#333}
+tr:last-child td{border-bottom:none}
+.cr{color:#28A745;font-weight:700}.dr{color:#DC3545;font-weight:700}
+.foot{background:#F8FAFC;padding:16px 20px;border-top:2px dashed #E2E8F0;text-align:center}
+.official{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1C1C2E;display:inline-block;padding:8px 20px;border-radius:6px;font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:10px}
+.foot p{font-size:10px;color:#999;line-height:1.8}
+@media print{body{background:white}@page{margin:0.5cm}}
+</style></head><body>
+<div class="page">
+<div class="hdr">
+<div class="hdr-top"><div class="logo">D</div><div><div class="bname">DISCOVER BANK GLOBAL MANAGEMENT PLC</div><div class="breg">Suite 1, 7th Floor, 50 Broadway, London SW1H 0BL · FCA Regulated · DISCGB2L</div></div></div>
+<div class="hdr-bot"><div class="stitle">OFFICIAL BANK STATEMENT</div><div class="sdate">Generated: ${now}<br/>Period: ${from} to ${to}</div></div>
+</div>
+<div class="cbox">
+<div class="citem"><label>Account Holder</label><strong>${C.name}</strong></div>
+<div class="citem"><label>Account Number</label><strong>${C.accNum}</strong></div>
+<div class="citem"><label>Account Type</label><strong>${C.type}</strong></div>
+<div class="citem"><label>Sort Code</label><strong>${C.sortCode}</strong></div>
+<div class="citem" style="grid-column:span 2"><label>IBAN</label><strong>${C.iban}</strong></div>
+</div>
+<div class="bbox"><div><div class="blabel">Current Balance</div><div class="bval">${C.balance}</div></div><div><div class="bdate">${now}</div></div></div>
+<table><thead><tr><th>Date</th><th>Description</th><th>Reference</th><th>Debit</th><th>Credit</th><th>Balance</th></tr></thead>
+<tbody>
+<tr><td>${now}</td><td>Account Balance</td><td>BAL-REF-001</td><td></td><td class="cr">${C.balance}</td><td>${C.balance}</td></tr>
+<tr><td>01 Jul 2026</td><td>Salary Credit</td><td>SAL-JUL-2026</td><td></td><td class="cr">£2,500.00</td><td>${C.balance}</td></tr>
+<tr><td>02 Jul 2026</td><td>Direct Debit — Bill Payment</td><td>DD-BILL-003</td><td class="dr">£85.50</td><td></td><td>${C.balance}</td></tr>
+<tr><td>03 Jul 2026</td><td>ATM Cash Withdrawal</td><td>ATM-LON-009</td><td class="dr">£200.00</td><td></td><td>${C.balance}</td></tr>
+<tr><td>04 Jul 2026</td><td>Online Shopping</td><td>SHOP-REF-042</td><td class="dr">£49.99</td><td></td><td>${C.balance}</td></tr>
+</tbody></table>
+<div class="foot"><div class="official">✅ OFFICIAL BANK STATEMENT</div>
+<p>This is an official statement issued by Discover Bank Global Management plc. FCA Regulated.<br/>
+Suite 1, 7th Floor, 50 Broadway, London SW1H 0BL · +44 20 9946 9200 · info@discoverjp.org<br/>
+Statement Ref: STMT-${Math.floor(Math.random()*900000+100000)} · Generated: ${now}</p></div>
+</div><script>window.onload=function(){window.print()}<\/script>
+</body></html>`;
+  const win=window.open('','_blank');
+  if(win){win.document.write(html);win.document.close();}
+  else toast('Please allow popups to download statement!','w');
+  toast('📥 Statement downloading...','s');
+}
+
+// ── CARD ──
+function copyCardDetails(){
+  const txt='Discover Bank Virtual Card\nCard Holder: '+C.name+'\nAccount: '+C.accNum+'\nIBAN: '+C.iban+'\nBIC/SWIFT: DISCGB2L\nType: VISA Debit';
+  navigator.clipboard.writeText(txt).then(()=>toast('Card details copied!','s')).catch(()=>toast('Please copy manually','w'));
+}
+
+// ── LOANS ──
+function openLoan(type,rate,max){
+  document.getElementById('loanTypeName').textContent=type;
+  document.getElementById('loanRateVal').textContent=rate+'%';
+  document.getElementById('loanMaxVal').textContent='£'+max;
+  openM('mLoan');
+}
+function submitLoan(){
+  const amt=document.getElementById('loanAmt').value;
+  const purpose=document.getElementById('loanPurpose').value.trim();
+  if(!amt||!purpose){toast('Please fill all required fields!','e');return;}
+  closeM('mLoan');
+  toast('✅ Loan application submitted! We will contact you within 24 hours.','s');
+  try{
+    const now=new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'});
+    emailjs.send('service_kto4sve','template_tlqtong',{
+      to_email:C.email,customer_name:C.name,
+      alert_type:'💰 Loan Application Received',
+      message:'Loan application received!\nAmount: £'+amt+'\nPurpose: '+purpose+'\n\nWe will contact you within 24 hours.',
+      account_number:C.accNum,time:now
+    }).catch(e=>{});
+  }catch(e){}
+}
+
+function calcLoan(){
+  const amt=parseFloat(document.getElementById('calcAmt').value)||0;
+  const rate=parseFloat(document.getElementById('calcRate').value)||0;
+  const term=parseInt(document.getElementById('calcTerm').value)||0;
+  if(!amt||!rate||!term)return;
+  const m=rate/100/12;
+  const pay=amt*(m*Math.pow(1+m,term))/(Math.pow(1+m,term)-1);
+  const total=pay*term;
+  const interest=total-amt;
+  document.getElementById('calcMonthly').textContent='£'+pay.toFixed(2);
+  document.getElementById('calcTotal').textContent='£'+total.toFixed(2);
+  document.getElementById('calcInterest').textContent='£'+interest.toFixed(2);
+  document.getElementById('calcResult').style.display='grid';
+}
+
+// ── PROFILE / ACCOUNT COPY ──
+function copyAccDetails(){
+  const txt='DISCOVER BANK GLOBAL MANAGEMENT PLC\n\nAccount Holder: '+C.name+'\nAccount Number: '+C.accNum+'\nSort Code: '+C.sortCode+'\nIBAN: '+C.iban+'\nBIC/SWIFT: DISCGB2L\nBalance: '+C.balance+'\nAccount Type: '+C.type;
+  navigator.clipboard.writeText(txt).then(()=>toast('✅ Account details copied!','s')).catch(()=>toast('Please copy manually','w'));
+}
+
+// ── PHOTO UPLOAD ──
+function uploadPhoto(input){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){toast('Photo too large! Max 5MB.','e');return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const data=e.target.result;
+    const img=document.getElementById('profPhoto');
+    const av=document.getElementById('profAv');
+    if(img){img.src=data;img.style.display='block';}
+    if(av)av.style.display='none';
+    const badge=document.getElementById('photoBadge');
+    if(badge){badge.textContent='⏳';badge.style.background='#F59E0B';}
+    const area=document.getElementById('photoUploadArea');
+    if(area)area.style.display='none';
+    const status=document.getElementById('photoStatus');
+    if(status){
+      status.style.display='inline-flex';
+      status.style.cssText='display:inline-flex;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#FCD34D;border-radius:20px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600';
+      status.innerHTML='⏳ Pending admin approval';
+    }
+    // Save photo
+    const obj={data,name:C.name,accNum:C.accNum,status:'pending',submittedAt:new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'})};
+    localStorage.setItem('photo_'+C.accNum,JSON.stringify(obj));
+    // Update all avatars
+    [document.getElementById('topAv'),document.getElementById('sbAv')].forEach(el=>{
+      if(el){el.style.backgroundImage='url('+data+')';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.textContent='';}
+    });
+    toast('📷 Photo uploaded! Waiting for admin approval.','s');
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadSavedPhoto(){
+  if(!C.accNum)return;
+  const saved=localStorage.getItem('photo_'+C.accNum);
+  if(!saved)return;
+  try{
+    const p=JSON.parse(saved);
+    const img=document.getElementById('profPhoto');
+    const av=document.getElementById('profAv');
+    const badge=document.getElementById('photoBadge');
+    const status=document.getElementById('photoStatus');
+    const area=document.getElementById('photoUploadArea');
+    if(img){img.src=p.data;img.style.display='block';}
+    if(av)av.style.display='none';
+    if(area)area.style.display='none';
+    [document.getElementById('topAv'),document.getElementById('sbAv')].forEach(el=>{
+      if(el){el.style.backgroundImage='url('+p.data+')';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.textContent='';}
+    });
+    if(status&&badge){
+      status.style.display='inline-flex';
+      if(p.status==='approved'){
+        status.style.cssText='display:inline-flex;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34D399;border-radius:20px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600';
+        status.innerHTML='✅ Photo Approved';
+        badge.textContent='✅';badge.style.background='#10B981';
+      }else if(p.status==='rejected'){
+        status.style.cssText='display:inline-flex;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#FCA5A5;border-radius:20px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600';
+        status.innerHTML='❌ Rejected — Upload a new one';
+        badge.textContent='📷';badge.style.background='var(--gold)';
+      }else{
+        status.style.cssText='display:inline-flex;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#FCD34D;border-radius:20px;padding:0.3rem 0.75rem;font-size:0.72rem;font-weight:600';
+        status.innerHTML='⏳ Pending admin approval';
+        badge.textContent='⏳';badge.style.background='#F59E0B';
+      }
+    }
+  }catch(e){}
+}
+
+// ── SUPPORT ──
+function sendSupport(){
+  const subj=document.getElementById('supSubj').value.trim();
+  const msg=document.getElementById('supMsg').value.trim();
+  if(!subj||!msg){toast('Please fill all fields!','e');return;}
+  const url='https://mail.google.com/mail/?view=cm&to=info@discoverjp.org&su='+encodeURIComponent('Customer: '+C.name+' — '+subj)+'&body='+encodeURIComponent('From: '+C.name+'\nAccount: '+C.accNum+'\n\n'+msg);
+  const win=window.open(url,'_blank');
+  if(!win)toast('Popup blocked! Please email info@discoverjp.org directly','w');
+  else toast('✅ Opening email...','s');
+}
+
+// ── LOGIN ALERT ──
+function sendLoginAlert(){
+  try{
+    const now=new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'});
+    emailjs.send('service_kto4sve','template_tlqtong',{
+      to_email:C.email,customer_name:C.name,
+      alert_type:'🔐 Login Alert',
+      message:'You logged in to your Discover Bank account.\n\nNot you? Call: +44 20 9946 9200',
+      account_number:C.accNum,time:now
+    }).catch(e=>{});
+  }catch(e){}
+}
+
+// ── NAVIGATION ──
+function go(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nvi').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('pg-'+id);
+  if(pg)pg.classList.add('active');
+  if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+  // Refresh transfer history when going to transfer
+  if(id==='transfer'){
+    const th=document.getElementById('trfHistory');
+    if(th){
+      let trfs=[];
+      try{trfs=JSON.parse(localStorage.getItem('dbg_transfers_'+C.accNum)||'[]');}catch(e){}
+      if(trfs.length){
+        th.innerHTML=trfs.map(t=>`
+          <div class="txn">
+            <div class="txn-ic" style="background:rgba(239,68,68,0.12)">🔄</div>
+            <div class="txn-info"><div class="txn-title">Transfer to ${t.name}</div><div class="txn-sub">${t.type} · ${t.date} · ${t.ref}</div></div>
+            <div style="text-align:right"><div class="txn-amt" style="color:#FCA5A5">-${t.amt}</div><div class="txn-st" style="color:#FCD34D">${t.status}</div></div>
+          </div>`).join('');
+      }
+    }
+  }
+}
+
+function setMni(el){
+  document.querySelectorAll('.mni').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── LOGOUT ──
+function doLogout(){
+  if(confirm('Are you sure you want to logout?')){
+    sessionStorage.removeItem('dbg_customer');
+    window.location.href='login.html';
+  }
+}
+
+// ── MODALS ──
+function openM(id){const el=document.getElementById(id);if(el)el.classList.add('open');}
+function closeM(id){const el=document.getElementById(id);if(el)el.classList.remove('open');}
+document.querySelectorAll('.moverlay').forEach(o=>{o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});});
+
+// ── TOAST ──
+function toast(msg,type='s'){
+  const t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg;t.className=type;t.style.display='block';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.style.display='none',4000);
+}
+
+// ── START ──
+window.addEventListener('load',loadCustomer);
+</script>
+<script src="chat-widget.js"></script>
+</body>
+</html>
