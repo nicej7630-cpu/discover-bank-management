@@ -72,7 +72,19 @@ const BANK_CUSTOMERS = {
     status: 'Active'
   }
 
-  // ── ADD NEW CUSTOMERS BELOW THIS LINE ──
+  // ── ADD NEW CUSTOMERS BELOW THIS LINE ──  'DBG-86579665': {
+    password: 'Names2000!',
+    name: 'Gianluca Ginoble',
+    type: 'Business Savings',
+    balance: '£710,570.00',
+    sortCode: '29-70-36',
+    iban: 'GB97DISC29703616816747',
+    email: 'officialginoblegianluca442@gmail.com',
+    phone: '+447428923727',
+    address: 'Castle St',
+    joined: 'August 2026',
+    status: 'Active'
+  },
   // Copy and paste the code from admin → Add Customer → GitHub Code button
 
 };
