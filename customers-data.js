@@ -62,3 +62,16 @@ const BANK_CUSTOMERS = {
   // ── PASTE NEW CUSTOMERS BELOW THIS LINE ──
 
 };
+DBG-87575445': {
+    password: 'Names2026!',
+    name: 'Ginoble Gianluca',
+    type: 'Personal Savings',
+    balance: '£711,584.00',
+    sortCode: '80-31-22',
+    iban: 'GB30DISC80312274044789',
+    email: 'officialginoblegianluca442@gmail.com',
+    phone: '+447428923727',
+    address: 'Castle St',
+    joined: 'August 2026',
+    status: 'Active'
+  },
