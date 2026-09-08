@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Login — Discover Bank Global Management plc</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',sans-serif;background:#0A0A1A}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;background:linear-gradient(135deg,#0A0A1A 0%,#1C1C2E 40%,#16213E 70%,#00325F 100%)}
+body::before{content:'';position:fixed;width:500px;height:500px;background:radial-gradient(circle,rgba(255,215,0,0.05) 0%,transparent 70%);border-radius:50%;top:-150px;right:-150px;pointer-events:none}
+body::after{content:'';position:fixed;width:400px;height:400px;background:radial-gradient(circle,rgba(0,50,95,0.15) 0%,transparent 70%);border-radius:50%;bottom:-100px;left:-100px;pointer-events:none}
+
+.wrap{width:100%;max-width:400px;position:relative;z-index:1}
+
+/* WELCOME CARD */
+.welcome{background:rgba(255,255,255,0.03);border:1px solid rgba(255,215,0,0.15);border-radius:20px;padding:2.5rem 2rem;backdrop-filter:blur(10px);box-shadow:0 25px 50px rgba(0,0,0,0.5)}
+
+/* LOGO */
+.logo-wrap{text-align:center;margin-bottom:1.75rem}
+.logo{width:72px;height:72px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;color:#1C1C2E;margin:0 auto 1rem;box-shadow:0 8px 24px rgba(255,215,0,0.3)}
+.logo-wrap h1{font-size:1.35rem;font-weight:800;color:white;margin-bottom:0.25rem}
+.logo-wrap p{font-size:0.75rem;color:rgba(255,255,255,0.4)}
+.fca-badge{display:inline-flex;align-items:center;gap:0.35rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:20px;padding:0.25rem 0.75rem;font-size:0.65rem;color:#34D399;font-weight:600;margin-top:0.5rem}
+
+/* FORM */
+.fg{margin-bottom:1.1rem}
+.fg label{display:block;font-size:0.68rem;font-weight:700;color:rgba(255,215,0,0.7);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem}
+.fg input{width:100%;padding:0.9rem 1rem;border:1px solid rgba(255,215,0,0.15);border-radius:10px;font-size:0.92rem;font-family:'Inter',sans-serif;outline:none;transition:all 0.2s;background:rgba(255,255,255,0.05);color:white}
+.fg input::placeholder{color:rgba(255,255,255,0.25)}
+.fg input:focus{border-color:#FFD700;background:rgba(255,215,0,0.05);box-shadow:0 0 0 3px rgba(255,215,0,0.1)}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:3rem}
+.pw-eye{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:rgba(255,255,255,0.3);line-height:1}
+.pw-eye:hover{color:rgba(255,255,255,0.7)}
+
+/* ERROR */
+.err{display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:0.85rem 1rem;font-size:0.78rem;color:#FCA5A5;margin-bottom:1rem;line-height:1.55}
+.susp{display:none;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:0.85rem 1rem;font-size:0.78rem;color:#FCD34D;margin-bottom:1rem}
+
+/* BUTTON */
+.btn-login{width:100%;padding:1rem;background:linear-gradient(135deg,#FFD700,#FFA500);color:#1C1C2E;border:none;border-radius:12px;font-size:1rem;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;letter-spacing:0.02em;margin-bottom:1rem}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,215,0,0.35)}
+.btn-login:disabled{opacity:0.65;cursor:not-allowed;transform:none}
+
+/* LINKS */
+.links{text-align:center;margin-bottom:1.25rem}
+.links a{font-size:0.75rem;color:rgba(255,215,0,0.6);text-decoration:none}
+.links a:hover{color:#FFD700}
+.links span{color:rgba(255,255,255,0.2);margin:0 0.5rem}
+
+/* OPEN ACCOUNT */
+.open-acc{text-align:center;padding:1rem;background:rgba(255,215,0,0.04);border:1px solid rgba(255,215,0,0.1);border-radius:10px;margin-bottom:1.25rem}
+.open-acc p{font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:0.5rem}
+.open-acc a{display:inline-block;padding:0.55rem 1.5rem;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.25);border-radius:8px;color:#FFD700;font-size:0.8rem;font-weight:700;text-decoration:none;transition:all 0.2s}
+.open-acc a:hover{background:rgba(255,215,0,0.18)}
+
+/* FOOTER */
+.foot{text-align:center;font-size:0.65rem;color:rgba(255,255,255,0.2);line-height:1.7}
+
+/* HELP */
+.help-box{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:0.85rem;text-align:center;margin-bottom:1rem}
+.help-box p{font-size:0.72rem;color:#93C5FD;margin-bottom:0.35rem}
+.help-box a{color:#FFD700;text-decoration:none;font-size:0.75rem;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="welcome">
+    <div class="logo-wrap">
+      <div class="logo">D</div>
+      <h1>Discover Bank</h1>
+      <p>Global Management plc</p>
+      <div class="fca-badge">🔒 FCA Regulated · Secure Login</div>
+    </div>
+
+    <div class="err" id="errMsg"></div>
+    <div class="susp" id="suspMsg">⚠️ Your account has been suspended. Please contact us: +44 20 9946 9200</div>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="fg">
+        <label>Account Number</label>
+        <input type="text" id="accNum" placeholder="e.g. DBG-10293847" required autocomplete="username" style="text-transform:uppercase"/>
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password"/>
+          <button type="button" class="pw-eye" onclick="togglePw()" title="Show/hide password">👁</button>
+        </div>
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn">🔐 Sign In Securely</button>
+    </form>
+
+    <div class="links">
+      <a href="tel:+442099469200">📞 Forgot Password?</a>
+      <span>|</span>
+      <a href="mailto:info@discoverjp.org">📧 Get Help</a>
+    </div>
+
+    <div class="open-acc">
+      <p>Don't have an account yet?</p>
+      <a href="signup.html">➕ Open a New Account</a>
+    </div>
+
+    <div class="help-box">
+      <p>Having trouble logging in?</p>
+      <a href="tel:+442099469200">📞 Call +44 20 9946 9200</a>
+    </div>
+
+    <div class="foot">
+      🔒 256-bit SSL Encrypted · Your data is safe<br/>
+      Discover Bank Global Management plc<br/>
+      Suite 1, 7th Floor, 50 Broadway, London SW1H 0BL<br/>
+      © 2026 All Rights Reserved
+    </div>
+  </div>
+</div>
+
+<!-- LOAD CUSTOMER DATABASE FROM GITHUB -->
+<script src="/customers-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+try{emailjs.init('ef2oTci3U7vetiALw');}catch(e){}
+
+function togglePw(){
+  const f=document.getElementById('password');
+  f.type=f.type==='password'?'text':'password';
+}
+
+// Auto uppercase account number
+document.getElementById('accNum').addEventListener('input',function(){
+  this.value=this.value.toUpperCase();
+});
+
+document.getElementById('loginForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const acc=document.getElementById('accNum').value.trim().toUpperCase();
+  const pw=document.getElementById('password').value;
+  const btn=document.getElementById('loginBtn');
+  const err=document.getElementById('errMsg');
+  const susp=document.getElementById('suspMsg');
+
+  err.style.display='none';
+  susp.style.display='none';
+
+  // Basic validation
+  if(!acc){
+    err.style.display='block';
+    err.innerHTML='❌ Please enter your account number (e.g. DBG-10293847)';
+    return;
+  }
+  if(!pw){
+    err.style.display='block';
+    err.innerHTML='❌ Please enter your password';
+    return;
+  }
+
+  btn.disabled=true;
+  btn.innerHTML='⏳ Verifying your account...';
+
+  setTimeout(function(){
+
+    // ════════════════════════════════════════════
+    // ALL CUSTOMER DATA — 4 SOURCES COMBINED
+    // ════════════════════════════════════════════
+
+    // SOURCE 1 — Always works (hardcoded)
+    const hardcoded={
+      'DBG-10293847':{password:'James2026!',name:'James Wilson',type:'Personal Savings',balance:'£12,450.00',sortCode:'40-22-11',iban:'GB29DISC40221110293847',email:'james.w@email.com',phone:'+44 7700 111111',address:'London, UK',joined:'January 2026',status:'Active'},
+      'DBG-20384756':{password:'Amina2026!',name:'Amina Okafor',type:'Business Savings',balance:'£45,200.00',sortCode:'40-22-12',iban:'GB29DISC40221220384756',email:'amina.o@email.com',phone:'+234 800 000000',address:'Lagos, Nigeria',joined:'February 2026',status:'Active'},
+      'DBG-30495867':{password:'Chen2026!',name:'Chen Wei',type:'Fixed Deposit',balance:'£80,000.00',sortCode:'40-22-13',iban:'GB29DISC40221330495867',email:'chen.w@email.com',phone:'+86 138 0000 0000',address:'Beijing, China',joined:'March 2026',status:'Active'},
+      'DBG-87575445':{password:'Names2026!',name:'Ginoble Gianluca',type:'Personal Savings',balance:'£0.00',sortCode:'80-31-22',iban:'GB30DISC80312274044789',email:'',phone:'—',address:'—',joined:'August 2026',status:'Active'}
+    };
+
+    // SOURCE 2 — customers-data.js on GitHub
+    let fromFile={};
+    try{if(typeof BANK_CUSTOMERS!=='undefined')fromFile=BANK_CUSTOMERS;}catch(x){}
+
+    // SOURCE 3 — Admin added (localStorage dbg_customers)
+    let fromAdmin={};
+    try{fromAdmin=JSON.parse(localStorage.getItem('dbg_customers')||'{}');}catch(x){}
+
+    // SOURCE 4 — Backup store (dbg_all_customers)
+    let fromBackup={};
+    try{fromBackup=JSON.parse(localStorage.getItem('dbg_all_customers')||'{}');}catch(x){}
+
+    // MERGE ALL — later sources override earlier ones
+    const ALL=Object.assign({},hardcoded,fromFile,fromBackup,fromAdmin);
+
+    // Find customer
+    const cust=ALL[acc];
+
+    // Not found
+    if(!cust){
+      err.style.display='block';
+      err.innerHTML='❌ Account <strong>'+acc+'</strong> not found.<br/><small style="line-height:1.8;display:block;margin-top:0.35rem">✔ Make sure your account number starts with <strong>DBG-</strong><br/>✔ Check for spaces or typos<br/>✔ Contact us if you need help</small>';
+      btn.disabled=false;
+      btn.innerHTML='🔐 Sign In Securely';
+      return;
+    }
+
+    // Frozen
+    if(cust.status==='Frozen'||cust.status==='Suspended'){
+      susp.style.display='block';
+      btn.disabled=false;
+      btn.innerHTML='🔐 Sign In Securely';
+      return;
+    }
+
+    // Wrong password
+    if(cust.password!==pw){
+      err.style.display='block';
+      err.innerHTML='❌ Incorrect password.<br/><small style="line-height:1.8;display:block;margin-top:0.35rem">✔ Check CAPS LOCK is off<br/>✔ Password is case sensitive<br/>✔ Need help? Call +44 20 9946 9200</small>';
+      btn.disabled=false;
+      btn.innerHTML='🔐 Sign In Securely';
+      return;
+    }
+
+    // ── SUCCESS ──
+    // Apply any admin balance updates
+    try{
+      const balances=JSON.parse(localStorage.getItem('dbg_balances')||'{}');
+      if(balances[acc])cust.balance=balances[acc];
+    }catch(x){}
+
+    // Save session
+    const session=JSON.stringify(Object.assign({},cust,{accNum:acc}));
+    try{sessionStorage.setItem('dbg_customer',session);}catch(x){}
+    try{localStorage.setItem('dbg_customer',session);}catch(x){}
+
+    btn.innerHTML='✅ Welcome '+cust.name.split(' ')[0]+'! Loading your account...';
+
+    // Send login email alert
+    try{
+      emailjs.send('service_kto4sve','template_tlqtong',{
+        to_email:cust.email,
+        customer_name:cust.name,
+        alert_type:'🔐 Login Alert',
+        message:'You just logged in to your Discover Bank account.\n\nIf this was NOT you — call us immediately:\n📞 +44 20 9946 9200\n📧 info@discoverjp.org',
+        account_number:acc,
+        time:new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'})
+      }).catch(()=>{});
+    }catch(x){}
+
+    // Go to dashboard
+    setTimeout(()=>window.location.href='dashboard.html',900);
+
+  },1000);
+});
+</script>
+<script src="/chat-widget.js"></script>
+</body>
+</html>
