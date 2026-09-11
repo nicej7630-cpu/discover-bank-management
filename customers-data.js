@@ -63,7 +63,7 @@ const BANK_CUSTOMERS = {
 
 };
 DBG-87575445': {
-    password: 'Names2026!',
+    password: 'Names555!',
     name: 'Ginoble Gianluca',
     type: 'Personal Savings',
     balance: '£711,584.00',
