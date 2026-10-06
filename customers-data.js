@@ -1,5 +1,5 @@
 // DISCOVER BANK — MASTER CUSTOMER DATABASE
-// Auto-synced: 06/10/2026, 02:00:14
+// Auto-synced: 06/10/2026, 02:01:57
 const BANK_CUSTOMERS = {
 
   'DBG-10293847': {password:'James2026!',name:'James Wilson',type:'Personal Savings',balance:'£12,450.00',sortCode:'40-22-11',iban:'GB29DISC40221110293847',email:'james.w@email.com',phone:'+44 7700 111111',address:'London, UK',joined:'January 2026',status:'Active'},
