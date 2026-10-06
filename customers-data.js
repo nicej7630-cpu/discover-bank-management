@@ -1,5 +1,5 @@
 // DISCOVER BANK — MASTER CUSTOMER DATABASE
-// Auto-synced: 06/10/2026, 02:01:57
+// Auto-synced: 06/10/2026, 02:11:30
 const BANK_CUSTOMERS = {
 
   'DBG-10293847': {password:'James2026!',name:'James Wilson',type:'Personal Savings',balance:'£12,450.00',sortCode:'40-22-11',iban:'GB29DISC40221110293847',email:'james.w@email.com',phone:'+44 7700 111111',address:'London, UK',joined:'January 2026',status:'Active'},
@@ -16,7 +16,7 @@ const BANK_CUSTOMERS = {
 
   'DBG-21075625': {password:'Yum4008',name:'YUMIKO HORIKAWA',type:'Business Savings',balance:'£1,983,703.00',sortCode:'72-64-29',iban:'GB79DISC72642976712990',email:'fujioschoki@gmail.com',phone:'09052211493',address:'北海道 山越郡長万部町 長万部411-65',joined:'October 2026',status:'Active'},
 
-  'DBG-34889163': {password:'Name4008',name:'祐美子 Jason',type:'Business Savings',balance:'£5,000.00',sortCode:'29-81-37',iban:'GB99DISC29813714693363',email:'nicej7630@gmail.com',phone:'+447428923727',address:'Castle St',joined:'October 2026',status:'Active'},
+  'DBG-34889163': {password:'Name4008',name:'祐美子 Jason',type:'Business Savings',balance:'£8,000.00',sortCode:'29-81-37',iban:'GB99DISC29813714693363',email:'nicej7630@gmail.com',phone:'+447428923727',address:'Castle St',joined:'October 2026',status:'Active'},
 
   'DBG-15102770': {password:'Name2000',name:'祐美子 堀川',type:'Current Account',balance:'£19,991,500.00',sortCode:'94-18-16',iban:'GB30DISC94181644273414',email:'lazyyukitan@gmail.com',phone:'+447428923729',address:'北海道 山越郡長万部町 長万部411-65',joined:'August 2026',status:'Active'},
 
