@@ -1577,45 +1577,7 @@ function changePIN(){
   toast('✅ PIN changed successfully!','s');
   closeM('mPin');
   ['pinCurrent','pinNew','pinConfirm'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-}
-
-// ═══════════════════════════════
-  FACE VERIFICATION 
-  
-// ═══════════════════════════════
-let _pendingAction = null;
-let _stream = null;
-
-const FACE_THRESHOLD = 1000; // face verification applies to amounts of $1,000 or more
-
-// Decides whether a transaction needs face verification
-async function isFrozen(){
-  if(!window.DB || !C || !C.accNum) return false;
-  try{
-    const fresh = await window.DB.getCustomer(C.accNum);
-    if(fresh && fresh.status) C.status = fresh.status;
-    return !!fresh && fresh.status === 'Frozen';
-  }catch(e){ return false; }
-}
-function showFrozen(on){
-  const b = document.getElementById('frozenBanner');
-  if(b) b.style.display = on ? 'block' : 'none';
-}
-async function checkStatus(){
-  if(!window.DB){ setTimeout(checkStatus, 300); return; }
-  showFrozen(await isFrozen());
-}
-async function guard(kind){
-  if(await isFrozen()){
-    showFrozen(true);
-    toast('Your account is frozen. Transactions are not available.');
-    return;
-  }
-  const field = {transfer:'tr-amt', withdraw:'wd-amt', fx:'fx-amt'}[kind];
-  const amt = parseFloat(document.getElementById(field).value) || 0;
-  if(amt >= FACE_THRESHOLD){
-    secure(kind);
-    return;
+}return;
   }
   
 // ═══════════════════════════════
