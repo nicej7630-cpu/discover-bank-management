@@ -92,7 +92,7 @@ body::after{content:'';position:fixed;width:400px;height:400px;background:radial
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-try{ emailjs.init('ef2oTci3U7vetiAMw'); }catch(e){}
+try{ emailjs.init('ef2oTci3U7vetiALw'); }catch(e){}
 </script>
 <script type="module">
 import { customerSignIn, customerSignOut } from './discover-db.js';
@@ -138,7 +138,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
     // Login alert email (same as before)
     try{
-      window.emailjs.send('service_dgdartu','template_tlqtobg',{
+      window.emailjs.send('service_dgdarru','template_tlqtong',{
         to_email: cust.email,
         customer_name: cust.name,
         alert_type: '🔐 Login Alert',
