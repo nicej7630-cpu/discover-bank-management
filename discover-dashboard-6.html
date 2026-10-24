@@ -1821,7 +1821,7 @@ function sendSupport(){
 // LOGIN ALERT
 // ═══════════════════════════════
 function sendLoginAlert(){
-  try{emailjs.send('service_kto4ove','template_tlqtobg',{to_email:C.email,customer_name:C.name,alert_type:'🔐 Login Alert',message:'You just logged into your Discover Bank account.\n\nNot you? Call: +44 20 9946 9200',account_number:C.accNum,time:new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'})}).catch(()=>{});}catch(e){}
+  try{emailjs.send('service_kto4sve','template_tlqtong',{to_email:C.email,customer_name:C.name,alert_type:'🔐 Login Alert',message:'You just logged into your Discover Bank account.\n\nNot you? Call: +44 20 9946 9200',account_number:C.accNum,time:new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'})}).catch(()=>{});}catch(e){}
 }
 
 // ═══════════════════════════════
