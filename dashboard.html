@@ -896,7 +896,7 @@ body{font-family:'Inter',sans-serif;background:var(--dark3);color:rgba(255,255,2
 <script src="/customers-data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-try{emailjs.init('ef2oTci3U7vetiAMw');}catch(e){}
+try{emailjs.init('ef2oTci3U7vetiALw');}catch(e){}
 let C={};
 let _pendingTransfer=null;
 let _cameraStream=null;
@@ -1185,7 +1185,7 @@ function processWithdrawal(){
 
   // Send email notification
   try{
-    emailjs.send('service_dgdartu','template_tlqtobg',{
+    emailjs.send('service_dgdarru','template_tlqtong',{
       to_email:C.email,
       customer_name:C.name,
       alert_type:'🏧 Withdrawal Request',
@@ -1322,7 +1322,7 @@ let _otpCode=null, _otpExp=0, _otpNext=null;
 
 function requireOtp(next){
   const code = String(Math.floor(100000 + Math.random()*900000));
-  emailjs.send('service_dgdartu','template_tlqtobg',{
+  emailjs.send('service_dgdarru','template_tlqtong',{
     to_email: C.email,
     customer_name: C.name,
     alert_type: '🔐 Your verification code',
@@ -1539,7 +1539,7 @@ function processTransfer(){
   else{['intName','intBank','intIban','intAmt','intRef'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});}
   // Send email
   try{
-    emailjs.send('service_dgdartu','template_tlqtobg',{to_email:C.email,customer_name:C.name,alert_type:'🔄 Transfer Submitted',message:'Transfer submitted!\nTo: '+t.name+'\nAmount: '+amtStr+'\nRef: '+txnRef+'\nNew Balance: '+newBalStr,account_number:C.accNum,time:dateStr+' at '+timeStr}).catch(()=>{});
+    emailjs.send('service_dgdarru','template_tlqtong',{to_email:C.email,customer_name:C.name,alert_type:'🔄 Transfer Submitted',message:'Transfer submitted!\nTo: '+t.name+'\nAmount: '+amtStr+'\nRef: '+txnRef+'\nNew Balance: '+newBalStr,account_number:C.accNum,time:dateStr+' at '+timeStr}).catch(()=>{});
   }catch(e){}
   _pendingTransfer=null;
 }
@@ -1721,7 +1721,7 @@ function submitLoan(){
   if(!amt||!purpose||!income){toast('Please fill all required fields!','e');return;}
   closeM('mLoan');
   toast('✅ Loan application submitted! We will contact you within 24 hours.','s');
-  try{emailjs.send('service_dgdartu','template_tlqtobg',{to_email:C.email,customer_name:C.name,alert_type:'💰 Loan Application',message:'Loan application received!\nAmount: £'+amt+'\nPurpose: '+purpose,account_number:C.accNum,time:new Date().toLocaleString('en-GB')}).catch(()=>{});}catch(e){}
+  try{emailjs.send('service_dgdarru','template_tlqtong',{to_email:C.email,customer_name:C.name,alert_type:'💰 Loan Application',message:'Loan application received!\nAmount: £'+amt+'\nPurpose: '+purpose,account_number:C.accNum,time:new Date().toLocaleString('en-GB')}).catch(()=>{});}catch(e){}
   ['loanAmt','loanIncome','loanPurpose'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
 function calcLoan(){
@@ -1821,7 +1821,7 @@ function sendSupport(){
 // LOGIN ALERT
 // ═══════════════════════════════
 function sendLoginAlert(){
-  try{emailjs.send('service_dgdartu','template_tlqtobg',{to_email:C.email,customer_name:C.name,alert_type:'🔐 Login Alert',message:'You just logged into your Discover Bank account.\n\nNot you? Call: +44 20 9946 9200',account_number:C.accNum,time:new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'})}).catch(()=>{});}catch(e){}
+  try{emailjs.send('service_dgdarru','template_tlqtong',{to_email:C.email,customer_name:C.name,alert_type:'🔐 Login Alert',message:'You just logged into your Discover Bank account.\n\nNot you? Call: +44 20 9946 9200',account_number:C.accNum,time:new Date().toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'})}).catch(()=>{});}catch(e){}
 }
 
 // ═══════════════════════════════
