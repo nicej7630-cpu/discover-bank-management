@@ -194,7 +194,7 @@ tr:hover td{background:rgba(255,215,0,0.03)}
 @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.fr{grid-template-columns:1fr}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>try{emailjs.init("ef2oTci3U7vetiAMw");}catch(e){}</script>
+<script>try{emailjs.init("ef2oTci3U7vetiALw");}catch(e){}</script>
 </head>
 <body>
 <script src="customers-data.js"></script>
@@ -2647,7 +2647,7 @@ async function rqApprove(acc, id){
       }catch(e){}
     }
     try{
-      await window.emailjs.send('service_dgdartu','template_tlqtobg',{
+      await window.emailjs.send('service_dgdarru','template_tlqtong',{
         to_email: cust.email,
         customer_name: cust.name,
         alert_type: '✅ Your payment has been approved',
