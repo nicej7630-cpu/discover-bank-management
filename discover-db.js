@@ -19,7 +19,7 @@ const firebaseConfig = {
   storageBucket: "discover-bank-c4ac6.firebasestorage.app",
   messagingSenderId: "267410109999",
   appId: "1:267410109999:web:71b2b7c03a9a07760278da",
-  measurementId: "G-QFZZ8SJFE1"
+  measurementId: "G-QFZZ8SJEE1"
 };
 
 export const PROJECT_ID = firebaseConfig.projectId;
