@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>Notifications · Discover Bank (admin)</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Arial,sans-serif;background:#0F1419;color:#E8ECF1;line-height:1.5}
+header{background:#1B2330;color:#FFD700;padding:1rem 1.3rem;font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+header button{background:transparent;border:1px solid #FFD700;color:#FFD700;padding:.4rem .9rem;border-radius:999px;cursor:pointer;font:inherit}
+main{max-width:920px;margin:0 auto;padding:1.4rem 1.1rem 3rem}
+.card{background:#1B2330;border:1px solid #2A3646;border-radius:14px;padding:1.2rem;margin-bottom:1.1rem}
+h2{font-size:1.1rem;color:#FFD700;margin-bottom:.6rem}
+label{display:block;font-size:.84rem;font-weight:600;margin:.7rem 0 .25rem;color:#C9D2DC}
+input,textarea,select{width:100%;padding:.65rem .75rem;border:1px solid #2F3D52;border-radius:9px;background:#0F1419;color:#fff;font:inherit}
+textarea{min-height:110px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.btn{background:#FFD700;color:#111;border:0;padding:.7rem 1.2rem;border-radius:999px;font-weight:800;cursor:pointer;font:inherit;margin-top:.9rem}
+.small{background:transparent;color:#FFD700;border:1px solid #FFD700;padding:.35rem .8rem;border-radius:999px;cursor:pointer;font:inherit;font-size:.82rem}
+.item{border-top:1px solid #2A3646;padding:.8rem 0;display:flex;justify-content:space-between;gap:.7rem;flex-wrap:wrap}
+.item:first-child{border-top:0}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:.12rem .55rem;border-radius:999px;margin-left:.3rem}
+.news{background:#16324A;color:#7CC8FF}.alert{background:#4A2A16;color:#FFB27A}
+.muted{color:#8C9BAE;font-size:.86rem}
+.msg{margin-top:.6rem;font-size:.9rem}.ok{color:#7CE3A1}.err{color:#FF8A8A}
+.hidden{display:none !important}
+@media(max-width:640px){.row{grid-template-columns:1fr}}</style>
+</head>
+<body>
+<header><span>Discover Bank · Notifications (admin)</span><button id="logoutBtn" class="hidden" onclick="logout()">Sign out</button></header>
+
+<div id="loginView" class="card" style="max-width:420px;margin:2.5rem auto">
+  <h2>Admin sign-in</h2>
+  <p class="muted">Sign in with the bank admin account.</p>
+  <label for="em">Email</label><input id="em" type="email" value="officesupport.mlaj@gmail.com"/>
+  <label for="pw">Password</label><input id="pw" type="password"/>
+  <button class="btn" onclick="signIn()">Sign in</button>
+  <div id="loginErr" class="msg err hidden"></div>
+</div>
+
+<main id="appView" class="hidden">
+  <div class="card">
+    <h2>Send a message to customers</h2>
+    <p class="muted">Customers see these in the bell icon on their dashboard. <b>News</b> goes to every customer. <b>Account alert</b> goes to one customer only.</p>
+    <div class="row">
+      <div><label for="kind">Type *</label>
+        <select id="kind"><option value="news">Bank news (all customers)</option><option value="alert">Account alert (one customer)</option></select></div>
+      <div><label for="acc">Customer account number (for alerts)</label><input id="acc" placeholder="e.g. DBG-10293847"/></div>
+    </div>
+    <label for="tpl">Start from a template (optional)</label>
+    <select id="tpl" onchange="applyTemplate()">
+      <option value="">Write my own</option>
+      <option value="0">News: service update</option>
+      <option value="1">News: security reminder</option>
+      <option value="2">News: branch or contact update</option>
+      <option value="3">Alert: withdrawal approved</option>
+      <option value="4">Alert: withdrawal declined</option>
+      <option value="5">Alert: account frozen</option>
+      <option value="6">Alert: balance adjusted</option>
+    </select>
+    <label for="title">Title *</label><input id="title"/>
+    <label for="body">Message *</label><textarea id="body"></textarea>
+    <button class="btn" onclick="send()">Send to customer dashboard</button>
+    <div id="sendMsg" class="msg"></div>
+  </div>
+
+  <div class="card">
+    <h2>Messages sent <span class="muted" id="count"></span></h2>
+    <div id="list"><p class="muted">Loading...</p></div>
+  </div>
+</main>
+
+<script type="module">
+import { adminSignIn, adminSignOut, onAuthChange, addNotification, listAllNotifications, deleteNotification } from './discover-db-v2.js';
+const ADMIN = 'officesupport.mlaj@gmail.com';
+const $ = id => document.getElementById(id);
+const esc = v => String(v==null?'':v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const flash = (t, ok) => { $('sendMsg').textContent = t; $('sendMsg').className = 'msg ' + (ok ? 'ok' : 'err'); };
+
+const TEMPLATES = [
+  { kind:'news', title:'Service update from Discover Bank', body:'We have updated our online banking service. Your balance, transactions and receipts remain available as before. If you notice anything unusual, please contact us straight away.' },
+  { kind:'news', title:'Security reminder', body:'Discover Bank will never ask you for your password or a one-time code by phone, email or chat. Keep your details private, and sign out after using a shared device.' },
+  { kind:'news', title:'Contact and office update', body:'Our customer care team is available Monday to Friday. Please use the chat on your dashboard or contact us during working hours with any questions about your account.' },
+  { kind:'alert', title:'Your withdrawal was approved', body:'Your withdrawal request has been approved. The amount has been debited from your account, and the receipt is available in your transaction history.' },
+  { kind:'alert', title:'Your withdrawal was declined', body:'Your withdrawal request could not be approved. Please contact customer care for more information about this decision.' },
+  { kind:'alert', title:'Your account has been frozen', body:'For your security, your account has been frozen. Please contact customer care as soon as possible to confirm your identity and reactivate your account.' },
+  { kind:'alert', title:'Your balance has been adjusted', body:'Your account balance has been adjusted by our team. The change, with its date and time, is recorded in your transaction history.' }
+];
+
+window.signIn = async () => {
+  $('loginErr').classList.add('hidden');
+  try{ await adminSignIn($('em').value.trim(), $('pw').value); }
+  catch(e){ $('loginErr').textContent = 'Sign-in failed. Check the email and password.'; $('loginErr').classList.remove('hidden'); }
+};
+window.logout = () => adminSignOut();
+
+window.applyTemplate = () => {
+  const i = $('tpl').value; if(i === '') return;
+  const t = TEMPLATES[Number(i)];
+  $('kind').value = t.kind; $('title').value = t.title; $('body').value = t.body;
+};
+
+window.send = async () => {
+  const kind = $('kind').value, title = $('title').value.trim(), body = $('body').value.trim();
+  const acc = $('acc').value.trim().toUpperCase();
+  if(!title || !body) return flash('Please fill in the title and message.', false);
+  if(kind === 'alert' && !/^DBG-\d{8}$/.test(acc)) return flash('For an account alert, enter the account number, for example DBG-10293847.', false);
+  try{
+    await addNotification({ type: kind, audience: kind === 'news' ? 'all' : acc, title, body });
+    $('title').value = ''; $('body').value = ''; $('acc').value = ''; $('tpl').value = '';
+    flash('Sent. The customer will see it in their bell icon.', true);
+    loadList();
+  }catch(e){ flash('Could not send: ' + (e.code || e.message), false); }
+};
+
+async function loadList(){
+  try{
+    const list = await listAllNotifications();
+    $('count').textContent = '(' + list.length + ')';
+    $('list').innerHTML = list.length ? list.map(n => {
+      const when = n.createdAt && n.createdAt.toDate ? n.createdAt.toDate().toLocaleString('en-GB') : '';
+      const who = n.audience === 'all' ? 'All customers' : esc(n.audience);
+      return `<div class="item"><div style="flex:1;min-width:220px"><b>${esc(n.title)}</b>
+        <span class="tag ${n.type === 'news' ? 'news' : 'alert'}">${n.type === 'news' ? 'News' : 'Account alert'}</span>
+        <div class="muted">To: ${who} · ${esc(when)}</div>
+        <div class="muted" style="margin-top:.3rem">${esc(n.body)}</div></div>
+        <button class="small" onclick="removeN('${esc(n.id)}')">Delete</button></div>`;
+    }).join('') : '<p class="muted">Nothing sent yet.</p>';
+  }catch(e){ $('list').innerHTML = '<p class="err">Could not load: ' + esc(e.code || e.message) + '</p>'; }
+}
+window.removeN = async id => { if(!confirm('Delete this message?')) return; try{ await deleteNotification(id); loadList(); }catch(e){ alert(e.message); } };
+
+onAuthChange(user => {
+  const ok = !!user && user.email === ADMIN;
+  $('loginView').classList.toggle('hidden', ok);
+  $('appView').classList.toggle('hidden', !ok);
+  $('logoutBtn').classList.toggle('hidden', !ok);
+  if(ok) loadList();
+});
+</script>
+</body>
+</html>
